@@ -1,0 +1,23 @@
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+.secrets/
+
+# Dependency and tool caches
+node_modules/
+.venv/
+__pycache__/
+.pytest_cache/
+
+# Generated reports and temporary output
+coverage/
+dist/
+build/
+tmp/
+*.log
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/
