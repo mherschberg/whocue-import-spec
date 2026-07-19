@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Empty Links Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "links": {}
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Numeric Source ID Demo",
+    "source_id": 0
+  },
+  "people": [
+    {
+      "name": "Skyler Hart"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": null
+  },
+  "people": [
+    {
+      "name": "Drew Ellis"
+    }
+  ]
+}

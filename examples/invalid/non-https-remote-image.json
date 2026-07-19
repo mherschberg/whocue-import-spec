@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Non HTTPS Remote Image Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "image": {
+        "mode": "remote_url",
+        "url": "http://example.com/images/alex-morgan.png",
+        "expected_mime_type": "image/png"
+      }
+    }
+  ]
+}

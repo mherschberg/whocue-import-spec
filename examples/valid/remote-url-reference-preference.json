@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Remote Reference Preference Demo"
+  },
+  "people": [
+    {
+      "name": "Avery Kim",
+      "title": "Field Marketing Lead",
+      "company": "Example Launch Collective",
+      "image": {
+        "mode": "remote_url",
+        "url": "https://example.com/images/avery-kim.jpg",
+        "expected_mime_type": "image/jpeg",
+        "storage_preference": "remote_reference"
+      }
+    }
+  ]
+}

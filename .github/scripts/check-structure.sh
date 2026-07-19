@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Verify the STEP-2 import-spec skeleton without depending on schema artifacts.
+# Verify the import-spec repository structure.
 
 set -euo pipefail
 
@@ -10,8 +10,14 @@ required_paths=(
   "LICENSE-THROUGHSTONE"
   ".env.example"
   ".gitignore"
+  "package.json"
+  "package-lock.json"
+  "scripts/validate-examples.mjs"
   "schema/README.md"
+  "schema/whocue-import-v1.schema.json"
   "examples/README.md"
+  "examples/valid"
+  "examples/invalid"
   "instructions/README.md"
   ".github/workflows/ci.yml"
 )
@@ -31,7 +37,7 @@ main() {
     return 1
   fi
 
-  echo "import-spec skeleton structure ok"
+  echo "import-spec repository structure ok"
 }
 
 main "$@"

@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Remote Image Demo"
+  },
+  "people": [
+    {
+      "name": "Morgan Lee",
+      "title": "Experience Designer",
+      "company": "Waypoint Example Studio",
+      "image": {
+        "mode": "remote_url",
+        "url": "https://example.com/images/morgan-lee.png",
+        "expected_mime_type": "image/png",
+        "storage_preference": "save_locally"
+      }
+    }
+  ]
+}

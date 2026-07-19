@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Invalid Enum Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "priority": "urgent",
+      "status": "maybe"
+    }
+  ]
+}

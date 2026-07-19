@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Missing Embedded Image Data Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "image": {
+        "mode": "embedded",
+        "mime_type": "image/png"
+      }
+    }
+  ]
+}

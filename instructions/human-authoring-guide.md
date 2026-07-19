@@ -1,0 +1,159 @@
+# WhoCue v1 Import Authoring Guide
+
+Use this guide to write or review a WhoCue import file by hand. The
+machine-readable contract is `schema/whocue-import-v1.schema.json`; this guide
+explains the same v1 rules in authoring terms.
+
+## File Shape
+
+A v1 import is one JSON object for one event-scoped people list:
+
+```json
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Demo Networking Breakfast"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan"
+    }
+  ]
+}
+```
+
+Required top-level fields:
+
+| Field | Rule |
+|-------|------|
+| `schema_version` | Must be exactly `"1.0"`. |
+| `event` | Object describing the event. `event.name` is required. |
+| `people` | Array with 1-250 person records. Each person requires `name`. |
+
+The schema is strict. Unknown fields are rejected, and optional fields should be
+omitted when unknown. Do not use `null` unless a future schema version explicitly
+allows it.
+
+## Event Fields
+
+| Field | Required | Rule |
+|-------|----------|------|
+| `name` | Yes | 1-120 characters, non-blank. This is the event merge key. |
+| `source_id` | No | 1-128 characters, non-blank. External traceability only. |
+| `start_at` | No | RFC 3339 date-time string. |
+| `end_at` | No | RFC 3339 date-time string. |
+| `timezone` | No | IANA-style area/location value, such as `America/New_York`. |
+| `location` | No | 1-160 characters, non-blank. |
+| `description` | No | 1-1,000 characters, non-blank. |
+
+When only an event date is known, use `start_at` at local `00:00:00`,
+`end_at` at local `23:59:59`, and include the event `timezone`.
+
+## Person Fields
+
+| Field | Required | Rule |
+|-------|----------|------|
+| `name` | Yes | 1-120 characters, non-blank. This is the person merge key inside the event. |
+| `source_id` | No | 1-128 characters, non-blank. External traceability only. |
+| `title` | No | 1-120 characters, non-blank. |
+| `company` | No | 1-120 characters, non-blank. |
+| `affiliation` | No | 1-120 characters, non-blank. |
+| `notes` | No | 1-2,000 characters, non-blank. |
+| `connection_topic` | No | 1-500 characters, non-blank. |
+| `priority` | No | One of `low`, `medium`, or `high`. |
+| `status` | No | One of `not_met` or `met`. |
+| `tags` | No | Up to 12 unique strings, each 1-40 characters and non-blank. |
+| `links` | No | Object containing at least one supported HTTPS link. |
+| `image` | No | Image object using one supported image mode. |
+
+Within one import file, person names must be unique after trimming, collapsing
+repeated whitespace, and case-insensitive comparison. If the file contains two
+records that normalize to the same name, WhoCue rejects the import rather than
+guessing how to merge them.
+
+## Links
+
+`links` may contain these keys only:
+
+- `linkedin`
+- `x`
+- `instagram`
+- `facebook`
+- `website`
+- `blog`
+
+Every link must be an HTTPS URL and no longer than 2,048 characters. If no links
+are known, omit the `links` object.
+
+## Images
+
+A person may omit `image`, or provide exactly one image object.
+
+Supported v1 image modes:
+
+| Mode | Required fields | Use when |
+|------|-----------------|----------|
+| `none` | `mode` | You want to explicitly say no image is supplied. |
+| `embedded` | `mode`, `mime_type`, `data` | The image is small and should travel inside the JSON file. |
+| `package_file` | `mode`, `path`, `mime_type` | The import will be a ZIP package with image files next to the manifest. |
+| `remote_url` | `mode`, `url` | WhoCue should fetch an HTTPS image URL during import. |
+
+Supported image MIME types are `image/jpeg`, `image/png`, and `image/webp`.
+
+Embedded images use canonical base64 and are limited to 1,398,104 characters,
+approximately 1 MiB decoded. Package and remote images must stay within a 2 MiB
+image-file limit and a 2048 x 2048 decoded-image envelope.
+
+`package_file.path` must be a safe relative path inside the ZIP package. It may
+not be absolute, contain `.` or `..` path segments, contain double slashes, or
+point to anything other than `.jpg`, `.jpeg`, `.png`, or `.webp`.
+
+`remote_url.url` must use HTTPS. Remote image downloads may follow at most 2
+redirects and must complete within a 10 second per-image timeout. Optional
+`storage_preference` values are `save_locally` and `remote_reference`.
+
+Raw `local_file` references outside a ZIP package are not supported in v1.
+
+## Size Limits
+
+- Standalone JSON import file: maximum 10 MiB.
+- ZIP import package: maximum 50 MiB compressed size.
+- People per import: 1-250.
+- One image per person.
+
+The app may reject an otherwise schema-valid file if these importer-level limits
+are exceeded.
+
+## Privacy And Data Quality
+
+Use only data the importing user is allowed to store in WhoCue. Do not include
+private attendee lists, copied profile data, personal photos, private notes, or
+production URLs in public examples or test fixtures.
+
+For examples, demos, and fixtures, use synthetic people, organizations, events,
+notes, URLs, and image payloads. The published fixtures under `examples/` are
+synthetic references for the expected style.
+
+## Validate Before Import
+
+Install dependencies once:
+
+```bash
+npm ci
+```
+
+Validate the schema and fixture corpus:
+
+```bash
+npm run validate
+```
+
+Run the full local import-spec check:
+
+```bash
+npm run check
+```
+
+The validation command compiles the schema, checks all valid and invalid
+fixtures, and adds supplemental semantic checks that JSON Schema alone does not
+cover.

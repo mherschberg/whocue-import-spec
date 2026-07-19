@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Invalid Image MIME Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "image": {
+        "mode": "embedded",
+        "mime_type": "image/gif",
+        "data": "QUJDRA=="
+      }
+    }
+  ]
+}

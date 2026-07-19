@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Blank Person Name Demo"
+  },
+  "people": [
+    {
+      "name": "   "
+    }
+  ]
+}

@@ -4,12 +4,23 @@ This repository is the public source of truth for the WhoCue import contract:
 JSON Schema files, examples, and LLM-facing instructions for creating import
 files that the WhoCue mobile app can validate and load.
 
-## Current Scaffold Status
+## Current Contract Status
 
-This is a skeleton created during STEP-2. Schema v1, valid and invalid fixture
-files, numeric limits, image-mode decisions, and final prompt instructions are
-intentionally planned for STEP-3. Until STEP-3 lands, this repository defines the
-artifact layout and baseline checks only.
+Schema v1 is represented by:
+
+- `schema/whocue-import-v1.schema.json` - JSON Schema draft 2020-12 contract.
+- `schema/README.md` - schema summary, limits, and rules enforced outside plain
+  JSON Schema.
+- `examples/valid/` - synthetic fixtures that must pass validation.
+- `examples/invalid/` - synthetic fixtures that must fail validation.
+- `instructions/human-authoring-guide.md` - guide for people writing or
+  reviewing import files.
+- `instructions/llm-generator-instructions.md` - prompt/instruction text for
+  LLMs or other generators.
+
+The v1 contract uses strict unknown-field rejection, required top-level
+`schema_version`, `event`, and `people`, explicit image modes, bounded field and
+record counts, and synthetic-only public examples.
 
 ## Repository Status
 
@@ -56,15 +67,24 @@ only to retained Throughstone-authored scaffold material.
 ## Artifact Layout
 
 ```text
-schema/        JSON Schema contract files, starting with v1 in STEP-3.
-examples/      Synthetic valid and invalid fixture files, starting in STEP-3.
-instructions/  LLM-facing and human-facing import instructions, starting in STEP-3.
+schema/         JSON Schema contract files, starting with whocue-import-v1.schema.json.
+examples/       Synthetic valid and invalid fixture files.
+instructions/   Human-facing and LLM-facing import instructions.
+scripts/        Local validation tooling used by npm scripts and CI.
 ```
 
-The placeholder README files in those directories exist so the structure is
-clear before the contract artifacts are authored.
+Key v1 choices are documented in the directory README files. The schema is the
+machine-readable source of truth; Markdown explains authoring rules, validation
+workflow, and importer-level constraints that JSON Schema does not express
+portably.
 
 ## Local Checks
+
+Install the locked validator dependencies:
+
+```bash
+npm ci
+```
 
 Run the same structural check used by CI:
 
@@ -72,16 +92,39 @@ Run the same structural check used by CI:
 bash .github/scripts/check-structure.sh
 ```
 
-This check only verifies the skeleton shape. It does not validate schema or
-examples yet because those artifacts do not exist until STEP-3.
+Validate the schema and fixture corpus:
+
+```bash
+npm run validate
+```
+
+The validation command compiles `schema/whocue-import-v1.schema.json`, enforces
+JSON Schema `format` checks through AJV, requires every file under
+`examples/valid/` to pass, and requires every file under `examples/invalid/` to
+fail. It also performs supplemental semantic checks for duplicate person merge
+keys within one import and canonical embedded-image base64, plus generated edge
+cases for large count and length boundaries.
+
+To run both local gates:
+
+```bash
+npm run check
+```
 
 ## GitHub Actions
 
-The baseline workflow in `.github/workflows/ci.yml` runs the structural check
-without network access. After STEP-3 adds schema and fixtures, extend CI to
-validate the JSON Schema and all valid and invalid examples.
+The workflow in `.github/workflows/ci.yml` runs the structural check, installs
+the locked Node dependencies with `npm ci`, and runs `npm run validate`.
+
+## Privacy And Example Data
+
+All checked-in examples and docs must use synthetic people, organizations,
+events, notes, image payloads, and URLs. Do not commit private attendee lists,
+copied profile data, personal photos, private notes, production URLs, or raw
+import files from real users.
 
 ## Scope Guard
 
-Do not add real import schema semantics, production fixtures, numeric limits, or
-image-mode rules in this scaffold step. Those decisions belong to STEP-3.
+This repository owns the public import contract artifacts only. Do not implement
+WhoCue app-side parsing, local schema-copy consistency checks, SQLite merge
+behavior, or mobile UI here; those belong to later app implementation STEPs.

@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Boundary Fixture For Tags And Longer Fields",
+    "source_id": "boundary-event-with-longer-but-readable-source-id",
+    "start_at": "2026-11-02T00:00:00-05:00",
+    "end_at": "2026-11-02T23:59:59-05:00",
+    "timezone": "America/New_York",
+    "location": "Synthetic Convention Center, Room 120",
+    "description": "This fixture stays readable while exercising optional event fields close enough to boundary behavior for contract tests."
+  },
+  "people": [
+    {
+      "name": "Casey Rowan",
+      "source_id": "boundary-person-casey-rowan",
+      "title": "Senior Director of Applied Event Research",
+      "company": "Example Analytics Cooperative",
+      "notes": "Synthetic long note used to keep parser, storage, and display tests honest without storing private information. The exact words do not matter; the fixture exists to prove that multi-sentence notes remain valid when they are well below the v1 limit but longer than ordinary smoke-test data.",
+      "connection_topic": "Discuss how attendees prioritize people to meet when they have a long prepared list but limited event time.",
+      "priority": "high",
+      "status": "not_met",
+      "tags": [
+        "priority",
+        "speaker",
+        "workshop",
+        "investor",
+        "customer",
+        "partner",
+        "research",
+        "design",
+        "mobile",
+        "local-first",
+        "import",
+        "follow-up"
+      ],
+      "links": {
+        "website": "https://example.com/people/casey-rowan",
+        "x": "https://example.com/social/casey-rowan",
+        "instagram": "https://example.com/photos/casey-rowan",
+        "facebook": "https://example.com/community/casey-rowan"
+      }
+    }
+  ]
+}

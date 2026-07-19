@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Unknown Image Field Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "image": {
+        "mode": "none",
+        "caption": "Synthetic caption not supported by v1."
+      }
+    }
+  ]
+}

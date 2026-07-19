@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Empty Embedded Data Demo"
+  },
+  "people": [
+    {
+      "name": "Robin Gray",
+      "image": {
+        "mode": "embedded",
+        "mime_type": "image/png",
+        "data": ""
+      }
+    }
+  ]
+}

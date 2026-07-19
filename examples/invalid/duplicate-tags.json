@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Duplicate Tags Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "tags": [
+        "speaker",
+        "speaker"
+      ]
+    }
+  ]
+}

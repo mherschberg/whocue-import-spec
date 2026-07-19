@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Unsafe Package Path Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "image": {
+        "mode": "package_file",
+        "path": "../headshots/alex-morgan.png",
+        "mime_type": "image/png"
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Duplicate Person Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "title": "Program Manager"
+    },
+    {
+      "name": "Alex Morgan",
+      "title": "Designer"
+    }
+  ]
+}

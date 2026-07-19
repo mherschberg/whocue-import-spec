@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Person Name Length Demo"
+  },
+  "people": [
+    {
+      "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ]
+}

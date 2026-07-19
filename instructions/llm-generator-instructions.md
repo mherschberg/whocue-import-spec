@@ -1,0 +1,171 @@
+# WhoCue v1 LLM Generator Instructions
+
+Use these instructions when generating a WhoCue v1 import JSON file for a user.
+The output must validate against `schema/whocue-import-v1.schema.json`.
+
+## Output Rule
+
+When the user asks for a WhoCue import file, output JSON only: no Markdown code
+fence, no explanation, and no extra text before or after the JSON.
+
+If required facts are missing and the user has not asked you to use synthetic
+demo data, ask concise clarification questions instead of inventing real private
+data.
+
+## Privacy Rule
+
+Do not invent real private people, organizations, attendee lists, notes, photos,
+or profile URLs. Use only facts supplied by the user or clearly synthetic demo
+data. Public examples must use synthetic names, organizations, events, notes,
+URLs, and image payloads.
+
+## Required Structure
+
+Generate one JSON object with exactly these required top-level fields:
+
+```json
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Event Name"
+  },
+  "people": [
+    {
+      "name": "Synthetic Person Name"
+    }
+  ]
+}
+```
+
+Rules:
+
+- Use `snake_case` field names.
+- Set `schema_version` to exactly `"1.0"`.
+- Include `event.name`.
+- Include `people` with 1-250 person objects.
+- Include `name` for every person.
+- Reject unknown fields; use only fields listed in these instructions.
+- Omit unknown optional fields. Do not output `null`.
+- Do not output empty or whitespace-only strings.
+
+## Event Object
+
+Allowed `event` fields:
+
+- `name`: required, 1-120 characters.
+- `source_id`: optional, 1-128 characters.
+- `start_at`: optional RFC 3339 date-time.
+- `end_at`: optional RFC 3339 date-time.
+- `timezone`: optional IANA-style value such as `America/New_York`.
+- `location`: optional, 1-160 characters.
+- `description`: optional, 1-1,000 characters.
+
+If only an event date is known, use local `00:00:00` for `start_at`, local
+`23:59:59` for `end_at`, and include `timezone` when known.
+
+## Person Object
+
+Allowed person fields:
+
+- `name`: required, 1-120 characters.
+- `source_id`: optional, 1-128 characters.
+- `title`: optional, 1-120 characters.
+- `company`: optional, 1-120 characters.
+- `affiliation`: optional, 1-120 characters.
+- `notes`: optional, 1-2,000 characters.
+- `connection_topic`: optional, 1-500 characters.
+- `priority`: optional; allowed values are `low`, `medium`, and `high`.
+- `status`: optional; allowed values are `not_met` and `met`.
+- `tags`: optional array of up to 12 unique non-blank strings, each 1-40
+  characters.
+- `links`: optional object with at least one supported HTTPS link.
+- `image`: optional image object using one supported image mode.
+
+Person names must be unique within the import after trimming, collapsing
+repeated whitespace, and case-insensitive comparison. If two supplied people
+appear to have the same name, ask the user how to disambiguate them or omit one;
+do not create duplicate merge keys.
+
+## Links
+
+Allowed `links` keys:
+
+- `linkedin`
+- `x`
+- `instagram`
+- `facebook`
+- `website`
+- `blog`
+
+Every link value must be an HTTPS URL and no longer than 2,048 characters. Omit
+`links` if no supported link is available.
+
+## Image Modes
+
+A person may omit `image`, or include exactly one of these image objects.
+
+No image:
+
+```json
+{ "mode": "none" }
+```
+
+Embedded image:
+
+```json
+{
+  "mode": "embedded",
+  "mime_type": "image/png",
+  "data": "BASE64_IMAGE_DATA"
+}
+```
+
+Package file image:
+
+```json
+{
+  "mode": "package_file",
+  "path": "images/person-name.webp",
+  "mime_type": "image/webp"
+}
+```
+
+Remote URL image:
+
+```json
+{
+  "mode": "remote_url",
+  "url": "https://example.com/images/person-name.png",
+  "expected_mime_type": "image/png",
+  "storage_preference": "save_locally"
+}
+```
+
+Image rules:
+
+- Supported MIME types are `image/jpeg`, `image/png`, and `image/webp`.
+- Do not use raw `local_file`; it is unsupported in v1.
+- Remote image URLs must use HTTPS.
+- `storage_preference`, when present, must be `save_locally` or
+  `remote_reference`.
+- Embedded image data must be canonical base64 and no more than 1,398,104
+  characters, approximately 1 MiB decoded.
+- Package image paths must be relative paths inside the ZIP package. They must
+  not be absolute, include `.` or `..` path segments, include double slashes, or
+  point to unsupported file extensions.
+- Package and remote images must stay within a 2 MiB image-file limit and a 2048
+  x 2048 decoded-image envelope.
+
+## Final Self-Check Before Output
+
+Before producing JSON, check:
+
+- The top-level object has only `schema_version`, `event`, and `people`.
+- Every object uses only allowed fields.
+- `event.name` and every `person.name` are present and non-blank.
+- No optional field is `null`, blank, or invented from private data.
+- Enum values exactly match the allowed lowercase values.
+- All URLs use HTTPS.
+- Image objects use exactly one supported mode.
+- Person names are unique within the event.
+- The JSON is valid, with no comments or trailing commas.

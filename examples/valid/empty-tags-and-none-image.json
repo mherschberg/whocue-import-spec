@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Empty Optional Collections Demo"
+  },
+  "people": [
+    {
+      "name": "Casey Rivera",
+      "tags": [],
+      "image": {
+        "mode": "none"
+      }
+    }
+  ]
+}
