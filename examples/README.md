@@ -2,9 +2,9 @@
 
 This directory contains synthetic valid and invalid WhoCue import examples.
 
-Fixtures are part of the public import contract. The WhoCue app will later use
-this corpus for parser and contract tests, so filenames should remain stable
-once published.
+Fixtures are part of the public import contract. The WhoCue app uses this corpus
+for parser, import-service, and schema-copy contract tests, so filenames should
+remain stable once published.
 
 ## Directory Layout
 
@@ -13,9 +13,10 @@ valid/    JSON files that should pass v1 schema and semantic validation.
 invalid/  JSON files that should parse as JSON but fail v1 validation.
 ```
 
-Malformed JSON coverage should use a separate, clearly named non-JSON fixture
-only if the validation tooling added in STEP-3.3 supports it. Every `.json`
-fixture in this directory must remain valid JSON.
+Malformed JSON coverage belongs in app-side parser tests or a separate,
+clearly named non-JSON fixture if this repository's validation tooling adds
+explicit support for it. Every `.json` fixture in this directory must remain
+valid JSON.
 
 ## Valid Fixtures
 
@@ -75,11 +76,11 @@ fixture in this directory must remain valid JSON.
 
 ## Validation Notes
 
-Most invalid fixtures should fail plain JSON Schema validation. STEP-3.3 must
-configure the validator to enforce `format` checks so bad date-time and URI
-fixtures fail consistently. Some validator installs treat `format` as annotation
-unless extra dependencies or options are enabled; `invalid/invalid-date-time.json`
-exists to catch that configuration gap.
+Most invalid fixtures should fail plain JSON Schema validation. The validator is
+configured to enforce `format` checks so bad date-time and URI fixtures fail
+consistently. Some validator installs treat `format` as annotation unless extra
+dependencies or options are enabled; `invalid/invalid-date-time.json` exists to
+catch that configuration gap.
 
 Some v1 rules are semantic or package-level checks rather than portable JSON
 Schema constraints:

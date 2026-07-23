@@ -127,4 +127,5 @@ import files from real users.
 
 This repository owns the public import contract artifacts only. Do not implement
 WhoCue app-side parsing, local schema-copy consistency checks, SQLite merge
-behavior, or mobile UI here; those belong to later app implementation STEPs.
+behavior, image processing, or mobile UI here; those belong in the private app
+repo.
