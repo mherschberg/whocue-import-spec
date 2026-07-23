@@ -13,6 +13,8 @@ Schema v1 is represented by:
   JSON Schema.
 - `examples/valid/` - synthetic fixtures that must pass validation.
 - `examples/invalid/` - synthetic fixtures that must fail validation.
+- `examples/valid/realistic-demo.zip` - ready-to-import package form of the
+  realistic demo, including synthetic local headshot image files.
 - `instructions/human-authoring-guide.md` - guide for people writing or
   reviewing import files.
 - `instructions/llm-generator-instructions.md` - prompt/instruction text for

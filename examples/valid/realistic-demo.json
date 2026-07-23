@@ -29,7 +29,9 @@
         "linkedin": "https://example.com/in/riley-chen"
       },
       "image": {
-        "mode": "none"
+        "mode": "package_file",
+        "path": "images/riley-chen.jpg",
+        "mime_type": "image/jpeg"
       }
     },
     {
@@ -48,6 +50,11 @@
       ],
       "links": {
         "website": "https://example.com/people/jordan-ellis"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/jordan-ellis.jpg",
+        "mime_type": "image/jpeg"
       }
     },
     {
@@ -65,6 +72,11 @@
       ],
       "links": {
         "blog": "https://example.com/blog/samira-patel"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/samira-patel.jpg",
+        "mime_type": "image/jpeg"
       }
     }
   ]

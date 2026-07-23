@@ -11,6 +11,7 @@ remain stable once published.
 ```text
 valid/    JSON files that should pass v1 schema and semantic validation.
 invalid/  JSON files that should parse as JSON but fail v1 validation.
+valid/images/  Synthetic local image files referenced by package fixtures.
 ```
 
 Malformed JSON coverage belongs in app-side parser tests or a separate,
@@ -23,7 +24,8 @@ valid JSON.
 | Fixture | Purpose |
 |---------|---------|
 | `valid/minimal.json` | Smallest practical v1 import: schema version, event name, and one named person. |
-| `valid/realistic-demo.json` | Realistic multi-person event with optional event fields, tags, status, priority, notes, connection topics, links, and no-image handling. |
+| `valid/realistic-demo.json` | Realistic multi-person event with optional event fields, tags, status, priority, notes, connection topics, links, and package-file headshot references. |
+| `valid/realistic-demo.zip` | Ready-to-import package form of `realistic-demo.json` with the referenced synthetic headshots under `images/`. |
 | `valid/embedded-image.json` | Embedded image mode with a tiny synthetic PNG payload. |
 | `valid/package-file-image.json` | ZIP package image mode with a safe relative image path. |
 | `valid/remote-url-image.json` | HTTPS remote image mode with expected MIME type and storage preference. |
