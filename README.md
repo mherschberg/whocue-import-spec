@@ -39,7 +39,11 @@ When a user asks an LLM to create a WhoCue file for an event:
 4. Use `schema/whocue-import-v1.schema.json` as the machine-readable protocol
    and `examples/valid/minimal.json` or `examples/valid/realistic-demo.json` as
    output models.
-5. Return JSON only when the user is ready for an import file.
+5. If the user is generating the file on a laptop or desktop, suggest saving
+   the `.json` file, or image-heavy `.zip` package, into a synced folder such
+   as Google Drive, OneDrive, Dropbox, or iCloud Drive, then importing it from
+   the phone through WhoCue's document picker.
+6. Return JSON only when the user is ready for an import file.
 
 The protocol is intentionally small: one event object plus 1-250 people. For
 each selected person, prefer practical recognition and conversation details:

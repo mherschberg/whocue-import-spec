@@ -20,6 +20,25 @@ data.
 During research or selection, you may summarize candidates and ask the user to
 confirm the shortlist. Once producing the import file, output JSON only.
 
+## Transfer To The Phone
+
+WhoCue imports files on the phone through the native document picker. If the
+user is working with an LLM on a laptop or desktop, suggest this workflow before
+the final JSON-only output:
+
+1. Save the generated WhoCue import as a `.json` file, or as a `.zip` package
+   when using `package_file` images.
+2. Put that file in a cloud-synced folder or drive that is also available on the
+   phone, such as Google Drive, OneDrive, Dropbox, or iCloud Drive.
+3. On the phone, open WhoCue, choose Import, and select the `.json` or `.zip`
+   file from the document picker.
+
+For imports with local images, prefer a ZIP package that contains the JSON
+manifest and referenced image files. Do not suggest raw local file paths next to
+the JSON file; mobile document pickers do not reliably grant access to sibling
+files across iOS and Android, and v1 does not support `local_file` image
+references.
+
 ## Privacy Rule
 
 Do not invent real private people, organizations, attendee lists, notes, photos,
