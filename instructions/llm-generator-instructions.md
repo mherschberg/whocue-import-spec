@@ -3,6 +3,11 @@
 Use these instructions when generating a WhoCue v1 import JSON file for a user.
 The output must validate against `schema/whocue-import-v1.schema.json`.
 
+If the user also asks you to find people for an event, first use
+`instructions/people-selection-guide.md`. That guide covers public-source
+research, relevance ranking, privacy limits, and how to map event value into
+WhoCue fields. Use this file for the final JSON protocol.
+
 ## Output Rule
 
 When the user asks for a WhoCue import file, output JSON only: no Markdown code
@@ -12,12 +17,19 @@ If required facts are missing and the user has not asked you to use synthetic
 demo data, ask concise clarification questions instead of inventing real private
 data.
 
+During research or selection, you may summarize candidates and ask the user to
+confirm the shortlist. Once producing the import file, output JSON only.
+
 ## Privacy Rule
 
 Do not invent real private people, organizations, attendee lists, notes, photos,
 or profile URLs. Use only facts supplied by the user or clearly synthetic demo
 data. Public examples must use synthetic names, organizations, events, notes,
 URLs, and image payloads.
+
+Do not include private contact details, sensitive personal data, inferred
+protected traits, or unverified claims. If a fact is uncertain, omit it or put a
+short neutral caveat in `notes`.
 
 ## Required Structure
 
@@ -85,6 +97,11 @@ Person names must be unique within the import after trimming, collapsing
 repeated whitespace, and case-insensitive comparison. If two supplied people
 appear to have the same name, ask the user how to disambiguate them or omit one;
 do not create duplicate merge keys.
+
+Use `connection_topic` for the main reason the user may want to talk to the
+person at this event. Use `notes` for short public context that helps recognition
+or conversation. Do not add unsupported fields such as `reason`, `confidence`,
+`citation`, `email`, `phone`, or `speaker_session`.
 
 ## Links
 
@@ -163,7 +180,12 @@ Before producing JSON, check:
 - The top-level object has only `schema_version`, `event`, and `people`.
 - Every object uses only allowed fields.
 - `event.name` and every `person.name` are present and non-blank.
+- Every selected person has a clear event-specific relevance reason in
+  `connection_topic`, `notes`, `priority`, `tags`, or a combination of those
+  fields.
 - No optional field is `null`, blank, or invented from private data.
+- No private contact details, sensitive personal data, or unsupported research
+  metadata fields are present.
 - Enum values exactly match the allowed lowercase values.
 - All URLs use HTTPS.
 - Image objects use exactly one supported mode.

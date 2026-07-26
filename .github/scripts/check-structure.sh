@@ -6,6 +6,7 @@ set -euo pipefail
 
 required_paths=(
   "README.md"
+  "PROTOCOL.md"
   "LICENSING.md"
   "LICENSE-THROUGHSTONE"
   ".env.example"
@@ -19,6 +20,9 @@ required_paths=(
   "examples/valid"
   "examples/invalid"
   "instructions/README.md"
+  "instructions/human-authoring-guide.md"
+  "instructions/llm-generator-instructions.md"
+  "instructions/people-selection-guide.md"
   ".github/workflows/ci.yml"
 )
 

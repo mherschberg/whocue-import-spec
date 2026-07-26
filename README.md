@@ -8,6 +8,7 @@ files that the WhoCue mobile app can validate and load.
 
 Schema v1 is represented by:
 
+- `PROTOCOL.md` - concise public protocol reference for LLMs and humans.
 - `schema/whocue-import-v1.schema.json` - JSON Schema draft 2020-12 contract.
 - `schema/README.md` - schema summary, limits, and rules enforced outside plain
   JSON Schema.
@@ -19,30 +20,51 @@ Schema v1 is represented by:
   reviewing import files.
 - `instructions/llm-generator-instructions.md` - prompt/instruction text for
   LLMs or other generators.
+- `instructions/people-selection-guide.md` - public guidance for LLMs that need
+  to find relevant people for an event before generating the import file.
 
 The v1 contract uses strict unknown-field rejection, required top-level
 `schema_version`, `event`, and `people`, explicit image modes, bounded field and
 record counts, and synthetic-only public examples.
 
+## Quick Start For LLMs
+
+When a user asks an LLM to create a WhoCue file for an event:
+
+1. Read `instructions/people-selection-guide.md` to decide who belongs in the
+   user's event-day list and what evidence is relevant.
+2. Read `PROTOCOL.md` for the concise public file-format protocol.
+3. Read `instructions/llm-generator-instructions.md` to produce the final JSON
+   shape.
+4. Use `schema/whocue-import-v1.schema.json` as the machine-readable protocol
+   and `examples/valid/minimal.json` or `examples/valid/realistic-demo.json` as
+   output models.
+5. Return JSON only when the user is ready for an import file.
+
+The protocol is intentionally small: one event object plus 1-250 people. For
+each selected person, prefer practical recognition and conversation details:
+name, role, organization, why the user may want to meet them, and a concise
+connection topic. Do not include private notes or guessed personal data.
+
 ## Repository Status
 
-The intended public GitHub remote is:
+The GitHub remote is:
 
 ```text
 https://github.com/mherschberg/whocue-import-spec
 ```
 
-Remote creation is pending. This workspace is currently in a mono-repo-for-now
-topology, so this folder is scaffolded locally without nested Git metadata. When
-the public repo is created or split, attach that remote to the standalone
-`whocue-import-spec` checkout.
+The repository has been split into a standalone Git repository at
+`Code/whocue-import-spec/` and pushed to GitHub. It is intentionally private
+until launch. When the owner is ready for public LLM/user access, change the
+GitHub repository visibility to public.
 
-Suggested remote setup after creating the GitHub repository:
+Current remote setup:
 
 ```bash
-git remote add origin git@github.com:mherschberg/whocue-import-spec.git
-git branch -M main
-git push -u origin main
+git remote -v
+origin  https://github.com/mherschberg/whocue-import-spec.git (fetch)
+origin  https://github.com/mherschberg/whocue-import-spec.git (push)
 ```
 
 ## Architecture Pointers
@@ -73,6 +95,7 @@ schema/         JSON Schema contract files, starting with whocue-import-v1.schem
 examples/       Synthetic valid and invalid fixture files.
 instructions/   Human-facing and LLM-facing import instructions.
 scripts/        Local validation tooling used by npm scripts and CI.
+PROTOCOL.md     Concise public file-format protocol.
 ```
 
 Key v1 choices are documented in the directory README files. The schema is the

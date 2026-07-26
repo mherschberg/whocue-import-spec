@@ -10,6 +10,7 @@ authors should not need access to the private WhoCue architecture docs.
 |------|--------------|
 | `human-authoring-guide.md` | Human-readable guide for writing or reviewing a v1 import JSON file. |
 | `llm-generator-instructions.md` | Prompt/instruction text for an LLM or other generator that produces v1 import JSON. |
+| `people-selection-guide.md` | Guidance for an LLM that must find and rank event-relevant people before producing JSON. |
 
 ## Contract References
 
