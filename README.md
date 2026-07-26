@@ -44,7 +44,9 @@ When a user asks an LLM to create a WhoCue file for an event:
 The protocol is intentionally small: one event object plus 1-250 people. For
 each selected person, prefer practical recognition and conversation details:
 name, role, organization, why the user may want to meet them, and a concise
-connection topic. Do not include private notes or guessed personal data.
+connection topic. Use `identity_uncertain: true` when the selected profile may
+not identify the intended person. Do not include private notes or guessed
+personal data.
 
 ## Repository Status
 

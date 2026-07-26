@@ -60,6 +60,7 @@ When only an event date is known, use `start_at` at local `00:00:00`,
 | `affiliation` | No | 1-120 characters, non-blank. |
 | `notes` | No | 1-2,000 characters, non-blank. |
 | `connection_topic` | No | 1-500 characters, non-blank. |
+| `identity_uncertain` | No | Boolean. Use `true` when the record may not refer to the intended person. Omit or use `false` when identity is sufficiently certain. |
 | `priority` | No | One of `low`, `medium`, or `high`. |
 | `status` | No | One of `not_met` or `met`. |
 | `tags` | No | Up to 12 unique strings, each 1-40 characters and non-blank. |

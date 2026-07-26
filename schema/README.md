@@ -27,6 +27,8 @@ Each import file describes one event-scoped people list.
   local app-owned IDs during import.
 - Optional status values are `not_met` and `met`.
 - Optional priority values are `low`, `medium`, and `high`.
+- Optional `identity_uncertain` is a boolean marker for records that may not
+  identify the intended person.
 - Tags are shallow strings, limited to 12 unique tags per person and 40
   characters per tag.
 - Optional person links are allowed for `linkedin`, `x`, `instagram`,

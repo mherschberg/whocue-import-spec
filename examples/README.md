@@ -24,7 +24,7 @@ valid JSON.
 | Fixture | Purpose |
 |---------|---------|
 | `valid/minimal.json` | Smallest practical v1 import: schema version, event name, and one named person. |
-| `valid/realistic-demo.json` | Realistic multi-person event with optional event fields, tags, status, priority, notes, connection topics, links, and package-file headshot references. |
+| `valid/realistic-demo.json` | Realistic multi-person event with optional event fields, tags, status, priority, identity uncertainty, notes, connection topics, links, and package-file headshot references. |
 | `valid/realistic-demo.zip` | Ready-to-import package form of `realistic-demo.json` with the referenced synthetic headshots under `images/`. |
 | `valid/embedded-image.json` | Embedded image mode with a tiny synthetic PNG payload. |
 | `valid/package-file-image.json` | ZIP package image mode with a safe relative image path. |

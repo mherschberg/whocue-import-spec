@@ -98,9 +98,10 @@ Use only public information or information supplied by the user. Do not include:
 - Images copied from private accounts or pages that are not meant for public
   reuse.
 
-If information is uncertain, either omit it or write a neutral note such as
-`Public role needs confirmation before the event.` Do not fabricate titles,
-companies, links, or photos to make a record look complete.
+If ordinary field information is uncertain, either omit it or write a neutral
+note such as `Public role needs confirmation before the event.` If the profile
+may not refer to the intended person, set `identity_uncertain: true`. Do not
+fabricate titles, companies, links, or photos to make a record look complete.
 
 ## Mapping Research To WhoCue JSON
 
@@ -111,6 +112,8 @@ Map relevance into the existing v1 fields:
 - Use `priority` for event-day triage, not social status.
 - Use `tags` for scan-friendly categories; keep them short and non-duplicative.
 - Use `links` for identity verification and follow-up context.
+- Use `identity_uncertain: true` only when the selected profile may not be the
+  intended person; do not use it as a general confidence score.
 - Use `image.mode: "remote_url"` only for HTTPS image URLs that are public and
   likely to be stable; otherwise omit `image` or use `{ "mode": "none" }`.
 

@@ -86,6 +86,9 @@ Allowed person fields:
 - `affiliation`: optional, 1-120 characters.
 - `notes`: optional, 1-2,000 characters.
 - `connection_topic`: optional, 1-500 characters.
+- `identity_uncertain`: optional boolean; set to `true` only when the record
+  may not refer to the intended person. Omit or use `false` when identity is
+  sufficiently certain.
 - `priority`: optional; allowed values are `low`, `medium`, and `high`.
 - `status`: optional; allowed values are `not_met` and `met`.
 - `tags`: optional array of up to 12 unique non-blank strings, each 1-40
@@ -100,8 +103,10 @@ do not create duplicate merge keys.
 
 Use `connection_topic` for the main reason the user may want to talk to the
 person at this event. Use `notes` for short public context that helps recognition
-or conversation. Do not add unsupported fields such as `reason`, `confidence`,
-`citation`, `email`, `phone`, or `speaker_session`.
+or conversation. Use `identity_uncertain` only for person-identity uncertainty,
+not as a general confidence score for every field. Do not add unsupported fields
+such as `reason`, `confidence`, `citation`, `email`, `phone`, or
+`speaker_session`.
 
 ## Links
 

@@ -139,6 +139,9 @@
           "maxLength": 500,
           "pattern": "\\S"
         },
+        "identity_uncertain": {
+          "type": "boolean"
+        },
         "priority": {
           "type": "string",
           "enum": [
