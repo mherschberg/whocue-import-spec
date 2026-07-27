@@ -33,6 +33,14 @@ Use public, event-relevant sources when available:
 - Recent public talks, articles, projects, or company announcements that relate
   to the event topic.
 
+If you cannot find a candidate list from public event-relevant sources, stop and
+ask the user to provide one of the following before selecting real people:
+
+- A pasted list of names.
+- A saved HTML page that contains the event people, speakers, attendees,
+  sponsors, exhibitors, or nominees.
+- A screenshot that shows a list of names.
+
 Prefer primary or event-owned sources over scraped lists, stale profile pages,
 or guesses. When public sources conflict, prefer the event page for event role
 and the person's or organization's official page for current title.
@@ -40,6 +48,31 @@ and the person's or organization's official page for current title.
 Do not bypass logins, paywalls, private attendee systems, robots restrictions,
 or privacy settings. Do not infer private attendance from social media unless
 the user supplied it or the person publicly announced it.
+
+If the user supplies a long list or the event has many candidate people,
+consider splitting the review into groups of about 10 people. If your
+environment supports subagents or parallel research workers, assign one group to
+each worker and have each return only the strongest event-relevant candidates,
+with uncertainty flags and concise rationale. Combine the group results, remove
+duplicates, then rank the combined shortlist against the user's goal. Keep the
+final WhoCue list within the user's requested size and the v1 schema limit of
+250 people.
+
+If the available list contains names but no companies, titles, affiliations, or
+event roles, do a limited public identity check before deciding:
+
+- Search LinkedIn, the person's public website, the event site, and ordinary
+  web search results for a person with that name.
+- Prefer matches connected to companies, topics, communities, sponsors,
+  speakers, exhibitors, or partners that are likely to be present at the event.
+- Treat the match as uncertain unless the event context clearly disambiguates
+  the person.
+- If you include the person, set `identity_uncertain: true` when the selected
+  profile may not refer to the intended person, and add a neutral caveat in
+  `notes` such as `Likely profile based on public search; confirm before the
+  event.`
+- Do not invent a title, company, affiliation, or link when the public match is
+  weak or ambiguous.
 
 ## Who To Include
 
@@ -81,6 +114,24 @@ Good fields to preserve:
 - `image`: only when a public, appropriate image URL is available or the user
   supplied an image package.
 
+After choosing the people to meet, ask the user whether they also want recent
+public online activity reviewed to tailor notes and suggested topics. Do this as
+an optional enrichment pass before generating JSON, not as a default requirement.
+If the user says yes, for each selected person:
+
+- Try to find public social media profiles, a personal website, and a blog.
+- Review the website and the last few publicly visible social media posts or
+  blog entries that are relevant to the event, the user's goal, or a practical
+  conversation starter.
+- Update `connection_topic` and `notes` with concise, public, event-useful
+  context. Phrase suggestions naturally; avoid quoting long passages.
+- Add supported HTTPS profile links under `links` when they help verify identity
+  or follow up.
+- Treat online activity as stale or uncertain when dates, authorship, or identity
+  are unclear, and mark identity uncertainty when applicable.
+- Skip private, login-gated, sensitive, personal, inflammatory, or unrelated
+  material.
+
 Avoid fields that do not help event-day recognition or conversation, such as
 long biographies, exhaustive publication lists, unrelated career history,
 personal trivia, sensitive traits, home locations, private contact details, or
@@ -116,6 +167,9 @@ Map relevance into the existing v1 fields:
   intended person; do not use it as a general confidence score.
 - Use `image.mode: "remote_url"` only for HTTPS image URLs that are public and
   likely to be stable; otherwise omit `image` or use `{ "mode": "none" }`.
+- When recent online activity was reviewed, fold useful public findings into
+  `notes`, `connection_topic`, `tags`, and supported `links`; do not add
+  unsupported fields for activity summaries, citations, or research metadata.
 
 Do not add unsupported fields such as `email`, `phone`, `source`, `reason`,
 `confidence`, `speaker_session`, or `citation`. The v1 schema rejects unknown
@@ -131,5 +185,9 @@ Before generating the import JSON, confirm:
 - Names are unique after case-insensitive comparison and whitespace cleanup.
 - No private or sensitive personal data is included.
 - Uncertain facts were omitted or clearly marked as needing confirmation.
+- Name-only matches found through LinkedIn or web search are flagged with
+  `identity_uncertain: true` when the identity may not be the intended person.
+- If recent online activity was used, it came only from public, relevant sources
+  and was compressed into schema-supported fields.
 - The selected details fit the v1 schema in
   `schema/whocue-import-v1.schema.json`.
