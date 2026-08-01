@@ -6,7 +6,7 @@
   "people": [
     {
       "name": "Alex Morgan",
-      "email": "alex@example.com"
+      "favorite_color": "blue"
     }
   ]
 }

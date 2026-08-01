@@ -49,9 +49,17 @@ or profile URLs. Use only facts supplied by the user or clearly synthetic demo
 data. Public examples must use synthetic names, organizations, events, notes,
 URLs, and image payloads.
 
-Do not include private contact details, sensitive personal data, inferred
-protected traits, or unverified claims. If a fact is uncertain, omit it or put a
-short neutral caveat in `notes`.
+Do not include guessed private contact details, sensitive personal data,
+inferred protected traits, or unverified claims. If a fact is uncertain, omit it
+or put a short neutral caveat in `notes`.
+
+When creating an initial event list, ask the user whether they want you to spend
+extra effort looking for email addresses. Email lookup is optional because it may
+cost additional searches, may not find anything, and may be awkward if the user
+already has the person's contact information. If the user opts in, include only
+email addresses you actually find from sources the user wants represented. Never
+fabricate, pattern-match, or guess an email address. Never look up phone numbers
+ahead of the event; include `phone` only when the user supplied it.
 
 Keep research evidence out of the final JSON. Citations, confidence scores,
 source URLs used as evidence, ranking rationale, and speaker-session notes may
@@ -134,9 +142,9 @@ do not create duplicate merge keys.
 Use `connection_topic` for the main reason the user may want to talk to the
 person at this event. Use `notes` for short public context that helps recognition
 or conversation. Use `identity_uncertain` only for person-identity uncertainty,
-not as a general confidence score for every field. Do not add unsupported fields
-such as `reason`, `confidence`, `citation`, `email`, `phone`, or
-`speaker_session`.
+not as a general confidence score for every field. Do not guess or infer
+`email` or `phone`; phone numbers are user-supplied only. Do not add unsupported
+fields such as `reason`, `confidence`, `citation`, or `speaker_session`.
 
 ## Links
 
@@ -220,8 +228,12 @@ Before producing JSON, check:
   `connection_topic`, `notes`, `priority`, `tags`, or a combination of those
   fields.
 - No optional field is `null`, blank, or invented from private data.
-- No private contact details, sensitive personal data, or unsupported research
-  metadata fields are present.
+- Email addresses are user-supplied or were found only after explicit user
+  approval; no email address is guessed.
+- Phone numbers are user-supplied only; no phone number was researched ahead of
+  the event.
+- No guessed private contact details, sensitive personal data, or unsupported
+  research metadata fields are present.
 - Enum values exactly match the allowed lowercase values.
 - All URLs use HTTPS.
 - Date-time fields include `Z` or a numeric timezone offset.

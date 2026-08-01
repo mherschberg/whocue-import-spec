@@ -71,6 +71,8 @@ Allowed fields:
 | `company` | No | 1-120 characters, non-blank. |
 | `affiliation` | No | 1-120 characters, non-blank. |
 | `notes` | No | 1-2,000 characters, non-blank. |
+| `email` | No | 1-254 characters, non-blank. Include only user-supplied email addresses, or addresses found through an explicit user-approved email lookup. Never guess. |
+| `phone` | No | 1-40 characters, non-blank. Include only user-supplied phone numbers. Do not research phone numbers while creating an initial event list. |
 | `connection_topic` | No | 1-500 characters, non-blank. |
 | `identity_uncertain` | No | Boolean. Use `true` when the record may not refer to the intended person. Omit or use `false` when identity is sufficiently certain. |
 | `priority` | No | One of `low`, `medium`, or `high`. |
@@ -87,8 +89,11 @@ Use `connection_topic` for the main reason to talk with the person at this
 event. Use `notes` for short public context that helps recognition or
 conversation. Use `identity_uncertain: true` only to flag uncertainty that the
 profile identifies the intended person; do not use it as a general confidence
-score. Do not add unsupported fields such as `email`, `phone`, `reason`,
-`confidence`, `citation`, or `speaker_session`.
+score. Before looking for email addresses, ask whether the user wants that extra
+research. If they say yes, include only found email addresses from sources the
+user wants represented, and never fabricate or guess an address. Never look up
+phone numbers while creating an initial event list. Do not add unsupported
+fields such as `reason`, `confidence`, `citation`, or `speaker_session`.
 
 ## Links
 
@@ -193,5 +198,5 @@ Before output, verify that:
 - URLs use HTTPS.
 - Embedded image data is canonical padded base64, not a data URI.
 - Person names are unique within the event.
-- No private contact details, sensitive personal data, or unsupported research
-  metadata fields are present.
+- No guessed private contact details, sensitive personal data, or unsupported
+  research metadata fields are present.

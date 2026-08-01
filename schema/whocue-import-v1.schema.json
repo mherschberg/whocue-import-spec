@@ -133,6 +133,18 @@
           "maxLength": 2000,
           "pattern": "\\S"
         },
+        "email": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 254,
+          "pattern": "\\S"
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "pattern": "\\S"
+        },
         "connection_topic": {
           "type": "string",
           "minLength": 1,

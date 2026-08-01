@@ -49,6 +49,8 @@ Schema-enforced limits:
 | Event description | 1-1,000 characters |
 | Person name, title, company, affiliation | 1-120 characters |
 | Person notes | 1-2,000 characters |
+| Person email | 1-254 characters |
+| Person phone | 1-40 characters |
 | Connection topic | 1-500 characters |
 | Tags per person | 0-12 |
 | Tag length | 1-40 characters |

@@ -39,10 +39,12 @@ omitted when unknown. Do not use `null` unless a future schema version explicitl
 allows it.
 
 Keep shortlist research outside the final JSON. Unsupported fields such as
-`citation`, `confidence`, `speaker_session`, `source`, `reason`, `email`, and
-`phone` are rejected by v1. If a public fact helps event-day recognition or
-conversation, summarize it briefly in `notes` or `connection_topic`; otherwise
-leave it out.
+`citation`, `confidence`, `speaker_session`, `source`, and `reason` are
+rejected by v1. If a public fact helps event-day recognition or conversation,
+summarize it briefly in `notes` or `connection_topic`; otherwise leave it out.
+Use `email` only for user-supplied addresses or addresses found through an
+explicit user-approved email lookup. Use `phone` only for user-supplied phone
+numbers; do not research phone numbers while creating an initial event list.
 
 ## Event Fields
 
@@ -71,6 +73,8 @@ the event `timezone`. For example, use `2026-09-14T09:00:00-04:00`, not
 | `company` | No | 1-120 characters, non-blank. |
 | `affiliation` | No | 1-120 characters, non-blank. |
 | `notes` | No | 1-2,000 characters, non-blank. |
+| `email` | No | 1-254 characters, non-blank. Optional lookup requires explicit user approval; never guess. |
+| `phone` | No | 1-40 characters, non-blank. User-supplied only; never research ahead of the event. |
 | `connection_topic` | No | 1-500 characters, non-blank. |
 | `identity_uncertain` | No | Boolean. Use `true` when the record may not refer to the intended person. Omit or use `false` when identity is sufficiently certain. |
 | `priority` | No | One of `low`, `medium`, or `high`. |

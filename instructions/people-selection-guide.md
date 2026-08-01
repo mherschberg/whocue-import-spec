@@ -147,8 +147,8 @@ Use only public information or information supplied by the user. Do not include:
 
 - Private attendee lists unless the user explicitly provides them for their own
   local import.
-- Personal email addresses, phone numbers, home addresses, birthdays, family
-  details, or sensitive personal data.
+- Guessed personal email addresses, phone numbers, home addresses, birthdays,
+  family details, or sensitive personal data.
 - Unverified claims, rumors, inferred demographics, or protected traits.
 - Images copied from private accounts or pages that are not meant for public
   reuse.
@@ -167,6 +167,11 @@ Map relevance into the existing v1 fields:
 - Use `priority` for event-day triage, not social status.
 - Use `tags` for scan-friendly categories; keep them short and non-duplicative.
 - Use `links` for identity verification and follow-up context.
+- Ask before trying to find email addresses. If the user opts in, include only
+  email addresses actually found from sources the user wants represented; never
+  fabricate, pattern-match, or guess an email.
+- Never look up phone numbers ahead of the event. Use `phone` only when the user
+  supplied the number.
 - Use `identity_uncertain: true` only when the selected profile may not be the
   intended person; do not use it as a general confidence score.
 - Use `image.mode: "remote_url"` only for HTTPS image URLs that are public and
@@ -175,9 +180,10 @@ Map relevance into the existing v1 fields:
   `notes`, `connection_topic`, `tags`, and supported `links`; do not add
   unsupported fields for activity summaries, citations, or research metadata.
 
-Do not add unsupported fields such as `email`, `phone`, `source`, `reason`,
-`confidence`, `speaker_session`, or `citation`. The v1 schema rejects unknown
-fields. Put compact relevant context into `notes` or `connection_topic`.
+Do not guess or infer `email` or `phone`. Do not add unsupported fields such as
+`source`, `reason`, `confidence`, `speaker_session`, or `citation`. The v1
+schema rejects unknown fields. Put compact relevant context into `notes` or
+`connection_topic`.
 
 ## Final Selection Check
 

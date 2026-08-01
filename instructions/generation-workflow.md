@@ -32,6 +32,8 @@ Collect only the inputs needed for a focused event-day list:
 - Desired list size. Default to 10-30 people unless the user asks otherwise.
 - Must-include and must-exclude people, organizations, roles, or topics.
 - Public event sources, pasted lists, screenshots, or user-supplied notes.
+- Whether to spend extra effort looking for email addresses for selected
+  people. Default to no lookup unless the user asks for it or opts in.
 - Image preference: no images, public HTTPS image URLs, embedded small images,
   or a ZIP package with image files.
 
@@ -67,16 +69,22 @@ list within the user's requested size and the v1 limit of 250 people.
 After shortlist confirmation, optionally enrich the selected people with public
 or user-supplied facts that help recognition and conversation. Good enrichment
 targets are current title, company, affiliation, public profile links, short
-event-relevant notes, and a concise connection topic.
+event-relevant notes, and a concise connection topic. Email lookup is optional:
+ask the user before doing it because it may add cost, may fail, and may be
+unwanted if the user already has the contact information. If the user opts in,
+include only email addresses actually found from sources the user wants
+represented. Never fabricate, pattern-match, or guess an email address. Never
+look up phone numbers ahead of the event; include `phone` only when the user
+supplied it.
 
 Omit uncertain ordinary fields rather than guessing. Use
 `identity_uncertain: true` only when the selected profile may not identify the
 intended person. Do not use it as a general confidence score.
 
-Do not include private contact details, sensitive personal data, inferred
-protected traits, rumors, copied private profile content, personal photos, or
-private notes unless the user explicitly supplied the data for their own local
-import.
+Do not include guessed private contact details, sensitive personal data,
+inferred protected traits, rumors, copied private profile content, personal
+photos, or private notes unless the user explicitly supplied the data for their
+own local import.
 
 ### 5. Map Details Into V1 Fields
 
@@ -85,15 +93,16 @@ Map the confirmed details into supported WhoCue v1 fields only:
 - Event: `name`, `source_id`, `start_at`, `end_at`, `timezone`, `location`,
   `description`.
 - Person: `name`, `source_id`, `title`, `company`, `affiliation`, `notes`,
-  `connection_topic`, `identity_uncertain`, `priority`, `status`, `tags`,
-  `links`, `image`.
+  `email`, `phone`, `connection_topic`, `identity_uncertain`, `priority`,
+  `status`, `tags`, `links`, `image`.
 - Links: `linkedin`, `x`, `instagram`, `facebook`, `website`, `blog`.
 - Images: `none`, `embedded`, `package_file`, or `remote_url`.
 
-Do not add unsupported fields, including `email`, `phone`, `citation`,
-`confidence`, `speaker_session`, `reason`, `source`, raw `local_file`, activity
-summaries, research notes, ranking rationale, citations, or evidence lists. The
-v1 schema rejects unknown fields.
+Do not guess or infer `email` or `phone`; phone numbers are user-supplied only.
+Do not add unsupported fields, including `citation`, `confidence`,
+`speaker_session`, `reason`, `source`, raw `local_file`, activity summaries,
+research notes, ranking rationale, citations, or evidence lists. The v1 schema
+rejects unknown fields.
 
 ### 6. Choose The Image Mode
 
@@ -188,6 +197,7 @@ Inputs:
 - Must exclude:
 - Sources I provide:
 - Image preference: no images / public HTTPS URLs / embedded small images / ZIP package images
+- Email lookup: no / yes, try to find email addresses for selected people
 
 Workflow:
 1. Ask concise questions if required event or goal details are missing.
@@ -198,11 +208,14 @@ Workflow:
 5. Map only to WhoCue v1 fields from PROTOCOL.md.
 6. Omit unknown optional fields. Do not use nulls.
 7. Use identity_uncertain only when the selected profile may not identify the intended person.
-8. Do not include private contact details, sensitive personal data, copied private profile data,
-   or unsupported fields such as email, phone, citation, confidence, speaker_session,
+8. Ask before trying to find email addresses. If I approve email lookup, include only found
+   addresses and never make up or guess an email.
+9. Never look up phone numbers ahead of time. Include phone only when I provide it.
+10. Do not include guessed private contact details, sensitive personal data, copied private
+   profile data, or unsupported fields such as citation, confidence, speaker_session,
    reason, source, local_file, activity summaries, research notes, or evidence lists.
-9. For local images, use a ZIP package with package_file paths. Do not use raw local paths.
-10. After I approve the shortlist, output JSON only with no Markdown fence or explanation.
+11. For local images, use a ZIP package with package_file paths. Do not use raw local paths.
+12. After I approve the shortlist, output JSON only with no Markdown fence or explanation.
 ```
 
 ## Final Checklist
@@ -219,8 +232,12 @@ Before import, confirm:
 - URLs use HTTPS.
 - Images use only `none`, `embedded`, `package_file`, or `remote_url`.
 - Raw `local_file` paths and sibling image-file workflows are absent.
-- Private contact details, sensitive personal data, citations, confidence
-  scores, research metadata, and unsupported fields are absent.
+- Email addresses are user-supplied or were found only after explicit user
+  approval; no email address is guessed.
+- Phone numbers are user-supplied only; no phone number was researched ahead of
+  the event.
+- Guessed private contact details, sensitive personal data, citations,
+  confidence scores, research metadata, and unsupported fields are absent.
 - The file or ZIP package has been reviewed against the v1 schema and is ready
   for WhoCue import validation.
 - The user has a path to transfer the `.json` or `.zip` to the phone document

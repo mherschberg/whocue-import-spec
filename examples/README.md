@@ -59,7 +59,6 @@ valid JSON.
 | `invalid/numeric-source-id.json` | `source_id` must be a string even when the source identifier looks numeric. |
 | `invalid/unknown-field.json` | Strict v1 rejects an undeclared person field. |
 | `invalid/unsupported-research-metadata-fields.json` | Strict v1 rejects generated research metadata fields such as `citation`, `confidence`, `speaker_session`, and `source`. |
-| `invalid/private-contact-fields.json` | Strict v1 rejects unsupported private contact fields such as `email` and `phone`. |
 | `invalid/unknown-image-field.json` | Strict v1 rejects an undeclared nested image field. |
 | `invalid/invalid-enum-value.json` | `priority` and `status` use unsupported enum values. |
 | `invalid/invalid-date-time.json` | Event timestamps are not RFC 3339 date-time strings; requires validator `format` assertion or an equivalent custom check. |
@@ -137,7 +136,7 @@ Common external-generator mistakes fall into two buckets:
 | Mistake | Coverage |
 |---------|----------|
 | Unsupported research metadata fields such as `citation`, `confidence`, `speaker_session`, `source`, `reason`, research notes, or evidence lists | Validation failure through strict unknown-field rejection. Keep this material outside the final JSON or fold a short user-useful summary into `notes` / `connection_topic`. |
-| Unsupported private contact fields such as `email` or `phone` | Validation failure through strict unknown-field rejection. Do not add private contact details to v1 import files. |
+| Guessed private contact details | Omit guessed `email` or `phone`; email lookup requires explicit user approval and phone is user-supplied only. |
 | Optional fields emitted as `null` | Validation failure. Omit unknown optional fields instead. |
 | Duplicate or near-duplicate person names | Supplemental semantic validation failure. Remove one record or disambiguate the actual `name` value before import. |
 | Raw `local_file` image references, non-HTTPS remote images, unsafe package paths, data URI prefixes, or non-canonical embedded base64 | Validation failure. Use `none`, `embedded`, `package_file`, or `remote_url` exactly as documented. |
