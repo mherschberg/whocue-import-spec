@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Private Contact Field Demo"
+  },
+  "people": [
+    {
+      "name": "Jordan Lee",
+      "title": "Founder",
+      "email": "jordan@example.invalid",
+      "phone": "+1-555-0100"
+    }
+  ]
+}

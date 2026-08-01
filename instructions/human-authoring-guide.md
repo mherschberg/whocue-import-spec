@@ -38,6 +38,12 @@ The schema is strict. Unknown fields are rejected, and optional fields should be
 omitted when unknown. Do not use `null` unless a future schema version explicitly
 allows it.
 
+Keep shortlist research outside the final JSON. Unsupported fields such as
+`citation`, `confidence`, `speaker_session`, `source`, `reason`, `email`, and
+`phone` are rejected by v1. If a public fact helps event-day recognition or
+conversation, summarize it briefly in `notes` or `connection_topic`; otherwise
+leave it out.
+
 ## Event Fields
 
 | Field | Required | Rule |
@@ -182,3 +188,8 @@ When WhoCue rejects a file, the app groups the scrubbed paths by repair area:
 The app examples are intentionally scrubbed. Use paths such as
 `$.people[0].name` to find the field, but avoid copying private notes, profile
 URLs, image data, or raw records into diagnostics.
+
+Validation is not a research-quality review. After the file validates, still
+check that selected people are relevant to the event, notes are current and
+useful, tags are not overbroad, identities are not confused, and remote images
+or package contents are actually available where the JSON says they are.

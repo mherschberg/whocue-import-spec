@@ -53,6 +53,12 @@ Do not include private contact details, sensitive personal data, inferred
 protected traits, or unverified claims. If a fact is uncertain, omit it or put a
 short neutral caveat in `notes`.
 
+Keep research evidence out of the final JSON. Citations, confidence scores,
+source URLs used as evidence, ranking rationale, and speaker-session notes may
+be useful while discussing the shortlist, but v1 has no fields for them. Use
+`notes` or `connection_topic` only for concise context the user will benefit
+from seeing during the event.
+
 ## Required Structure
 
 Generate one JSON object with exactly these required top-level fields:
@@ -223,6 +229,13 @@ Before producing JSON, check:
 - Image objects use exactly one supported mode.
 - Person names are unique within the event.
 - The JSON is valid, with no comments or trailing commas.
+
+Validation catches strict shape problems such as unknown fields, `null` optional
+values, duplicate names, non-HTTPS URLs, unsafe package paths, raw `local_file`
+image modes, and data URI prefixes in embedded image data. It does not prove
+that the selected people are relevant, that public facts are current, or that a
+remote image URL will be reachable when imported. Review those quality issues
+before final output.
 
 ## If WhoCue Reports A Validation Group
 

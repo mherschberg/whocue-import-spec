@@ -58,6 +58,8 @@ valid JSON.
 | `invalid/null-optional-field.json` | Optional fields are omitted when unknown; `null` is not accepted in v1. |
 | `invalid/numeric-source-id.json` | `source_id` must be a string even when the source identifier looks numeric. |
 | `invalid/unknown-field.json` | Strict v1 rejects an undeclared person field. |
+| `invalid/unsupported-research-metadata-fields.json` | Strict v1 rejects generated research metadata fields such as `citation`, `confidence`, `speaker_session`, and `source`. |
+| `invalid/private-contact-fields.json` | Strict v1 rejects unsupported private contact fields such as `email` and `phone`. |
 | `invalid/unknown-image-field.json` | Strict v1 rejects an undeclared nested image field. |
 | `invalid/invalid-enum-value.json` | `priority` and `status` use unsupported enum values. |
 | `invalid/invalid-date-time.json` | Event timestamps are not RFC 3339 date-time strings; requires validator `format` assertion or an equivalent custom check. |
@@ -67,6 +69,7 @@ valid JSON.
 | `invalid/empty-links.json` | Person links object is present but contains no supported links. |
 | `invalid/invalid-image-mime-type.json` | Embedded image declares an unsupported MIME type. |
 | `invalid/invalid-embedded-base64.json` | Embedded image data contains characters outside the v1 base64 pattern. |
+| `invalid/data-uri-embedded-image.json` | Embedded image data includes a data URI prefix instead of canonical base64 only. |
 | `invalid/noncanonical-embedded-base64.json` | Embedded image data uses non-canonical base64 without required padding. |
 | `invalid/empty-embedded-image-data.json` | Embedded image data is empty. |
 | `invalid/empty-image-object.json` | Image object is present but does not declare a valid mode. |
@@ -78,6 +81,7 @@ valid JSON.
 | `invalid/empty-tag.json` | Tag value is empty. |
 | `invalid/event-name-too-long.json` | Event name exceeds the 120-character v1 limit. |
 | `invalid/duplicate-person-name.json` | Duplicate person merge key inside one event. |
+| `invalid/near-duplicate-person-name.json` | Duplicate person merge key after whitespace and case normalization. |
 | `invalid/disallowed-local-file-image.json` | Raw `local_file` image references are unsupported in v1. |
 | `invalid/non-https-remote-image.json` | Remote image URL uses HTTP instead of HTTPS. |
 | `invalid/package-file-path-traversal.json` | ZIP package image path attempts to escape the package root. |
@@ -111,6 +115,9 @@ Schema constraints:
 
 - `invalid/duplicate-person-name.json` must fail a custom duplicate merge-key
   check after schema validation.
+- `invalid/near-duplicate-person-name.json` must fail the same duplicate
+  merge-key check after trimming, repeated-whitespace collapse, and
+  case-insensitive comparison.
 - Generated edge cases in `scripts/validate-examples.mjs` cover large mechanical
   boundaries such as 250 valid people, 251 invalid people, maximum field lengths,
   and just-over-limit values without committing oversized fixture files.
@@ -122,6 +129,20 @@ Schema constraints:
   validation outside the manifest schema.
 - Remote image timeout, redirect, download-size, response MIME, and decoded-image
   constraints require app/tooling validation outside the manifest schema.
+
+## Generation And Repair Coverage
+
+Common external-generator mistakes fall into two buckets:
+
+| Mistake | Coverage |
+|---------|----------|
+| Unsupported research metadata fields such as `citation`, `confidence`, `speaker_session`, `source`, `reason`, research notes, or evidence lists | Validation failure through strict unknown-field rejection. Keep this material outside the final JSON or fold a short user-useful summary into `notes` / `connection_topic`. |
+| Unsupported private contact fields such as `email` or `phone` | Validation failure through strict unknown-field rejection. Do not add private contact details to v1 import files. |
+| Optional fields emitted as `null` | Validation failure. Omit unknown optional fields instead. |
+| Duplicate or near-duplicate person names | Supplemental semantic validation failure. Remove one record or disambiguate the actual `name` value before import. |
+| Raw `local_file` image references, non-HTTPS remote images, unsafe package paths, data URI prefixes, or non-canonical embedded base64 | Validation failure. Use `none`, `embedded`, `package_file`, or `remote_url` exactly as documented. |
+| Weak relevance, stale public information, vague notes, overbroad tags, or a missing event-specific reason to meet someone | Authoring-quality problem. Review with the shortlist/checklist; JSON Schema cannot prove research quality or usefulness. |
+| Remote image URL availability, redirect behavior, response MIME, decoded dimensions, package contents, corrupt image bytes, or missing local-device files | Runtime or package-validation problem outside JSON Schema. Cover with app/tooling checks, not invalid manifest fixtures when the manifest itself is syntactically valid. |
 
 ## Image Problem Coverage
 
