@@ -40,14 +40,16 @@ allows it.
 |-------|----------|------|
 | `name` | Yes | 1-120 characters, non-blank. This is the event merge key. |
 | `source_id` | No | 1-128 characters, non-blank. External traceability only. |
-| `start_at` | No | RFC 3339 date-time string. |
-| `end_at` | No | RFC 3339 date-time string. |
+| `start_at` | No | RFC 3339 date-time string with `Z` or numeric timezone offset. |
+| `end_at` | No | RFC 3339 date-time string with `Z` or numeric timezone offset. |
 | `timezone` | No | IANA-style area/location value, such as `America/New_York`. |
 | `location` | No | 1-160 characters, non-blank. |
 | `description` | No | 1-1,000 characters, non-blank. |
 
 When only an event date is known, use `start_at` at local `00:00:00`,
-`end_at` at local `23:59:59`, and include the event `timezone`.
+`end_at` at local `23:59:59`, include the offset in each timestamp, and include
+the event `timezone`. For example, use `2026-09-14T09:00:00-04:00`, not
+`2026-09-14T09:00:00`.
 
 ## Person Fields
 
@@ -101,9 +103,10 @@ Supported v1 image modes:
 
 Supported image MIME types are `image/jpeg`, `image/png`, and `image/webp`.
 
-Embedded images use canonical base64 and are limited to 1,398,104 characters,
-approximately 1 MiB decoded. Package and remote images must stay within a 2 MiB
-image-file limit and a 2048 x 2048 decoded-image envelope.
+Embedded images use canonical padded base64 with no whitespace, data URI prefix,
+or missing padding, and are limited to 1,398,104 characters, approximately 1 MiB
+decoded. Package and remote images must stay within a 2 MiB image-file limit and
+a 2048 x 2048 decoded-image envelope.
 
 `package_file.path` must be a safe relative path inside the ZIP package. It may
 not be absolute, contain `.` or `..` path segments, contain double slashes, or

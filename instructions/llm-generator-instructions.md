@@ -85,14 +85,16 @@ Allowed `event` fields:
 
 - `name`: required, 1-120 characters.
 - `source_id`: optional, 1-128 characters.
-- `start_at`: optional RFC 3339 date-time.
-- `end_at`: optional RFC 3339 date-time.
+- `start_at`: optional RFC 3339 date-time with `Z` or numeric timezone offset.
+- `end_at`: optional RFC 3339 date-time with `Z` or numeric timezone offset.
 - `timezone`: optional IANA-style value such as `America/New_York`.
 - `location`: optional, 1-160 characters.
 - `description`: optional, 1-1,000 characters.
 
 If only an event date is known, use local `00:00:00` for `start_at`, local
-`23:59:59` for `end_at`, and include `timezone` when known.
+`23:59:59` for `end_at`, include the offset in each timestamp, and include
+`timezone` when known. For example, use `2026-09-14T09:00:00-04:00`, not
+`2026-09-14T09:00:00`.
 
 ## Person Object
 
@@ -189,8 +191,9 @@ Image rules:
 - Remote image URLs must use HTTPS.
 - `storage_preference`, when present, must be `save_locally` or
   `remote_reference`.
-- Embedded image data must be canonical base64 and no more than 1,398,104
-  characters, approximately 1 MiB decoded.
+- Embedded image data must be canonical padded base64 with no whitespace, data
+  URI prefix, or missing padding, and no more than 1,398,104 characters,
+  approximately 1 MiB decoded.
 - Package image paths must be relative paths inside the ZIP package. They must
   not be absolute, include `.` or `..` path segments, include double slashes, or
   point to unsupported file extensions.
@@ -212,6 +215,8 @@ Before producing JSON, check:
   metadata fields are present.
 - Enum values exactly match the allowed lowercase values.
 - All URLs use HTTPS.
+- Date-time fields include `Z` or a numeric timezone offset.
+- Embedded image data is canonical padded base64, not a data URI.
 - Image objects use exactly one supported mode.
 - Person names are unique within the event.
 - The JSON is valid, with no comments or trailing commas.

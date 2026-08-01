@@ -58,13 +58,16 @@ valid JSON.
 | `invalid/unknown-image-field.json` | Strict v1 rejects an undeclared nested image field. |
 | `invalid/invalid-enum-value.json` | `priority` and `status` use unsupported enum values. |
 | `invalid/invalid-date-time.json` | Event timestamps are not RFC 3339 date-time strings; requires validator `format` assertion or an equivalent custom check. |
+| `invalid/date-time-missing-offset.json` | Event timestamps omit the required `Z` or numeric timezone offset. |
 | `invalid/invalid-timezone.json` | Event timezone is not an IANA-style area/location value. |
 | `invalid/invalid-link-url.json` | Person link is not a valid HTTPS URL. |
 | `invalid/empty-links.json` | Person links object is present but contains no supported links. |
 | `invalid/invalid-image-mime-type.json` | Embedded image declares an unsupported MIME type. |
 | `invalid/invalid-embedded-base64.json` | Embedded image data contains characters outside the v1 base64 pattern. |
+| `invalid/noncanonical-embedded-base64.json` | Embedded image data uses non-canonical base64 without required padding. |
 | `invalid/empty-embedded-image-data.json` | Embedded image data is empty. |
 | `invalid/empty-image-object.json` | Image object is present but does not declare a valid mode. |
+| `invalid/null-image.json` | Optional image object is present as `null`; omit `image` or use `{ "mode": "none" }`. |
 | `invalid/missing-embedded-image-data.json` | Embedded image omits required mode-specific `data`. |
 | `invalid/invalid-storage-preference.json` | Remote image uses an unsupported storage preference. |
 | `invalid/too-many-tags.json` | Person has 13 tags; v1 allows at most 12. |
@@ -92,8 +95,9 @@ Schema constraints:
 - Generated edge cases in `scripts/validate-examples.mjs` cover large mechanical
   boundaries such as 250 valid people, 251 invalid people, maximum field lengths,
   and just-over-limit values without committing oversized fixture files.
-- Embedded image data may need custom decode validation beyond the schema's
-  conservative base64 character pattern and size limit.
+- Embedded image data must be canonical padded base64. Supplemental validation
+  rejects data URI prefixes, whitespace, malformed content, and missing padding
+  that can pass the schema's conservative character pattern.
 - ZIP package constraints such as undeclared files, duplicate entries, nested
   archives, compressed size, and actual image decode dimensions require package
   validation outside the manifest schema.

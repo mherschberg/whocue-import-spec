@@ -17,9 +17,11 @@ unknown fields are rejected instead of ignored.
 Each import file describes one event-scoped people list.
 
 - `event.name` is required and is the event merge key.
-- `event.start_at`, `event.end_at`, and `event.timezone` are optional. When an
-  event date is known but exact times are not, generators should use
-  `00:00:00` and `23:59:59` in the event's timezone.
+- `event.start_at`, `event.end_at`, and `event.timezone` are optional. Date-time
+  values must include `Z` or a numeric timezone offset. When an event date is
+  known but exact times are not, generators should use `00:00:00` and
+  `23:59:59` with the local offset, plus `timezone` for the named event
+  timezone.
 - `people` must contain 1-250 person records.
 - Each person requires `name`; the person name is the merge key within the
   event.
@@ -61,8 +63,11 @@ plain JSON Schema:
 - Person names must be unique within a single import file after app-defined
   merge-key normalization.
 - If only an event date is known, import authors should provide `start_at` at
-  local midnight and `end_at` at local `23:59:59`; `timezone` should identify
-  the intended event timezone.
+  local midnight and `end_at` at local `23:59:59`, include the offset in each
+  timestamp, and use `timezone` to identify the named event timezone.
+- Embedded image data must be canonical padded base64. Supplemental validation
+  rejects data URI prefixes, whitespace, malformed content, and missing padding
+  that can pass the schema's conservative character pattern.
 - If an existing local event has duplicate matching person names, the app must
   reject the merge as ambiguous rather than guessing.
 - Embedded, packaged, and downloaded images must decode successfully, use JPEG,

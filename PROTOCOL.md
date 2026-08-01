@@ -48,14 +48,16 @@ Allowed fields:
 |-------|----------|------|
 | `name` | Yes | 1-120 characters, non-blank. Event merge key. |
 | `source_id` | No | 1-128 characters, non-blank. External traceability only. |
-| `start_at` | No | RFC 3339 date-time. |
-| `end_at` | No | RFC 3339 date-time. |
+| `start_at` | No | RFC 3339 date-time with `Z` or numeric timezone offset. |
+| `end_at` | No | RFC 3339 date-time with `Z` or numeric timezone offset. |
 | `timezone` | No | IANA-style value, such as `America/New_York`. |
 | `location` | No | 1-160 characters, non-blank. |
 | `description` | No | 1-1,000 characters, non-blank. |
 
 If only the event date is known, use local `00:00:00` for `start_at`, local
-`23:59:59` for `end_at`, and include `timezone` when known.
+`23:59:59` for `end_at`, include the offset in each timestamp, and include
+`timezone` when known. Example: `2026-09-14T09:00:00-04:00`, not
+`2026-09-14T09:00:00`.
 
 ## Person Object
 
@@ -143,8 +145,9 @@ Image rules:
 - Remote image URLs must use HTTPS.
 - `storage_preference`, when present, must be `save_locally` or
   `remote_reference`.
-- Embedded image data must be canonical base64 and no more than 1,398,104
-  characters, approximately 1 MiB decoded.
+- Embedded image data must be canonical padded base64 with no whitespace, data
+  URI prefix, or missing padding, and no more than 1,398,104 characters,
+  approximately 1 MiB decoded.
 - Package image paths must be safe relative paths inside the ZIP package.
 - Package and remote images must stay within a 2 MiB image-file limit and a
   2048 x 2048 decoded-image envelope.
@@ -167,8 +170,10 @@ Before output, verify that:
 - Every object uses only allowed fields.
 - Required names are present and non-blank.
 - Optional fields are omitted when unknown.
+- Date-time fields include `Z` or a numeric timezone offset.
 - Enum values exactly match the protocol.
 - URLs use HTTPS.
+- Embedded image data is canonical padded base64, not a data URI.
 - Person names are unique within the event.
 - No private contact details, sensitive personal data, or unsupported research
   metadata fields are present.
