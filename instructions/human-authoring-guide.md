@@ -4,6 +4,10 @@ Use this guide to write or review a WhoCue import file by hand. The
 machine-readable contract is `schema/whocue-import-v1.schema.json`; this guide
 explains the same v1 rules in authoring terms.
 
+For the full external workflow, including source gathering, shortlist review,
+LLM prompt guidance, validation, and phone transfer, start with
+`generation-workflow.md`.
+
 ## File Shape
 
 A v1 import is one JSON object for one event-scoped people list:

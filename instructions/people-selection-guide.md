@@ -3,6 +3,10 @@
 Use this guide before generating a WhoCue v1 import file when the user wants an
 LLM to identify people worth meeting at an event.
 
+For the full external workflow, including shortlist confirmation, final
+JSON-only output, validation, and phone transfer, start with
+`generation-workflow.md`.
+
 WhoCue is not a contact database. It is an event-day recognition and
 conversation aid. Select a focused set of people the user can realistically
 notice, remember, and approach during one event.

@@ -18,6 +18,8 @@ Schema v1 is represented by:
   realistic demo, including synthetic local headshot image files.
 - `instructions/human-authoring-guide.md` - guide for people writing or
   reviewing import files.
+- `instructions/generation-workflow.md` - end-to-end workflow and reusable
+  prompt/checklist for external generation.
 - `instructions/llm-generator-instructions.md` - prompt/instruction text for
   LLMs or other generators.
 - `instructions/people-selection-guide.md` - public guidance for LLMs that need
@@ -33,19 +35,21 @@ validation groups surfaced by the WhoCue app.
 
 When a user asks an LLM to create a WhoCue file for an event:
 
-1. Read `instructions/people-selection-guide.md` to decide who belongs in the
+1. Read `instructions/generation-workflow.md` for the end-to-end sequence from
+   source gathering to phone import.
+2. Read `instructions/people-selection-guide.md` to decide who belongs in the
    user's event-day list and what evidence is relevant.
-2. Read `PROTOCOL.md` for the concise public file-format protocol.
-3. Read `instructions/llm-generator-instructions.md` to produce the final JSON
+3. Read `PROTOCOL.md` for the concise public file-format protocol.
+4. Read `instructions/llm-generator-instructions.md` to produce the final JSON
    shape.
-4. Use `schema/whocue-import-v1.schema.json` as the machine-readable protocol
+5. Use `schema/whocue-import-v1.schema.json` as the machine-readable protocol
    and `examples/valid/minimal.json` or `examples/valid/realistic-demo.json` as
    output models.
-5. If the user is generating the file on a laptop or desktop, suggest saving
+6. If the user is generating the file on a laptop or desktop, suggest saving
    the `.json` file, or image-heavy `.zip` package, into a synced folder such
    as Google Drive, OneDrive, Dropbox, or iCloud Drive, then importing it from
    the phone through WhoCue's document picker.
-6. Return JSON only when the user is ready for an import file.
+7. Return JSON only when the user is ready for an import file.
 
 The protocol is intentionally small: one event object plus 1-250 people. For
 each selected person, prefer practical recognition and conversation details:

@@ -3,6 +3,9 @@
 Use these instructions when generating a WhoCue v1 import JSON file for a user.
 The output must validate against `schema/whocue-import-v1.schema.json`.
 
+For the full source-gathering, shortlist confirmation, validation, and phone
+transfer sequence, start with `generation-workflow.md`.
+
 If the user also asks you to find people for an event, first use
 `instructions/people-selection-guide.md`. That guide covers public-source
 research, relevance ranking, privacy limits, and how to map event value into
