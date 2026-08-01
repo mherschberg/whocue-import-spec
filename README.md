@@ -20,6 +20,8 @@ Schema v1 is represented by:
   reviewing import files.
 - `instructions/generation-workflow.md` - end-to-end workflow and reusable
   prompt/checklist for external generation.
+- `instructions/handoff-export-processing.md` - guidance for external LLMs,
+  humans, and user-controlled systems processing updated WhoCue handoff exports.
 - `instructions/llm-generator-instructions.md` - prompt/instruction text for
   LLMs or other generators.
 - `instructions/people-selection-guide.md` - public guidance for LLMs that need
@@ -60,6 +62,19 @@ name, role, organization, why the user may want to meet them, and a concise
 connection topic. Use `identity_uncertain: true` when the selected profile may
 not identify the intended person. Do not include private notes or guessed
 personal data.
+
+## Quick Start For Handoff Export Processing
+
+When a user gives an external LLM or human workflow a WhoCue event handoff
+export, read `instructions/handoff-export-processing.md`. Handoff exports are
+private user-controlled JSON documents whose root `format` is
+`whocue_event_handoff`. They include latest local app state such as meeting
+notes, app-updated status and priority, newly added people, and standard
+followup ownership states.
+
+Do not treat a handoff export as a WhoCue import file. If the user wants a fresh
+WhoCue import file from exported state, create a separate v1 import JSON using
+only the supported fields from `PROTOCOL.md` and validate it against the schema.
 
 ## Repository Status
 
@@ -108,9 +123,9 @@ only to retained Throughstone-authored scaffold material.
 ```text
 schema/         JSON Schema contract files, starting with whocue-import-v1.schema.json.
 examples/       Synthetic valid and invalid fixture files.
-instructions/   Human-facing and LLM-facing import instructions.
+instructions/   Human-facing and LLM-facing import and handoff instructions.
 scripts/        Local validation tooling used by npm scripts and CI.
-PROTOCOL.md     Concise public file-format protocol.
+PROTOCOL.md     Concise public import file-format protocol.
 ```
 
 Key v1 choices are documented in the directory README files. The schema is the

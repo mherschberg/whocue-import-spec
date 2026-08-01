@@ -6,8 +6,10 @@ and shortlist decisions separate from the final import JSON so the finished file
 can validate cleanly and be imported on the phone.
 
 WhoCue does not research people, call an LLM, or sync data. This import
-workflow does not define export of updated event state. The app imports a
-user-selected `.json` file or `.zip` package through the phone document picker.
+workflow is for bringing data into WhoCue. For processing updated event state
+exported back out of the app, use `handoff-export-processing.md`. The app
+imports a user-selected `.json` file or `.zip` package through the phone
+document picker.
 
 ## Source Files To Use
 
