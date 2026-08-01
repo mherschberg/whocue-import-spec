@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Design Systems Expo 2026",
+    "start_at": "2026-11-03T10:00:00-08:00",
+    "end_at": "2026-11-03T16:30:00-08:00",
+    "timezone": "America/Los_Angeles"
+  },
+  "people": [
+    {
+      "name": "Iris Novak",
+      "title": "Design Operations Lead",
+      "company": "Canvas Harbor Studio",
+      "connection_topic": "Ask how their team prepares recognition notes for large design critiques.",
+      "priority": "high",
+      "tags": [
+        "design",
+        "operations"
+      ],
+      "image": {
+        "mode": "package_file",
+        "path": "images/iris-novak.webp",
+        "mime_type": "image/webp"
+      }
+    },
+    {
+      "name": "Mateo Silva",
+      "title": "Research Lead",
+      "company": "Pattern Sample Works",
+      "notes": "Image quality unknown in the source material, so the file explicitly supplies no image.",
+      "connection_topic": "Discuss how they keep participant context concise enough for event-day review.",
+      "priority": "medium",
+      "tags": [
+        "research"
+      ],
+      "image": {
+        "mode": "none"
+      }
+    },
+    {
+      "name": "Priya Stone",
+      "affiliation": "Synthetic Accessibility Roundtable",
+      "connection_topic": "Ask what makes a mobile event list useful without turning into a CRM.",
+      "priority": "medium",
+      "tags": [
+        "accessibility",
+        "mobile"
+      ]
+    }
+  ]
+}

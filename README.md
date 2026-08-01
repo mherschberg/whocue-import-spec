@@ -43,8 +43,11 @@ When a user asks an LLM to create a WhoCue file for an event:
 4. Read `instructions/llm-generator-instructions.md` to produce the final JSON
    shape.
 5. Use `schema/whocue-import-v1.schema.json` as the machine-readable protocol
-   and `examples/valid/minimal.json` or `examples/valid/realistic-demo.json` as
-   output models.
+   and choose the closest output model: `examples/valid/minimal.json`,
+   `examples/valid/realistic-demo.json`,
+   `examples/valid/llm-researched-shortlist.json`,
+   `examples/valid/manual-sparse-shortlist.json`, or
+   `examples/valid/image-package-shortlist.json`.
 6. If the user is generating the file on a laptop or desktop, suggest saving
    the `.json` file, or image-heavy `.zip` package, into a synced folder such
    as Google Drive, OneDrive, Dropbox, or iCloud Drive, then importing it from
