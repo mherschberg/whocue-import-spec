@@ -220,3 +220,24 @@ Before producing JSON, check:
 - Image objects use exactly one supported mode.
 - Person names are unique within the event.
 - The JSON is valid, with no comments or trailing commas.
+
+## If WhoCue Reports A Validation Group
+
+When repairing a rejected file, preserve the user's requested list but fix the
+reported group directly:
+
+- File structure and version: output one JSON object, keep
+  `schema_version: "1.0"`, and remove unsupported fields.
+- Missing required content: add or repair required event/person names; remove
+  records that cannot be named.
+- Field types and formats: fix JSON types, exact enum values, date-time
+  offsets, IANA-style timezones, and HTTPS URLs.
+- Import limits: shorten over-limit text, reduce tags, split lists over 250
+  people, or avoid oversized embedded images.
+- Duplicates: disambiguate same-name people or remove duplicates; remove
+  repeated tags.
+- Image references: use `none`, `embedded`, `package_file`, or `remote_url`
+  exactly; use canonical padded base64, safe package paths, supported MIME
+  types, and HTTPS remote URLs.
+
+Return the repaired JSON only when the user is ready for the final import file.

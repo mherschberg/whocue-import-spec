@@ -159,6 +159,24 @@ Image rules:
 - People per import: 1-250.
 - Images per person: 0-1.
 
+## Repairing Validation Failures
+
+WhoCue groups validation failures by repair area. Use the group label shown by
+the app to choose the smallest useful fix:
+
+| App group | Repair |
+|-----------|--------|
+| File structure and version | Make the root a single JSON object, set `schema_version` to `"1.0"`, and remove fields that are not listed in this protocol. |
+| Missing required content | Add required `event`, `event.name`, `people`, and each person `name`; replace blank required text with non-blank text. |
+| Field types and formats | Use the exact JSON types, enum values, RFC 3339 date-times with offsets, IANA-style timezones, and HTTPS URLs required by v1. |
+| Import limits | Reduce people, tags, image payloads, file size, or over-long strings to the v1 limits. |
+| Duplicates | Remove or rename duplicate person merge keys within the event and repeated tags within one person. |
+| Image references | Use one supported image mode, supported MIME types, canonical padded base64 for embedded data, safe package paths, and HTTPS remote URLs. |
+
+Repair structure/version problems first, then required content, then individual
+field and image issues. Do not paste raw private records into bug reports or
+diagnostics; use the app's scrubbed paths such as `$.people[0].image.url`.
+
 ## LLM Output Rule
 
 When producing a final WhoCue import file, output JSON only: no Markdown code

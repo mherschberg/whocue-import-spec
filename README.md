@@ -25,7 +25,9 @@ Schema v1 is represented by:
 
 The v1 contract uses strict unknown-field rejection, required top-level
 `schema_version`, `event`, and `people`, explicit image modes, bounded field and
-record counts, and synthetic-only public examples.
+record counts, and synthetic-only public examples. `PROTOCOL.md`, the human
+guide, LLM instructions, and examples README now describe how to repair the
+validation groups surfaced by the WhoCue app.
 
 ## Quick Start For LLMs
 

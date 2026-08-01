@@ -87,6 +87,22 @@ consistently. Some validator installs treat `format` as annotation unless extra
 dependencies or options are enabled; `invalid/invalid-date-time.json` exists to
 catch that configuration gap.
 
+The WhoCue app also maps invalid fixture failures into user-facing repair
+groups. Representative public fixtures for each group are:
+
+| App repair group | Representative invalid fixtures |
+|------------------|---------------------------------|
+| File structure and version | `invalid/unsupported-schema-version.json`, `invalid/unknown-field.json` |
+| Missing required content | `invalid/missing-event.json`, `invalid/empty-event-object.json`, `invalid/missing-person-name.json` |
+| Field types and formats | `invalid/numeric-source-id.json`, `invalid/invalid-date-time.json`, `invalid/invalid-link-url.json` |
+| Import limits | `invalid/event-name-too-long.json`, `invalid/person-name-too-long.json`, `invalid/too-many-tags.json` |
+| Duplicates | `invalid/duplicate-person-name.json`, `invalid/duplicate-tags.json` |
+| Image references | `invalid/invalid-image-mime-type.json`, `invalid/non-https-remote-image.json`, `invalid/package-file-path-traversal.json` |
+
+Keep that table covered when adding a new validation category. A fixture may
+produce more than one low-level validation issue, but its primary repair group
+should remain obvious from the filename.
+
 Some v1 rules are semantic or package-level checks rather than portable JSON
 Schema constraints:
 

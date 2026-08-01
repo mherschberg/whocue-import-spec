@@ -161,3 +161,20 @@ npm run check
 The validation command compiles the schema, checks all valid and invalid
 fixtures, and adds supplemental semantic checks that JSON Schema alone does not
 cover.
+
+## Repair Common Validation Failures
+
+When WhoCue rejects a file, the app groups the scrubbed paths by repair area:
+
+| App group | What to check |
+|-----------|---------------|
+| File structure and version | The file is valid JSON, the root is one object, `schema_version` is exactly `"1.0"`, and every object uses only v1 fields. |
+| Missing required content | Required objects and names are present: `event`, `event.name`, `people`, and every person `name`. Blank required strings must become non-blank or the record should be removed. |
+| Field types and formats | Strings are strings, booleans are booleans, enums use exact lowercase values, date-times include `Z` or an offset, timezones look like `Area/Location`, and URLs are HTTPS. |
+| Import limits | The JSON file, people count, tag count, image payloads, and string lengths fit the limits in this guide. |
+| Duplicates | Person names are unique within the event after trimming/case normalization, and tags are not repeated within one person. |
+| Image references | The `image` object uses exactly one supported mode; embedded data is canonical padded base64; package paths are safe relative image paths; remote image URLs are HTTPS. |
+
+The app examples are intentionally scrubbed. Use paths such as
+`$.people[0].name` to find the field, but avoid copying private notes, profile
+URLs, image data, or raw records into diagnostics.
