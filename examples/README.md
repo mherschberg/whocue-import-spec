@@ -120,6 +120,29 @@ Schema constraints:
 - Remote image timeout, redirect, download-size, response MIME, and decoded-image
   constraints require app/tooling validation outside the manifest schema.
 
+## Image Problem Coverage
+
+Common image problem cases are covered at the layer that can make the behavior
+deterministic:
+
+| Problem case | Coverage owner |
+|--------------|----------------|
+| Missing package entry | App contract/import tests with generated ZIP packages; this is not a JSON Schema failure because the manifest path is syntactically valid. |
+| Undeclared package entry | App ZIP resolver tests; requires inspecting ZIP entries outside the manifest schema. |
+| Duplicate package entry | App ZIP resolver tests; requires archive-level duplicate path detection. |
+| Nested archive | App ZIP resolver tests; requires archive-level entry inspection. |
+| Corrupt image bytes | App contract/import and image processor tests; the manifest can be valid while bytes fail decode. |
+| Unsupported MIME or type mismatch | Public invalid JSON fixture for unsupported declared MIME; app contract/image tests for byte-level mismatch. |
+| Oversized image payload | Generated import-spec edge cases for embedded payload limits; app contract/image tests for package and remote byte limits. |
+| Remote non-HTTPS URL | Public invalid JSON fixture `invalid/non-https-remote-image.json`. |
+| Remote unavailable, bad status, or timeout | App contract/remote-fetcher tests with deterministic fakes; this depends on network response behavior, not JSON shape. |
+| Saved-local file missing after import | App display resolver and contract tests; this is a local-device storage condition after a previous successful import. |
+
+Do not force package, remote-network, or local-device conditions into invalid
+JSON fixtures when the manifest itself is valid. Keeping those checks in app
+tests avoids misleading public authors into thinking a JSON Schema validator can
+prove ZIP contents, remote availability, or on-device file existence.
+
 ## Naming
 
 Use lowercase kebab-case filenames that name the behavior being tested, such as
