@@ -26,6 +26,10 @@ valid JSON.
 | `valid/minimal.json` | Smallest practical v1 import: schema version, event name, and one named person. |
 | `valid/realistic-demo.json` | Realistic multi-person event with optional event fields, tags, status, priority, identity uncertainty, notes, connection topics, links, and package-file headshot references. |
 | `valid/realistic-demo.zip` | Ready-to-import package form of `realistic-demo.json` with the referenced synthetic headshots under `images/`. |
+| `valid/realistic-demo-2.json` | Six-person realistic demo event with synthetic companies, meeting context, and package-file headshot references. |
+| `valid/realistic-demo-2.zip` | Ready-to-import package form of `realistic-demo-2.json` with the referenced synthetic headshots under `images/`. |
+| `valid/realistic-demo-3.json` | Ten-person realistic demo event with synthetic companies, varied priorities, meeting states, and package-file headshot references. |
+| `valid/realistic-demo-3.zip` | Ready-to-import package form of `realistic-demo-3.json` with the referenced synthetic headshots under `images/`. |
 | `valid/llm-researched-shortlist.json` | Model for an LLM-researched, user-reviewed shortlist with event-specific priorities, tags, supported links, connection topics, and an explicit identity-uncertainty flag. |
 | `valid/manual-sparse-shortlist.json` | Model for a manually authored shortlist that stays useful while omitting unknown optional fields instead of using placeholders or `null`. |
 | `valid/image-package-shortlist.json` | Model for mixed image handling in a generated package manifest: one package-file image, one explicit no-image record, and one omitted image. |
@@ -174,6 +178,7 @@ one primary behavior so validation failures are easy to diagnose.
 
 ## Privacy
 
-All examples must use synthetic people, organizations, events, notes, image
-payloads, and URLs. Do not add real attendee lists, private notes, personal
-photos, production URLs, or copied profile data.
+All examples are fictional and do not depict any actual person or event.
+Existing and new examples must use synthetic people, organizations, events,
+notes, image payloads, and URLs. Do not add real attendee lists, private notes,
+personal photos, production URLs, or copied profile data.

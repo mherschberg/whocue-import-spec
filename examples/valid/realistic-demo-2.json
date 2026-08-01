@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Regional Growth Summit 2026",
+    "source_id": "event-rgs-2026",
+    "start_at": "2026-10-08T08:30:00-05:00",
+    "end_at": "2026-10-08T16:45:00-05:00",
+    "timezone": "America/Chicago",
+    "location": "Lakeview Innovation Center",
+    "description": "Synthetic six-person demo event for validating a medium-sized WhoCue import package."
+  },
+  "people": [
+    {
+      "name": "Avery Brooks",
+      "source_id": "person-avery-brooks",
+      "title": "VP of Customer Strategy",
+      "company": "Prairie Loop Analytics",
+      "notes": "Looking for better ways to capture context from conference conversations without slowing down account teams.",
+      "connection_topic": "Ask how their customer team prioritizes event follow-ups after regional summits.",
+      "priority": "high",
+      "status": "not_met",
+      "tags": [
+        "customer-success",
+        "analytics",
+        "buyer"
+      ],
+      "links": {
+        "website": "https://example.com/people/avery-brooks",
+        "linkedin": "https://example.com/in/avery-brooks"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/avery-brooks.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Mina Okafor",
+      "source_id": "person-mina-okafor",
+      "title": "Managing Partner",
+      "company": "Cedar Bridge Ventures",
+      "notes": "Invests in practical workflow tools for small professional-services firms.",
+      "connection_topic": "Compare how investors evaluate event-led customer discovery.",
+      "priority": "medium",
+      "status": "not_met",
+      "tags": [
+        "investor",
+        "workflow",
+        "strategy"
+      ],
+      "links": {
+        "website": "https://example.com/people/mina-okafor"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/mina-okafor.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Theo Martinez",
+      "source_id": "person-theo-martinez",
+      "title": "Director of Partnerships",
+      "company": "Signal Yard",
+      "notes": "Runs partner programs where quick face-to-face context often determines which introductions move forward.",
+      "connection_topic": "Ask about partner qualification before crowded networking sessions.",
+      "priority": "high",
+      "status": "not_met",
+      "tags": [
+        "partnerships",
+        "networking"
+      ],
+      "links": {
+        "linkedin": "https://example.com/in/theo-martinez"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/theo-martinez.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Priya Shah",
+      "source_id": "person-priya-shah",
+      "title": "Operations Lead",
+      "company": "North Pier Foods",
+      "notes": "Met briefly in a synthetic breakfast roundtable example; interested in vendor follow-up discipline.",
+      "connection_topic": "Follow up on how operations teams record supplier conversations.",
+      "priority": "medium",
+      "status": "met",
+      "tags": [
+        "operations",
+        "supplier"
+      ],
+      "links": {
+        "blog": "https://example.com/blog/priya-shah"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/priya-shah.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Lucas Nguyen",
+      "source_id": "person-lucas-nguyen",
+      "title": "Product Marketing Manager",
+      "company": "Brightline Demo Works",
+      "notes": "Testing messaging around simple tools that help teams remember why a contact mattered.",
+      "connection_topic": "Discuss positioning for lightweight relationship context versus full CRM workflows.",
+      "priority": "low",
+      "status": "not_met",
+      "tags": [
+        "marketing",
+        "positioning",
+        "product"
+      ],
+      "links": {
+        "website": "https://example.com/people/lucas-nguyen"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/lucas-nguyen.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Elena Rossi",
+      "source_id": "person-elena-rossi",
+      "title": "Program Chair",
+      "affiliation": "Midwest Founder Forum",
+      "notes": "May be the right organizer for a later demo conversation; identity is synthetic and intentionally uncertain.",
+      "connection_topic": "Ask whether organizers see attendee-prep tools as sponsor value or attendee value.",
+      "identity_uncertain": true,
+      "priority": "medium",
+      "status": "not_met",
+      "tags": [
+        "organizer",
+        "events"
+      ],
+      "links": {
+        "website": "https://example.com/people/elena-rossi"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/elena-rossi.jpg",
+        "mime_type": "image/jpeg"
+      }
+    }
+  ]
+}
