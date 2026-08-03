@@ -76,47 +76,28 @@ Do not treat a handoff export as a WhoCue import file. If the user wants a fresh
 WhoCue import file from exported state, create a separate v1 import JSON using
 only the supported fields from `PROTOCOL.md` and validate it against the schema.
 
-## Repository Status
+## Repository
 
-The GitHub remote is:
+Source and issues:
 
 ```text
 https://github.com/mherschberg/whocue-import-spec
 ```
 
-The repository has been split into a standalone Git repository at
-`Code/whocue-import-spec/` and pushed to GitHub. It is intentionally private
-until launch. When the owner is ready for public LLM/user access, change the
-GitHub repository visibility to public.
-
-Current remote setup:
-
-```bash
-git remote -v
-origin  https://github.com/mherschberg/whocue-import-spec.git (fetch)
-origin  https://github.com/mherschberg/whocue-import-spec.git (push)
-```
-
-## Architecture Pointers
-
-The private WhoCue docs hub governs the implementation decisions behind this
-public contract. Relevant private paths are:
-
-- `Code/whocue-docs/architecture/08-infrastructure-deployment.md`
-- `Code/whocue-docs/architecture/09-environments.md`
-- `Code/whocue-docs/architecture/11-interface-contracts.md`
-- `Code/whocue-docs/architecture/12-test-strategy.md`
-- `Code/whocue-docs/adr/ADR-0002-use-public-json-schema-import-spec-repo.md`
-
-This public repo should remain useful without access to those private files.
-They are listed for maintainers and future agents working inside the full
-WhoCue workspace.
-
 ## Licensing
 
-See [`LICENSING.md`](LICENSING.md). No project `LICENSE` is present because the
-current project-license posture is proprietary. `LICENSE-THROUGHSTONE` applies
-only to retained Throughstone-authored scaffold material.
+See [`LICENSE`](LICENSE) and [`LICENSING.md`](LICENSING.md). Copyright is held by
+Cognosco Media LLC, which retains all rights and grants a limited permission to
+use these files for generating, validating, or authoring WhoCue import files
+(including by a large language model) for use with the WhoCue application; all
+other rights are reserved. The `LICENSE` expressly permits this LLM use despite
+the general AI-use restrictions in Cognosco Media's
+[Terms](https://www.cognoscomedia.com/terms) and
+[User Guidelines](https://www.cognoscomedia.com/user-guidelines), and requires
+personal data in import files to be handled per the
+[Privacy Policy](https://www.cognoscomedia.com/privacy).
+`LICENSE-THROUGHSTONE` applies only to retained Throughstone-authored scaffold
+material.
 
 ## Artifact Layout
 

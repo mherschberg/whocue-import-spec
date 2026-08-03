@@ -1,8 +1,8 @@
 # Instructions
 
 This directory contains public instructions for creating WhoCue v1 import files.
-Use these files with the schema and examples in this repository; normal import
-authors should not need access to the private WhoCue architecture docs.
+Use these files with the schema and examples in this repository; they are
+self-contained and require no additional documentation.
 
 ## Files
 

@@ -1,0 +1,50 @@
+WhoCue Import Spec License
+
+Copyright (c) 2026 Cognosco Media LLC. All rights reserved.
+
+1. License Grant. Permission is hereby granted, free of charge, to any person
+   or automated system obtaining a copy of the files in this repository (the
+   "Files") to read and use the Files solely for the purpose of generating,
+   validating, or authoring WhoCue import files -- including by a large
+   language model or other automated system -- for use with the WhoCue
+   application.
+
+2. Generative AI Carve-Out. Notwithstanding any provision of Cognosco Media
+   LLC's Terms of Service (https://www.cognoscomedia.com/terms) or User
+   Guidelines (https://www.cognoscomedia.com/user-guidelines) that restricts
+   the use of Cognosco Media content with generative artificial intelligence,
+   the Files are expressly licensed for use with generative AI and other
+   automated systems for the sole purpose of producing WhoCue import files as
+   described in Section 1. This carve-out applies only to the Files in this
+   repository and grants no permission to use any other Cognosco Media content
+   to train or operate generative AI.
+
+3. Reservation of Rights. Except for the limited permission expressly granted
+   above, all rights are reserved by the copyright holder. Without limiting the
+   foregoing, you may not copy, modify, merge, publish, distribute, sublicense,
+   sell, or create derivative works of the Files, in whole or in part, for any
+   other purpose, without the prior written permission of Cognosco Media LLC.
+
+4. Personal Data. Import files may contain personal information about third
+   parties (such as names, email addresses, and phone numbers). Any personal
+   data placed in, generated for, or processed through import files must be
+   handled in accordance with applicable law and Cognosco Media LLC's Privacy
+   Policy (https://www.cognoscomedia.com/privacy). Do not include personal data
+   you are not authorized to use.
+
+5. Relationship to Other Terms. Use of the WhoCue application and related
+   services remains subject to Cognosco Media LLC's Terms of Service, User
+   Guidelines, and Privacy Policy. In the event of a conflict between this
+   License and those documents with respect to the Files, this License governs
+   the Files.
+
+6. No Warranty. THE FILES ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN
+   NO EVENT SHALL COGNOSCO MEDIA LLC BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING
+   FROM, OUT OF, OR IN CONNECTION WITH THE FILES OR THE USE OR OTHER DEALINGS IN
+   THE FILES.
+
+7. Governing Law. This License is governed by the laws of the State of New
+   York, without regard to its conflict-of-laws principles.
