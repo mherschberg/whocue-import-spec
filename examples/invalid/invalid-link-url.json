@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Invalid Link Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "links": {
+        "website": "not a url"
+      }
+    }
+  ]
+}

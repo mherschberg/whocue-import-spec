@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "0",
+    "source_id": "0"
+  },
+  "people": [
+    {
+      "name": "0",
+      "source_id": "0",
+      "title": "0",
+      "company": "0",
+      "affiliation": "0",
+      "notes": "0",
+      "connection_topic": "0",
+      "tags": [
+        "0"
+      ]
+    }
+  ]
+}

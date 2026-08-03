@@ -1,0 +1,16 @@
+{
+  "name": "whocue-import-spec",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Validation tooling for the WhoCue import contract.",
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate-examples.mjs",
+    "check": "bash .github/scripts/check-structure.sh && npm run validate"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  }
+}

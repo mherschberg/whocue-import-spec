@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mherschberg/whocue-import-spec/schema/whocue-import-v1.schema.json",
+  "title": "WhoCue Import Schema v1",
+  "description": "Version 1.0 schema for importing one event-scoped people list into WhoCue.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "event",
+    "people"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "event": {
+      "$ref": "#/$defs/event"
+    },
+    "people": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 250,
+      "items": {
+        "$ref": "#/$defs/person"
+      }
+    }
+  },
+  "$defs": {
+    "non_empty_short_string": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "pattern": "\\S"
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "\\S"
+    },
+    "https_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://",
+      "maxLength": 2048
+    },
+    "iana_timezone": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)+$"
+    },
+    "package_image_path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.?(?:/|$))(?!.*//)[A-Za-z0-9._ -]+(?:/[A-Za-z0-9._ -]+)*\\.(?:jpg|jpeg|png|webp)$"
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/non_empty_short_string"
+        },
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "start_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "timezone": {
+          "$ref": "#/$defs/iana_timezone"
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "\\S"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "person": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/non_empty_short_string"
+        },
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S"
+        },
+        "company": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S"
+        },
+        "affiliation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "pattern": "\\S"
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000,
+          "pattern": "\\S"
+        },
+        "email": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 254,
+          "pattern": "\\S"
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "pattern": "\\S"
+        },
+        "connection_topic": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "pattern": "\\S"
+        },
+        "identity_uncertain": {
+          "type": "boolean"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_met",
+            "met"
+          ]
+        },
+        "tags": {
+          "type": "array",
+          "maxItems": 12,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "pattern": "\\S"
+          }
+        },
+        "links": {
+          "$ref": "#/$defs/person_links"
+        },
+        "image": {
+          "$ref": "#/$defs/image"
+        }
+      }
+    },
+    "person_links": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "linkedin": {
+          "$ref": "#/$defs/https_url"
+        },
+        "x": {
+          "$ref": "#/$defs/https_url"
+        },
+        "instagram": {
+          "$ref": "#/$defs/https_url"
+        },
+        "facebook": {
+          "$ref": "#/$defs/https_url"
+        },
+        "website": {
+          "$ref": "#/$defs/https_url"
+        },
+        "blog": {
+          "$ref": "#/$defs/https_url"
+        }
+      }
+    },
+    "image": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/image_none"
+        },
+        {
+          "$ref": "#/$defs/image_embedded"
+        },
+        {
+          "$ref": "#/$defs/image_package_file"
+        },
+        {
+          "$ref": "#/$defs/image_remote_url"
+        }
+      ]
+    },
+    "image_none": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "const": "none"
+        }
+      }
+    },
+    "image_embedded": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "mime_type",
+        "data"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "const": "embedded"
+        },
+        "mime_type": {
+          "$ref": "#/$defs/supported_image_mime_type"
+        },
+        "data": {
+          "type": "string",
+          "contentEncoding": "base64",
+          "maxLength": 1398104,
+          "pattern": "^[A-Za-z0-9+/]+={0,2}$"
+        }
+      }
+    },
+    "image_remote_url": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "url"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "const": "remote_url"
+        },
+        "url": {
+          "$ref": "#/$defs/https_url"
+        },
+        "expected_mime_type": {
+          "$ref": "#/$defs/supported_image_mime_type"
+        },
+        "storage_preference": {
+          "type": "string",
+          "enum": [
+            "save_locally",
+            "remote_reference"
+          ]
+        }
+      }
+    },
+    "image_package_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "path",
+        "mime_type"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "const": "package_file"
+        },
+        "path": {
+          "$ref": "#/$defs/package_image_path"
+        },
+        "mime_type": {
+          "$ref": "#/$defs/supported_image_mime_type"
+        }
+      }
+    },
+    "supported_image_mime_type": {
+      "type": "string",
+      "enum": [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ]
+    }
+  }
+}

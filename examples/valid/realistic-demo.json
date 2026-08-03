@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Metro Product Forum 2026",
+    "source_id": "event-mpf-2026",
+    "start_at": "2026-09-14T09:00:00-04:00",
+    "end_at": "2026-09-14T17:30:00-04:00",
+    "timezone": "America/New_York",
+    "location": "North Hall Conference Center",
+    "description": "Synthetic sample event for validating a practical WhoCue import file."
+  },
+  "people": [
+    {
+      "name": "Riley Chen",
+      "source_id": "person-riley-chen",
+      "title": "Director of Product Operations",
+      "company": "Northstar Demo Systems",
+      "notes": "Ask about how their team evaluates event-day mobile workflows.",
+      "connection_topic": "Compare lightweight field research habits before product launches.",
+      "priority": "high",
+      "status": "not_met",
+      "tags": [
+        "product",
+        "operations",
+        "speaker"
+      ],
+      "links": {
+        "website": "https://example.com/people/riley-chen",
+        "linkedin": "https://example.com/in/riley-chen"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/riley-chen.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Jordan Ellis",
+      "source_id": "person-jordan-ellis",
+      "title": "Founder",
+      "company": "Civic Signal Labs",
+      "notes": "Interested in tools that reduce prep work before in-person meetings.",
+      "connection_topic": "Ask how they decide which contacts are worth finding at a busy event.",
+      "priority": "medium",
+      "status": "not_met",
+      "tags": [
+        "founder",
+        "research",
+        "local-first"
+      ],
+      "links": {
+        "website": "https://example.com/people/jordan-ellis"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/jordan-ellis.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Samira Patel",
+      "source_id": "person-samira-patel",
+      "title": "Community Lead",
+      "affiliation": "Harbor Collective",
+      "notes": "Met briefly at a synthetic roundtable example in the previous quarter.",
+      "connection_topic": "Follow up on small-group event facilitation.",
+      "identity_uncertain": true,
+      "priority": "low",
+      "status": "met",
+      "tags": [
+        "community",
+        "events"
+      ],
+      "links": {
+        "blog": "https://example.com/blog/samira-patel"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/samira-patel.jpg",
+        "mime_type": "image/jpeg"
+      }
+    }
+  ]
+}

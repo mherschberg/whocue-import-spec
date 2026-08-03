@@ -1,0 +1,242 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Civic Tech Expo 2026",
+    "source_id": "event-cte-2026",
+    "start_at": "2026-11-12T09:00:00-08:00",
+    "end_at": "2026-11-13T15:30:00-08:00",
+    "timezone": "America/Los_Angeles",
+    "location": "Pier 4 Civic Hall",
+    "description": "Synthetic ten-person demo event for validating a larger WhoCue import package with varied priorities and meeting states."
+  },
+  "people": [
+    {
+      "name": "Nadia Kim",
+      "source_id": "person-nadia-kim",
+      "title": "Chief Digital Officer",
+      "company": "Westport City Services",
+      "notes": "Responsible for resident-facing digital service modernization across several departments.",
+      "connection_topic": "Ask how city teams prepare for vendor conversations during expo weeks.",
+      "priority": "high",
+      "status": "not_met",
+      "tags": [
+        "government",
+        "digital-services",
+        "buyer"
+      ],
+      "links": {
+        "website": "https://example.com/people/nadia-kim",
+        "linkedin": "https://example.com/in/nadia-kim"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/nadia-kim.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Marcus Bell",
+      "source_id": "person-marcus-bell",
+      "title": "Founder",
+      "company": "PermitPath Labs",
+      "notes": "Building synthetic permitting workflow examples for small municipal teams.",
+      "connection_topic": "Compare event discovery notes for founders selling into local government.",
+      "priority": "high",
+      "status": "not_met",
+      "tags": [
+        "founder",
+        "govtech",
+        "workflow"
+      ],
+      "links": {
+        "website": "https://example.com/people/marcus-bell"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/marcus-bell.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Sofia Ramirez",
+      "source_id": "person-sofia-ramirez",
+      "title": "Community Engagement Director",
+      "company": "Open Blocks Initiative",
+      "notes": "Leads neighborhood listening sessions and cares about preserving context from brief resident conversations.",
+      "connection_topic": "Ask how engagement teams decide which conversations deserve same-day follow-up.",
+      "priority": "medium",
+      "status": "not_met",
+      "tags": [
+        "community",
+        "engagement"
+      ],
+      "links": {
+        "blog": "https://example.com/blog/sofia-ramirez"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/sofia-ramirez.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Owen Fletcher",
+      "source_id": "person-owen-fletcher",
+      "title": "Procurement Advisor",
+      "company": "Harborline Consulting",
+      "notes": "Helps public agencies make vendor conversations auditable without making the process heavy.",
+      "connection_topic": "Discuss where lightweight event notes fit into formal procurement records.",
+      "priority": "medium",
+      "status": "not_met",
+      "tags": [
+        "procurement",
+        "consulting",
+        "compliance"
+      ],
+      "links": {
+        "linkedin": "https://example.com/in/owen-fletcher"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/owen-fletcher.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Iris Tan",
+      "source_id": "person-iris-tan",
+      "title": "Senior Product Designer",
+      "company": "Civic Pattern Studio",
+      "notes": "Interested in how nontechnical users recognize and recall people after busy field events.",
+      "connection_topic": "Compare design patterns for recognition-first contact lists.",
+      "priority": "low",
+      "status": "not_met",
+      "tags": [
+        "design",
+        "research"
+      ],
+      "links": {
+        "website": "https://example.com/people/iris-tan"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/iris-tan.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Darius Cole",
+      "source_id": "person-darius-cole",
+      "title": "Data Partnerships Lead",
+      "company": "Maple Street Data Trust",
+      "notes": "Coordinates data-sharing pilots where introductions often start informally at conferences.",
+      "connection_topic": "Ask how they track the source and intent of new data partnership leads.",
+      "priority": "medium",
+      "status": "met",
+      "tags": [
+        "data",
+        "partnerships"
+      ],
+      "links": {
+        "website": "https://example.com/people/darius-cole"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/darius-cole.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Hannah Weiss",
+      "source_id": "person-hannah-weiss",
+      "title": "Executive Director",
+      "affiliation": "Neighborhood Access Coalition",
+      "notes": "Synthetic nonprofit leader profile focused on accessibility in public-service technology.",
+      "connection_topic": "Ask what would make an attendee-prep tool useful for advocates with packed schedules.",
+      "priority": "high",
+      "status": "not_met",
+      "tags": [
+        "nonprofit",
+        "accessibility",
+        "advocacy"
+      ],
+      "links": {
+        "website": "https://example.com/people/hannah-weiss"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/hannah-weiss.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Benji Park",
+      "source_id": "person-benji-park",
+      "title": "Solutions Engineer",
+      "company": "RelayWorks Cloud",
+      "notes": "Often supports sales conversations after short booth introductions.",
+      "connection_topic": "Compare what technical context is useful before a first post-event call.",
+      "priority": "low",
+      "status": "not_met",
+      "tags": [
+        "sales-engineering",
+        "cloud"
+      ],
+      "links": {
+        "linkedin": "https://example.com/in/benji-park"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/benji-park.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Lena Ortiz",
+      "source_id": "person-lena-ortiz",
+      "title": "Program Manager",
+      "company": "BridgePoint Mobility",
+      "notes": "Runs pilot programs with transit agencies and wants fewer missed follow-ups after working sessions.",
+      "connection_topic": "Ask how program managers triage contacts after multi-day expos.",
+      "priority": "medium",
+      "status": "not_met",
+      "tags": [
+        "mobility",
+        "programs",
+        "transit"
+      ],
+      "links": {
+        "website": "https://example.com/people/lena-ortiz"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/lena-ortiz.jpg",
+        "mime_type": "image/jpeg"
+      }
+    },
+    {
+      "name": "Caleb Stone",
+      "source_id": "person-caleb-stone",
+      "title": "Conference Track Host",
+      "affiliation": "Public Interest Technology Forum",
+      "notes": "May be the correct host for the implementation track; mark uncertain so a user can verify before import.",
+      "connection_topic": "Ask whether track hosts need attendee shortlist tools before speaker receptions.",
+      "identity_uncertain": true,
+      "priority": "medium",
+      "status": "not_met",
+      "tags": [
+        "speaker",
+        "organizer",
+        "events"
+      ],
+      "links": {
+        "website": "https://example.com/people/caleb-stone"
+      },
+      "image": {
+        "mode": "package_file",
+        "path": "images/caleb-stone.jpg",
+        "mime_type": "image/jpeg"
+      }
+    }
+  ]
+}

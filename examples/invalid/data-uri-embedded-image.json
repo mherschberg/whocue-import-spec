@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Data URI Embedded Image Demo"
+  },
+  "people": [
+    {
+      "name": "Morgan Chen",
+      "image": {
+        "mode": "embedded",
+        "mime_type": "image/png",
+        "data": "data:image/png;base64,iVBORw0KGgo="
+      }
+    }
+  ]
+}

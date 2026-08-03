@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Invalid Date Demo",
+    "start_at": "September 14, 2026",
+    "end_at": "2026-09-14 17:30",
+    "timezone": "America/New_York"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan"
+    }
+  ]
+}

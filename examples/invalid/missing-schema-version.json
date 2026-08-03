@@ -1,0 +1,10 @@
+{
+  "event": {
+    "name": "Missing Schema Version Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan"
+    }
+  ]
+}

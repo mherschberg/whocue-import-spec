@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Near Duplicate Person Demo"
+  },
+  "people": [
+    {
+      "name": "Taylor Kim",
+      "title": "Partnerships Director"
+    },
+    {
+      "name": " taylor   kim ",
+      "title": "Community Lead"
+    }
+  ]
+}

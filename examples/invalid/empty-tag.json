@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Empty Tag Demo"
+  },
+  "people": [
+    {
+      "name": "Jamie Park",
+      "tags": [
+        ""
+      ]
+    }
+  ]
+}

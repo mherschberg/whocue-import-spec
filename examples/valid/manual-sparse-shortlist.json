@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Founder Coffee Meetup",
+    "location": "West Arcade Lobby"
+  },
+  "people": [
+    {
+      "name": "Ari Bennett",
+      "company": "Sample Signal Co",
+      "connection_topic": "Ask about their first customer discovery loop.",
+      "priority": "high",
+      "tags": [
+        "founder"
+      ]
+    },
+    {
+      "name": "Noor Alvarez",
+      "title": "Product Advisor",
+      "notes": "User-supplied note: met briefly during a synthetic workshop.",
+      "priority": "medium"
+    },
+    {
+      "name": "Devon Kim",
+      "connection_topic": "Compare event prep habits for small professional meetups."
+    }
+  ]
+}

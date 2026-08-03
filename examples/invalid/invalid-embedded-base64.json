@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Invalid Embedded Image Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "image": {
+        "mode": "embedded",
+        "mime_type": "image/png",
+        "data": "not-base64!"
+      }
+    }
+  ]
+}

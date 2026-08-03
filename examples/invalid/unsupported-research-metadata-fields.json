@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Unsupported Research Metadata Demo"
+  },
+  "people": [
+    {
+      "name": "Casey Rivera",
+      "title": "Product Lead",
+      "citation": "Synthetic agenda page",
+      "confidence": 0.82,
+      "speaker_session": "Synthetic Session 4",
+      "source": "Synthetic research notes"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Disallowed Local File Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "image": {
+        "mode": "local_file",
+        "path": "headshots/alex-morgan.png",
+        "mime_type": "image/png"
+      }
+    }
+  ]
+}

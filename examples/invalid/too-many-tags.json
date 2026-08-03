@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Too Many Tags Demo"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan",
+      "tags": [
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen"
+      ]
+    }
+  ]
+}

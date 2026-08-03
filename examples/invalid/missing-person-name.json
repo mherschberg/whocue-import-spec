@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Missing Person Name Demo"
+  },
+  "people": [
+    {
+      "title": "Program Manager",
+      "company": "Example Fieldworks"
+    }
+  ]
+}

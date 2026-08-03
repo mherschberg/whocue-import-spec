@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Empty People Demo"
+  },
+  "people": []
+}

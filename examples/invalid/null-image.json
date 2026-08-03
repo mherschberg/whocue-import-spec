@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Null Image Demo"
+  },
+  "people": [
+    {
+      "name": "Harper Lane",
+      "image": null
+    }
+  ]
+}

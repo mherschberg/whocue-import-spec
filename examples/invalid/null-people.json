@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Null People Demo"
+  },
+  "people": null
+}

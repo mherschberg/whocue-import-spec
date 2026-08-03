@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Synthetic Climate Partnerships Summit 2026",
+    "source_id": "event-synthetic-cps-2026",
+    "start_at": "2026-10-08T09:00:00-04:00",
+    "end_at": "2026-10-08T17:00:00-04:00",
+    "timezone": "America/New_York",
+    "location": "Riverton Innovation Hall",
+    "description": "Synthetic event used to model an LLM-researched WhoCue shortlist after user review."
+  },
+  "people": [
+    {
+      "name": "Maya Okafor",
+      "source_id": "shortlist-maya-okafor",
+      "title": "Partnerships Director",
+      "company": "Aurora Sample Labs",
+      "notes": "Synthetic speaker profile indicates a focus on pilot programs between startups and city agencies.",
+      "connection_topic": "Ask how they choose pilot partners when event leads outnumber follow-up capacity.",
+      "priority": "high",
+      "status": "not_met",
+      "tags": [
+        "speaker",
+        "partnerships",
+        "pilot"
+      ],
+      "links": {
+        "website": "https://example.com/synthetic/cps/maya-okafor",
+        "linkedin": "https://example.com/in/maya-okafor"
+      }
+    },
+    {
+      "name": "Theo Park",
+      "source_id": "shortlist-theo-park",
+      "title": "Program Manager",
+      "company": "Harbor Loop Partners",
+      "notes": "Listed in the synthetic sponsor directory as the contact for community demonstration projects.",
+      "connection_topic": "Compare approaches for finding high-signal conversations during crowded sponsor sessions.",
+      "priority": "medium",
+      "status": "not_met",
+      "tags": [
+        "sponsor",
+        "community",
+        "demo"
+      ],
+      "links": {
+        "website": "https://example.com/synthetic/cps/theo-park"
+      }
+    },
+    {
+      "name": "Lena Torres",
+      "source_id": "shortlist-lena-torres",
+      "affiliation": "North Pier Climate Guild",
+      "notes": "Likely profile based on synthetic public search; confirm before the event.",
+      "connection_topic": "Ask whether the guild has a lightweight way to track useful in-person introductions.",
+      "identity_uncertain": true,
+      "priority": "low",
+      "status": "not_met",
+      "tags": [
+        "community",
+        "uncertain"
+      ],
+      "links": {
+        "blog": "https://example.com/blog/lena-torres"
+      },
+      "image": {
+        "mode": "none"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Invalid Timezone Demo",
+    "timezone": "UTC"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan"
+    }
+  ]
+}
