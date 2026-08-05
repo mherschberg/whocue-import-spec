@@ -77,7 +77,7 @@ Allowed fields:
 | `identity_uncertain` | No | Boolean. Use `true` when the record may not refer to the intended person. Omit or use `false` when identity is sufficiently certain. |
 | `priority` | No | One of `low`, `medium`, or `high`. |
 | `status` | No | One of `not_met` or `met`. |
-| `tags` | No | Up to 12 unique non-blank strings, each 1-40 characters. |
+| `tags` | No | Up to 12 unique non-blank strings, each 1-40 characters. The 12 limit is a hard cap, not a target; keep the event's tag set small and shared. |
 | `links` | No | Object containing at least one supported HTTPS link. |
 | `image` | No | Image object using one supported image mode. |
 

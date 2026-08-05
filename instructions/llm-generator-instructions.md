@@ -61,6 +61,11 @@ email addresses you actually find from sources the user wants represented. Never
 fabricate, pattern-match, or guess an email address. Never look up phone numbers
 ahead of the event; include `phone` only when the user supplied it.
 
+When the user's sources do not already include photos, tell the user you will
+search public sources for headshots and proceed unless they decline. Use only
+public, appropriate images; never copy photos from private or login-gated pages,
+and never invent or misattribute a photo.
+
 Keep research evidence out of the final JSON. Citations, confidence scores,
 source URLs used as evidence, ranking rationale, and speaker-session notes may
 be useful while discussing the shortlist, but v1 has no fields for them. Use
@@ -130,7 +135,8 @@ Allowed person fields:
 - `priority`: optional; allowed values are `low`, `medium`, and `high`.
 - `status`: optional; allowed values are `not_met` and `met`.
 - `tags`: optional array of up to 12 unique non-blank strings, each 1-40
-  characters.
+  characters. The 12 limit is a hard cap, not a target; keep the event's tag set
+  small and shared (see the tag budget in `people-selection-guide.md`).
 - `links`: optional object with at least one supported HTTPS link.
 - `image`: optional image object using one supported image mode.
 
