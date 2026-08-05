@@ -79,7 +79,7 @@ the event `timezone`. For example, use `2026-09-14T09:00:00-04:00`, not
 | `identity_uncertain` | No | Boolean. Use `true` when the record may not refer to the intended person. Omit or use `false` when identity is sufficiently certain. |
 | `priority` | No | One of `low`, `medium`, or `high`. |
 | `status` | No | One of `not_met` or `met`. |
-| `tags` | No | Up to 12 unique strings, each 1-40 characters and non-blank. |
+| `tags` | No | Up to 12 unique strings, each 1-40 characters and non-blank. The 12 limit is a hard cap, not a target; keep the event's tag set small and shared (see the tag budget in `people-selection-guide.md`). |
 | `links` | No | Object containing at least one supported HTTPS link. |
 | `image` | No | Image object using one supported image mode. |
 
@@ -195,5 +195,6 @@ URLs, image data, or raw records into diagnostics.
 
 Validation is not a research-quality review. After the file validates, still
 check that selected people are relevant to the event, notes are current and
-useful, tags are not overbroad, identities are not confused, and remote images
-or package contents are actually available where the JSON says they are.
+useful, tags stay within a small shared vocabulary the user approved, identities
+are not confused, and remote images or package contents are actually available
+where the JSON says they are.
