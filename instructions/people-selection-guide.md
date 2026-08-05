@@ -53,6 +53,14 @@ Do not bypass logins, paywalls, private attendee systems, robots restrictions,
 or privacy settings. Do not infer private attendance from social media unless
 the user supplied it or the person publicly announced it.
 
+Some of the most useful sources are login-gated. LinkedIn is one example, but the
+event's own website, other sites, or the user's own systems such as a CRM may
+also be worth signing into. When access to any of these would materially improve
+research, ask the user whether they can provide it, and suggest options such as
+logging in within the browser the assistant controls or giving the assistant
+access to a browser on the user's device where they are already signed in. Use
+only access the user provides; never bypass logins or violate site terms.
+
 If the user supplies a long list or the event has many candidate people,
 consider splitting the review into groups of about 10 people. If your
 environment supports subagents or parallel research workers, assign one group to
@@ -95,7 +103,8 @@ Rank candidates by practical event value for this user:
 
 For a small list, prioritize high-confidence relevance over breadth. For a large
 list, group tags by reason such as `speaker`, `sponsor`, `partner`, `press`,
-`hiring`, `customer`, or `investor`.
+`hiring`, `customer`, or `investor`. Keep the tag set small and shared across the
+event; see the tag budget under "Mapping Research To WhoCue JSON".
 
 ## What Information Is Relevant
 
@@ -115,13 +124,16 @@ Good fields to preserve:
 - `tags`: short grouping labels based on event role or user goal.
 - `links`: HTTPS links that help verify identity, usually LinkedIn, personal
   website, company bio, speaker page, or relevant project page.
-- `image`: only when a public, appropriate image URL is available or the user
-  supplied an image package.
+- `image`: use a public, appropriate photo. If the user's sources do not already
+  include photos, tell the user you will search public sources for headshots and
+  proceed unless they decline; never use images from private or login-gated pages.
 
-After choosing the people to meet, ask the user whether they also want recent
-public online activity reviewed to tailor notes and suggested topics. Do this as
-an optional enrichment pass before generating JSON, not as a default requirement.
-If the user says yes, for each selected person:
+Research each selected person by default before generating JSON — do not rely on
+only the roster's name, title, and company. The user may opt out, for example
+"just names, fast"; honor that but note that notes and topics will be thin. A
+deeper pass over recent public online activity can further tailor notes and
+topics; confirm scope with the user when the list is large or costly. For each
+selected person:
 
 - Try to find public social media profiles, a personal website, and a blog.
 - Review the website and the last few publicly visible social media posts or
@@ -135,6 +147,16 @@ If the user says yes, for each selected person:
   are unclear, and mark identity uncertainty when applicable.
 - Skip private, login-gated, sensitive, personal, inflammatory, or unrelated
   material.
+
+Keep each person's research separate. Research each person as an independent unit
+and never carry a fact, link, quote, or photo from one person to another. Tie
+every detail to the specific person and the source it came from. People with
+common names or the same employer are easy to conflate — verify the name and
+company match before attributing anything, and set `identity_uncertain: true`
+when unsure rather than borrowing details. When subagents or parallel workers are
+available, isolating each person (or a small group) in its own context is the
+cleanest way to prevent cross-attribution; if you research several people in one
+context, re-check attribution before writing each record.
 
 Avoid fields that do not help event-day recognition or conversation, such as
 long biographies, exhaustive publication lists, unrelated career history,
@@ -165,7 +187,8 @@ Map relevance into the existing v1 fields:
 - Put the user's main reason to meet the person in `connection_topic`.
 - Put short supporting context in `notes`.
 - Use `priority` for event-day triage, not social status.
-- Use `tags` for scan-friendly categories; keep them short and non-duplicative.
+- Use `tags` for scan-friendly categories; keep them short, non-duplicative, and
+  drawn from a small shared vocabulary (see "Tag Budget" below).
 - Use `links` for identity verification and follow-up context.
 - Ask before trying to find email addresses. If the user opts in, include only
   email addresses actually found from sources the user wants represented; never
@@ -185,12 +208,34 @@ Do not guess or infer `email` or `phone`. Do not add unsupported fields such as
 schema rejects unknown fields. Put compact relevant context into `notes` or
 `connection_topic`.
 
+### Tag Budget
+
+Tags are for fast visual scanning, so use a small shared vocabulary per event
+rather than many one-off labels. Too many tags is poor event-day UX. The counts
+below are approximate guidance, not hard limits. Beyond the `priority` field,
+which is separate and does not count toward this budget, aim roughly for:
+
+- Fewer than 30 people: around 3-4 distinct tags.
+- 30-100 people: around 6-8 distinct tags.
+- More than 100 people: confirm the tagging scheme with the user.
+
+Propose the event's tag list to the user for approval or feedback before applying
+it. Prefer tags tied to the user's goal or event role (for example, `speaker`,
+`sponsor`, `target`, `gatekeeper`) and avoid near-duplicates. The v1 schema
+permits up to 12 tags per person, but that is a hard cap, not a target.
+
 ## Final Selection Check
 
 Before generating the import JSON, confirm:
 
 - The list size matches the user's request or a realistic event-day scope.
 - Every person has a clear relevance reason.
+- Every person has researched, event-specific context, not just their roster
+  title, unless the user opted out of research.
+- No fact, link, or photo is attributed to the wrong person (watch common names
+  and shared employers).
+- Tags come from a small shared vocabulary the user approved and roughly follow
+  the tag budget for the list size (approximate guidance, not a hard limit).
 - The list is not dominated by one organization unless the user asked for that.
 - Names are unique after case-insensitive comparison and whitespace cleanup.
 - No private or sensitive personal data is included.
