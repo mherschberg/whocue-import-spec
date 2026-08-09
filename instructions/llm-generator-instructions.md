@@ -1,5 +1,10 @@
 # WhoCue v1 LLM Generator Instructions
 
+> **You can adapt these instructions.** Download a copy of this file to your
+> computer or phone and adapt it for your own use in creating WhoCue import
+> files. Keep changes to your own copy; see the [`LICENSE`](../LICENSE) for what
+> is permitted.
+
 Use these instructions when generating a WhoCue v1 import JSON file for a user.
 The output must validate against `schema/whocue-import-v1.schema.json`.
 

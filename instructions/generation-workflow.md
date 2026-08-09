@@ -1,5 +1,10 @@
 # WhoCue External Generation Workflow
 
+> **You can adapt these instructions.** Download a copy of this file to your
+> computer or phone and adapt it for your own use in creating WhoCue import
+> files. Keep changes to your own copy; see the [`LICENSE`](../LICENSE) for what
+> is permitted.
+
 Use this workflow when an external LLM, a human author, or a mixed
 research-and-review process creates a WhoCue v1 import file. It keeps research
 and shortlist decisions separate from the final import JSON so the finished file
