@@ -88,9 +88,11 @@ https://github.com/mherschberg/whocue-import-spec
 
 See [`LICENSE`](LICENSE) and [`LICENSING.md`](LICENSING.md). Copyright is held by
 Cognosco Media LLC, which retains all rights and grants a limited permission to
-use these files for generating, validating, or authoring WhoCue import files
-(including by a large language model) for use with the WhoCue application; all
-other rights are reserved. The `LICENSE` expressly permits this LLM use despite
+use these files -- and to download and adapt a personal copy -- for generating,
+validating, or authoring WhoCue import files (including by a large language
+model) for use with the WhoCue application; all other rights (including
+publishing, distributing, or otherwise sharing the files or an adapted copy) are
+reserved. The `LICENSE` expressly permits this LLM use despite
 the general AI-use restrictions in Cognosco Media's
 [Terms](https://www.cognoscomedia.com/terms) and
 [User Guidelines](https://www.cognoscomedia.com/user-guidelines), and requires

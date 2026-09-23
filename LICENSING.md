@@ -2,9 +2,11 @@
 
 Project-authored content in this repository is governed by [`LICENSE`](LICENSE).
 Copyright is held by Cognosco Media LLC, which retains all rights and grants a
-limited permission to read and use the files solely for generating, validating,
-or authoring WhoCue import files (including by a large language model) for use
-with the WhoCue application. All other rights are reserved.
+limited permission to read and use the files -- and to download and adapt a
+personal copy -- solely for generating, validating, or authoring WhoCue import
+files (including by a large language model) for use with the WhoCue application.
+All other rights, including publishing, distributing, or otherwise sharing the
+files or an adapted copy, are reserved.
 
 The `LICENSE` includes an express carve-out permitting use of these files with
 generative AI for that sole purpose, notwithstanding the general AI-use

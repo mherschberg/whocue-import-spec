@@ -1,5 +1,10 @@
 # WhoCue v1 Import Authoring Guide
 
+> **You can adapt these instructions.** Download a copy of this file to your
+> computer or phone and adapt it for your own use in creating WhoCue import
+> files. Keep changes to your own copy; see the [`LICENSE`](../LICENSE) for what
+> is permitted.
+
 Use this guide to write or review a WhoCue import file by hand. The
 machine-readable contract is `schema/whocue-import-v1.schema.json`; this guide
 explains the same v1 rules in authoring terms.

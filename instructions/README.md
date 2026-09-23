@@ -30,6 +30,15 @@ self-contained and require no additional documentation.
 - Valid and invalid fixtures: `../examples/`
 - Local validation command: `npm run validate`
 
+## Using And Adapting These Files
+
+You may download a copy of these instructions to your computer or phone and
+adapt them for your own use in creating WhoCue import files -- for example,
+tailoring the reusable prompt to a specific event. Keep changes to your own
+copy; publishing, distributing, or otherwise sharing the files or an adapted
+copy is not permitted. See the repository [`LICENSE`](../LICENSE) for the full
+terms.
+
 ## Privacy
 
 Public examples, demos, tests, and prompt outputs should use synthetic data unless
