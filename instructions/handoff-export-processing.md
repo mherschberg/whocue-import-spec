@@ -9,6 +9,17 @@ WhoCue handoff exports are private user-provided data. Treat them as sensitive
 local context and do not upload, store, forward, or act on them beyond the
 user's explicit request.
 
+## The Machine-Readable Contract
+
+The handoff format has a published JSON Schema:
+`../schema/whocue-handoff-v1.schema.json` (draft 2020-12). Validate a document
+against it before acting on the contents. `../schema/README.md`, section
+"Handoff Export v1", is the field-by-field reference, and
+`../examples/handoff/valid/` shows what real exports look like.
+
+This guide is the prose companion to that schema. Where the two disagree, the
+schema wins, because the schema is derived from the app's generator.
+
 ## Import Files vs Handoff Exports
 
 WhoCue has two different JSON shapes:
@@ -16,26 +27,50 @@ WhoCue has two different JSON shapes:
 | Shape | Purpose | How to recognize it |
 |-------|---------|---------------------|
 | Import file | Bring a focused event people list into WhoCue | Root fields are `schema_version`, `event`, and `people`; validated by `../schema/whocue-import-v1.schema.json` |
-| Handoff export | Take current WhoCue app state out for external follow-up processing | Root field `format` is `whocue_event_handoff`; includes `import_compatible_snapshot` and `who_cue_state`; not accepted by the WhoCue import schema |
+| Handoff export | Take current WhoCue app state out for external follow-up processing | Root field `format` is `whocue_event_handoff` and `not_a_whocue_import_file` is `true`; includes `import_compatible_snapshot` and `who_cue_state`; validated by `../schema/whocue-handoff-v1.schema.json`; not accepted by the WhoCue import schema |
 
 Do not paste a full handoff export back into WhoCue's import flow. If a user
 wants to create a new import file from exported state, produce a separate v1
-import JSON using only the supported import fields and validate it against the
-schema.
+import JSON using only the supported import fields and validate it against
+`../schema/whocue-import-v1.schema.json`.
+
+### Import-Shaped Is Not Import-Valid
+
+`import_compatible_snapshot` uses import v1's field names, types, and enums, and
+rejects unknown fields the same way. It is still not guaranteed to be a valid
+import v1 document, because it carries app-local values and the app's limits are
+looser than the import contract's. A snapshot can legitimately contain zero
+people, more than 250 people, a 200-character person name, notes longer than
+2,000 characters, more than 12 tags, or an 80-character tag — all of which
+import v1 rejects.
+
+Treat the snapshot as the best starting point for a new import file, not as a
+file WhoCue will accept. `../schema/README.md` has the limit-by-limit
+comparison.
 
 ## What The Export Contains
 
-A handoff export may include:
+Every handoff export carries all of these. None of them is optional:
 
-- Export metadata: format, format version, generated timestamp, suggested file
-  name, and processing instructions.
-- Summary counts: total people, met/not-met counts, and follow-up ownership
-  counts.
+- Export metadata: `format`, `format_version`, `generated_at`,
+  `not_a_whocue_import_file`, `suggested_file_name`, `purpose`, and an
+  `instructions` object with `privacy`, `use`, and `import_note` notes.
+- `summary`: `event_name`, `people_count`, `met_count`, `not_met_count`,
+  `followup_me_count`, and `followup_other_count`.
 - `import_compatible_snapshot`: event and person fields that overlap the v1
   import contract, such as names, source IDs, title, company, notes, connection
   topic, identity uncertainty, priority, status, tags, and profile links.
 - `who_cue_state`: app-local event/person state, including local IDs, creation
   and update timestamps, meeting notes, and standard followup states.
+
+`generated_at` and every timestamp inside the document are UTC with a trailing
+`Z`. Optional fields are omitted when unknown; the export never writes `null`.
+The two people arrays come from one sorted list, so the record at a given index
+in `import_compatible_snapshot.people` is the same person as the record at that
+index in `who_cue_state.people`.
+
+An export can also carry an event with no people, in which case both people
+arrays are empty and every summary count is zero.
 
 The standard followup actions are:
 
@@ -82,7 +117,12 @@ When processing a handoff export:
    IDs are needed to reconcile rows in a user-controlled file.
 10. If asked to create a new WhoCue import file, output only a fresh v1 import
     JSON and omit app-only fields such as `meeting_notes`, `followups`,
-    `local_id`, `created_at`, and `updated_at`.
+    `local_id`, `created_at`, and `updated_at`. Check the result against import
+    v1's tighter limits; values copied straight from the snapshot may exceed
+    them.
+11. Validate the export against `../schema/whocue-handoff-v1.schema.json` before
+    relying on its structure. A document that fails is not a WhoCue handoff
+    export, whatever it claims in `format`.
 
 ## Common Outputs
 

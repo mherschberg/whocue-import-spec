@@ -1,0 +1,60 @@
+{
+  "format": "whocue_event_handoff",
+  "format_version": "1.0",
+  "generated_at": "2026-09-18T21:15:00.000Z",
+  "purpose": "External handoff of current WhoCue event state for user-controlled follow-up processing.",
+  "not_a_whocue_import_file": true,
+  "suggested_file_name": "whocue-sparse-demo-meetup-handoff-2026-09-18T21-15-00.000Z.json",
+  "instructions": {
+    "privacy": "This export contains private local event/person data. Treat it as user-provided private context.",
+    "use": "Use this file to summarize meetings, draft follow-up plans, or prepare system-specific updates only after the user chooses the downstream workflow.",
+    "import_note": "The import_compatible_snapshot section can inform a future WhoCue import file, but this whole handoff document is not accepted by the WhoCue import schema."
+  },
+  "summary": {
+    "event_name": "Sparse Demo Meetup",
+    "people_count": 1,
+    "met_count": 0,
+    "not_met_count": 1,
+    "followup_me_count": 0,
+    "followup_other_count": 0
+  },
+  "import_compatible_snapshot": {
+    "schema_version": "1.0",
+    "event": {
+      "name": "Sparse Demo Meetup"
+    },
+    "people": [
+      {
+        "name": "Ora Lindqvist",
+        "status": "not_met",
+        "citation": "https://example.com/source/ora-lindqvist"
+      }
+    ]
+  },
+  "who_cue_state": {
+    "event": {
+      "local_id": "0b8e51a4-77c2-4d30-9a16-4e0f2c83b5d7",
+      "name": "Sparse Demo Meetup",
+      "created_at": "2026-09-17T18:20:00.000Z",
+      "updated_at": "2026-09-17T18:20:00.000Z"
+    },
+    "people": [
+      {
+        "local_id": "e52c9f38-6b04-4a71-8d29-c1738f0a6b45",
+        "name": "Ora Lindqvist",
+        "status": "not_met",
+        "identity_uncertain": false,
+        "followups": {
+          "email": "off",
+          "call": "off",
+          "schedule_meeting": "off",
+          "send_documents": "off",
+          "introduce": "off",
+          "resume": "off"
+        },
+        "created_at": "2026-09-17T18:21:09.000Z",
+        "updated_at": "2026-09-17T18:21:09.000Z"
+      }
+    ]
+  }
+}
