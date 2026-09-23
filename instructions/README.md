@@ -1,8 +1,9 @@
 # Instructions
 
-This directory contains public instructions for creating WhoCue v1 import files.
-Use these files with the schema and examples in this repository; they are
-self-contained and require no additional documentation.
+This directory contains public instructions for creating WhoCue v1 import files
+and for processing the event handoff exports the app produces. Use these files
+with the schemas and examples in this repository; they are self-contained and
+require no additional documentation.
 
 ## Files
 
@@ -25,10 +26,17 @@ self-contained and require no additional documentation.
 
 ## Contract References
 
-- Machine-readable schema: `../schema/whocue-import-v1.schema.json`
-- Schema summary and limits: `../schema/README.md`
-- Valid and invalid fixtures: `../examples/`
+- Machine-readable import schema: `../schema/whocue-import-v1.schema.json`
+- Machine-readable handoff export schema:
+  `../schema/whocue-handoff-v1.schema.json`
+- Schema summaries, limits, and the two contracts' relationship:
+  `../schema/README.md`
+- Valid and invalid import fixtures: `../examples/`
+- Valid and invalid handoff export fixtures: `../examples/handoff/`
 - Local validation command: `npm run validate`
+
+A handoff export is not a WhoCue import file. The two contracts are separate,
+and `handoff-export-processing.md` explains how to move from one to the other.
 
 ## Using And Adapting These Files
 

@@ -1,0 +1,532 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mherschberg/whocue-import-spec/schema/whocue-handoff-v1.schema.json",
+  "title": "WhoCue Event Handoff Export Schema v1",
+  "description": "Version 1.0 schema for the whocue_event_handoff document the WhoCue app generates when a user exports one event's current local state for external follow-up processing. A handoff export is not a WhoCue import file and is not accepted by whocue-import-v1.schema.json.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "format_version",
+    "generated_at",
+    "purpose",
+    "not_a_whocue_import_file",
+    "suggested_file_name",
+    "instructions",
+    "summary",
+    "import_compatible_snapshot",
+    "who_cue_state"
+  ],
+  "properties": {
+    "format": {
+      "type": "string",
+      "const": "whocue_event_handoff"
+    },
+    "format_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Export timestamp. The app emits UTC with a trailing Z."
+    },
+    "purpose": {
+      "$ref": "#/$defs/non_blank_string",
+      "description": "Human-readable statement of why the document exists. Prose only; do not parse it."
+    },
+    "not_a_whocue_import_file": {
+      "type": "boolean",
+      "const": true,
+      "description": "Published boundary marker. A handoff export never becomes an import file by changing this value."
+    },
+    "suggested_file_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[A-Za-z0-9._-]+\\.json$",
+      "description": "Safe, separator-free JSON file name a consumer may write to disk. The app's scheme is whocue-<event-slug>-handoff-<timestamp>.json, which this contract deliberately does not pin."
+    },
+    "instructions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "privacy",
+        "use",
+        "import_note"
+      ],
+      "properties": {
+        "privacy": {
+          "$ref": "#/$defs/non_blank_string"
+        },
+        "use": {
+          "$ref": "#/$defs/non_blank_string"
+        },
+        "import_note": {
+          "$ref": "#/$defs/non_blank_string"
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_name",
+        "people_count",
+        "met_count",
+        "not_met_count",
+        "followup_me_count",
+        "followup_other_count"
+      ],
+      "properties": {
+        "event_name": {
+          "$ref": "#/$defs/non_blank_string"
+        },
+        "people_count": {
+          "$ref": "#/$defs/count"
+        },
+        "met_count": {
+          "$ref": "#/$defs/count"
+        },
+        "not_met_count": {
+          "$ref": "#/$defs/count"
+        },
+        "followup_me_count": {
+          "$ref": "#/$defs/count"
+        },
+        "followup_other_count": {
+          "$ref": "#/$defs/count"
+        }
+      }
+    },
+    "import_compatible_snapshot": {
+      "$ref": "#/$defs/import_compatible_snapshot"
+    },
+    "who_cue_state": {
+      "$ref": "#/$defs/who_cue_state"
+    }
+  },
+  "$defs": {
+    "non_blank_string": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "local_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "\\S"
+    },
+    "source_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "\\S"
+    },
+    "https_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://",
+      "maxLength": 2048
+    },
+    "person_links": {
+      "type": "object",
+      "additionalProperties": false,
+      "minProperties": 1,
+      "properties": {
+        "linkedin": {
+          "$ref": "#/$defs/https_url"
+        },
+        "x": {
+          "$ref": "#/$defs/https_url"
+        },
+        "instagram": {
+          "$ref": "#/$defs/https_url"
+        },
+        "facebook": {
+          "$ref": "#/$defs/https_url"
+        },
+        "website": {
+          "$ref": "#/$defs/https_url"
+        },
+        "blog": {
+          "$ref": "#/$defs/https_url"
+        }
+      }
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_met",
+        "met"
+      ]
+    },
+    "followup_state": {
+      "type": "string",
+      "enum": [
+        "off",
+        "me",
+        "other"
+      ]
+    },
+    "followups": {
+      "type": "object",
+      "required": [
+        "email",
+        "call",
+        "schedule_meeting",
+        "send_documents",
+        "introduce",
+        "resume"
+      ],
+      "properties": {
+        "email": {
+          "$ref": "#/$defs/followup_state"
+        },
+        "call": {
+          "$ref": "#/$defs/followup_state"
+        },
+        "schedule_meeting": {
+          "$ref": "#/$defs/followup_state"
+        },
+        "send_documents": {
+          "$ref": "#/$defs/followup_state"
+        },
+        "introduce": {
+          "$ref": "#/$defs/followup_state"
+        },
+        "resume": {
+          "$ref": "#/$defs/followup_state"
+        }
+      }
+    },
+    "import_compatible_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "event",
+        "people"
+      ],
+      "description": "Import-shaped view of the exported event. It uses import v1 field names, types, and enums, but it carries app-local values, so it is bounded by the app's looser limits and is not guaranteed to validate against whocue-import-v1.schema.json. See schema/README.md.",
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "1.0"
+        },
+        "event": {
+          "$ref": "#/$defs/snapshot_event"
+        },
+        "people": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/snapshot_person"
+          }
+        }
+      }
+    },
+    "snapshot_event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "start_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S"
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "pattern": "\\S"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "snapshot_person": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "status"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/person_name"
+        },
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "title": {
+          "$ref": "#/$defs/person_short_text"
+        },
+        "company": {
+          "$ref": "#/$defs/person_short_text"
+        },
+        "notes": {
+          "$ref": "#/$defs/person_notes"
+        },
+        "email": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 254,
+          "pattern": "\\S"
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "pattern": "\\S"
+        },
+        "connection_topic": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "pattern": "\\S"
+        },
+        "identity_uncertain": {
+          "type": "boolean",
+          "const": true,
+          "description": "The snapshot omits this field entirely when identity is certain; who_cue_state carries the full boolean."
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "links": {
+          "$ref": "#/$defs/person_links"
+        }
+      }
+    },
+    "person_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "\\S"
+    },
+    "person_short_text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "\\S"
+    },
+    "person_notes": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000,
+      "pattern": "\\S"
+    },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 80,
+        "pattern": "\\S"
+      }
+    },
+    "who_cue_state": {
+      "type": "object",
+      "required": [
+        "event",
+        "people"
+      ],
+      "description": "App-local state. Deliberately permissive: unknown members are allowed here so a new app-local field does not break external validators mid-version.",
+      "properties": {
+        "event": {
+          "$ref": "#/$defs/state_event"
+        },
+        "people": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/state_person"
+          }
+        }
+      }
+    },
+    "state_event": {
+      "type": "object",
+      "required": [
+        "local_id",
+        "name",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "local_id": {
+          "$ref": "#/$defs/local_id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "start_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "pattern": "\\S"
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300,
+          "pattern": "\\S"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "\\S"
+        }
+      }
+    },
+    "state_person": {
+      "type": "object",
+      "required": [
+        "local_id",
+        "name",
+        "status",
+        "identity_uncertain",
+        "followups",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "local_id": {
+          "$ref": "#/$defs/local_id"
+        },
+        "name": {
+          "$ref": "#/$defs/person_name"
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "identity_uncertain": {
+          "type": "boolean"
+        },
+        "followups": {
+          "$ref": "#/$defs/followups"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "source_id": {
+          "$ref": "#/$defs/source_id"
+        },
+        "title": {
+          "$ref": "#/$defs/person_short_text"
+        },
+        "company": {
+          "$ref": "#/$defs/person_short_text"
+        },
+        "notes": {
+          "$ref": "#/$defs/person_notes"
+        },
+        "meeting_notes": {
+          "$ref": "#/$defs/person_notes"
+        },
+        "email": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 254,
+          "pattern": "\\S"
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40,
+          "pattern": "\\S"
+        },
+        "connection_topic": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "pattern": "\\S"
+        },
+        "priority": {
+          "$ref": "#/$defs/priority"
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "links": {
+          "$ref": "#/$defs/person_links"
+        }
+      }
+    }
+  }
+}

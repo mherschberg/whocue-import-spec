@@ -1,10 +1,24 @@
 # WhoCue Import Spec
 
-This repository is the public source of truth for the WhoCue import contract:
+This repository is the public source of truth for the WhoCue file contracts:
 JSON Schema files, examples, and LLM-facing instructions for creating import
-files that the WhoCue mobile app can validate and load.
+files that the WhoCue mobile app can validate and load, and for processing the
+event handoff exports the app produces.
 
 ## Current Contract Status
+
+The repository publishes **two** contracts. They are separate and point in
+opposite directions:
+
+| Contract | Schema | Direction |
+|----------|--------|-----------|
+| Import v1 | `schema/whocue-import-v1.schema.json` | Into the app: one event-scoped people list. |
+| Event handoff export v1 | `schema/whocue-handoff-v1.schema.json` | Out of the app: one event's current local state. |
+
+A handoff export is **not** a WhoCue import file, and import schema v1 does not
+accept one. Publishing a schema for the handoff format does not change that.
+
+### Import v1
 
 Schema v1 is represented by:
 
@@ -32,6 +46,25 @@ The v1 contract uses strict unknown-field rejection, required top-level
 record counts, and synthetic-only public examples. `PROTOCOL.md`, the human
 guide, LLM instructions, and examples README now describe how to repair the
 validation groups surfaced by the WhoCue app.
+
+### Event Handoff Export v1
+
+The handoff export format is represented by:
+
+- `schema/whocue-handoff-v1.schema.json` - JSON Schema draft 2020-12 contract
+  for the `whocue_event_handoff` document.
+- `schema/README.md` - envelope reference, limits, the strictness decision, and
+  why the schema restates the import field set instead of referencing it.
+- `examples/handoff/valid/` - synthetic exports that must pass validation.
+- `examples/handoff/invalid/` - synthetic exports that must fail validation.
+- `instructions/handoff-export-processing.md` - guidance for external LLMs,
+  humans, and user-controlled systems processing a handoff export.
+
+The envelope rejects unknown root sections and unknown fields inside
+`import_compatible_snapshot`, while `who_cue_state` stays permissive so a new
+app-local field does not break external validators mid-version. The snapshot is
+import-*shaped*, not import-*valid*: it carries app-local values bounded by the
+app's looser limits. `schema/README.md` has the full comparison.
 
 ## Quick Start For LLMs
 
@@ -66,15 +99,24 @@ personal data.
 ## Quick Start For Handoff Export Processing
 
 When a user gives an external LLM or human workflow a WhoCue event handoff
-export, read `instructions/handoff-export-processing.md`. Handoff exports are
-private user-controlled JSON documents whose root `format` is
-`whocue_event_handoff`. They include latest local app state such as meeting
+export:
+
+1. Read `instructions/handoff-export-processing.md` for the processing rules and
+   a reusable prompt.
+2. Validate the document against `schema/whocue-handoff-v1.schema.json` before
+   acting on it, and read `schema/README.md` for the envelope reference.
+3. Use `examples/handoff/valid/` as the model for what a real export looks like.
+
+Handoff exports are private user-controlled JSON documents whose root `format`
+is `whocue_event_handoff`. They include latest local app state such as meeting
 notes, app-updated status and priority, newly added people, and standard
 followup ownership states.
 
 Do not treat a handoff export as a WhoCue import file. If the user wants a fresh
 WhoCue import file from exported state, create a separate v1 import JSON using
-only the supported fields from `PROTOCOL.md` and validate it against the schema.
+only the supported fields from `PROTOCOL.md` and validate it against the import
+schema. The snapshot inside a handoff export is a useful starting point, not a
+drop-in import file: it may carry values that exceed import v1's limits.
 
 ## Repository
 
@@ -104,11 +146,12 @@ material.
 ## Artifact Layout
 
 ```text
-schema/         JSON Schema contract files, starting with whocue-import-v1.schema.json.
-examples/       Synthetic valid and invalid fixture files.
-instructions/   Human-facing and LLM-facing import and handoff instructions.
-scripts/        Local validation tooling used by npm scripts and CI.
-PROTOCOL.md     Concise public import file-format protocol.
+schema/          JSON Schema contract files: whocue-import-v1 and whocue-handoff-v1.
+examples/        Synthetic valid and invalid import fixture files.
+examples/handoff/ Synthetic valid and invalid handoff export fixture files.
+instructions/    Human-facing and LLM-facing import and handoff instructions.
+scripts/         Local validation tooling used by npm scripts and CI.
+PROTOCOL.md      Concise public import file-format protocol.
 ```
 
 Key v1 choices are documented in the directory README files. The schema is the
@@ -136,12 +179,23 @@ Validate the schema and fixture corpus:
 npm run validate
 ```
 
-The validation command compiles `schema/whocue-import-v1.schema.json`, enforces
-JSON Schema `format` checks through AJV, requires every file under
-`examples/valid/` to pass, and requires every file under `examples/invalid/` to
-fail. It also performs supplemental semantic checks for duplicate person merge
-keys within one import and canonical embedded-image base64, plus generated edge
-cases for large count and length boundaries.
+The validation command runs both contracts through one generalized path. For
+each contract it compiles the schema, enforces JSON Schema `format` checks
+through AJV, requires every valid fixture to pass, requires every invalid
+fixture to fail, and runs generated edge cases for count and length boundaries
+that would bloat the corpus as files.
+
+Supplemental semantic checks cover what JSON Schema cannot express: duplicate
+person merge keys and canonical embedded-image base64 for imports; summary
+counts, cross-section agreement, and unique local IDs for handoff exports.
+
+Two cross-contract checks then run:
+
+- The handoff schema's `import_compatible_snapshot` must still mirror import
+  v1's field names, required fields, enums, and shared definitions. This is what
+  keeps the restated subset from drifting.
+- Every published handoff fixture's snapshot must validate as a real import v1
+  document, unless its people count falls outside import v1's 1-250 bound.
 
 To run both local gates:
 
