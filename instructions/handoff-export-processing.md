@@ -9,6 +9,10 @@ WhoCue handoff exports are private user-provided data. Treat them as sensitive
 local context and do not upload, store, forward, or act on them beyond the
 user's explicit request.
 
+The export can reach you as an attached `.json` file (sent from the app's
+**Share** action or saved with **Export file**) or as pasted JSON text (**Copy
+JSON**). The document is identical either way.
+
 ## The Machine-Readable Contract
 
 The handoff format has a published JSON Schema:
@@ -192,6 +196,29 @@ and field mapping first. When producing a fresh WhoCue import file, output only
 valid v1 import JSON and omit handoff-only fields such as meeting_notes,
 followups, local_id, created_at, and updated_at.
 ```
+
+### In-App Follow-Up Prompt
+
+The WhoCue app's **Export event** dialog offers a condensed, phone-sized version
+of the template above. It points the LLM back at this guide for the full rules.
+Its exact text is reproduced here so that an editor of either one sees both:
+
+```text
+Read the WhoCue handoff guide at
+https://github.com/mherschberg/whocue-import-spec/blob/main/instructions/handoff-export-processing.md,
+then process the WhoCue event export I have attached or pasted. Treat it as
+private. Do not send messages, update any system, or assume a CRM unless I ask.
+First summarize the event: people met, high-priority people needing follow-up,
+meeting notes, and follow-ups assigned to me and to others. Then ask what I want
+next: a recap, a prioritized follow-up list, draft messages, a spreadsheet
+table, CRM updates, or a fresh WhoCue import file.
+```
+
+When you change the reusable template, check that the condensed prompt still
+gives the same advice, and change both together. Conflicting prompts give users
+contradictory advice. The WhoCue app's tests compare this block with the in-app
+text (ignoring line wrapping), so a change to only one of them fails the app's
+next test run.
 
 ## Privacy Checklist
 
