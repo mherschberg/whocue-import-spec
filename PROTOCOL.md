@@ -7,6 +7,10 @@ machine-readable source of truth is
 Use this protocol to create one event-scoped people list that the WhoCue mobile
 app can upload, validate, and import.
 
+WhoCue also publishes a second, separate contract for the documents it exports.
+See [Event Handoff Exports](#event-handoff-exports) at the end of this file. A
+handoff export is not an import file and nothing below applies to it.
+
 ## File Type
 
 - Format: JSON.
@@ -200,3 +204,33 @@ Before output, verify that:
 - Person names are unique within the event.
 - No guessed private contact details, sensitive personal data, or unsupported
   research metadata fields are present.
+
+## Event Handoff Exports
+
+WhoCue exports one event's current local state as a `whocue_event_handoff`
+document. That is a different contract, in the opposite direction:
+
+- Schema: `schema/whocue-handoff-v1.schema.json`
+- Reference: `schema/README.md`, section "Handoff Export v1"
+- Processing guidance: `instructions/handoff-export-processing.md`
+- Fixtures: `examples/handoff/valid/` and `examples/handoff/invalid/`
+
+Recognize one by its root `format` field, which is exactly
+`"whocue_event_handoff"`. It also carries `not_a_whocue_import_file: true`,
+`import_compatible_snapshot`, and `who_cue_state`.
+
+**A handoff export is not a WhoCue import file.** Import schema v1 rejects it,
+and publishing a schema for the handoff format does not change that. The
+`import_compatible_snapshot` section is import-*shaped* — same field names,
+types, and enums — but it carries app-local values bounded by the app's looser
+limits, so it may exceed import v1's people count, string lengths, or tag
+limits.
+
+The WhoCue app can still re-import an unmodified handoff export it produced: it
+reads only `import_compatible_snapshot` and validates it as strict import v1.
+That is an app-side convenience, not part of this protocol.
+
+To turn exported state into something WhoCue will import, build a fresh v1
+import file from this protocol, drop the app-only fields (`meeting_notes`,
+`followups`, `local_id`, `created_at`, `updated_at`), and validate it against
+`schema/whocue-import-v1.schema.json`.

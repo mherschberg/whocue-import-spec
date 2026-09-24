@@ -1,7 +1,8 @@
 # Security Policy
 
-This repository defines the public WhoCue import contract. We take the integrity
-of that contract seriously.
+This repository defines the public WhoCue file contracts: the import contract
+and the event handoff export contract. We take the integrity of those contracts
+seriously.
 
 ## Reporting a problem
 

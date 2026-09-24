@@ -1,17 +1,20 @@
 # Examples
 
-This directory contains synthetic valid and invalid WhoCue import examples.
+This directory contains synthetic valid and invalid examples for both published
+WhoCue contracts: import files, and the event handoff exports the app produces.
 
-Fixtures are part of the public import contract. The WhoCue app uses this corpus
-for parser, import-service, and schema-copy contract tests, so filenames should
+Fixtures are part of the public contract. The WhoCue app uses this corpus for
+parser, import-service, and schema-copy contract tests, so filenames should
 remain stable once published.
 
 ## Directory Layout
 
 ```text
-valid/    JSON files that should pass v1 schema and semantic validation.
-invalid/  JSON files that should parse as JSON but fail v1 validation.
-valid/images/  Synthetic local image files referenced by package fixtures.
+valid/             JSON files that should pass import v1 schema and semantic validation.
+invalid/           JSON files that should parse as JSON but fail import v1 validation.
+valid/images/      Synthetic local image files referenced by package fixtures.
+handoff/valid/     JSON files that should pass handoff v1 schema and semantic validation.
+handoff/invalid/   JSON files that should parse as JSON but fail handoff v1 validation.
 ```
 
 Malformed JSON coverage belongs in app-side parser tests or a separate,
@@ -169,6 +172,70 @@ Do not force package, remote-network, or local-device conditions into invalid
 JSON fixtures when the manifest itself is valid. Keeping those checks in app
 tests avoids misleading public authors into thinking a JSON Schema validator can
 prove ZIP contents, remote availability, or on-device file existence.
+
+## Handoff Export Fixtures
+
+These fixtures exercise `../schema/whocue-handoff-v1.schema.json`. They are
+synthetic exports written in the shape the app's generator really emits: UTC
+timestamps with a trailing `Z`, people sorted by lower-cased name in both
+sections, optional fields omitted rather than emitted as `null`, and all six
+followup actions present on every `who_cue_state` person.
+
+### Valid
+
+| Fixture | Purpose |
+|---------|---------|
+| `handoff/valid/realistic-event-handoff.json` | Three-person export with met/not-met status, all three priorities, meeting notes, `me` and `other` followup ownership, an identity-uncertain record, tags, and links. |
+| `handoff/valid/minimal-single-person.json` | Smallest practical export: one not-met person with every optional field omitted in both sections. |
+| `handoff/valid/manually-added-person.json` | Export containing a person added inside the app after import, so that record has no `source_id` while the imported record does. |
+| `handoff/valid/empty-event-no-people.json` | Event with no people. Real generator output, and a snapshot that import v1 rejects because it requires at least one person. |
+
+### Invalid
+
+| Fixture | Expected failure |
+|---------|------------------|
+| `handoff/invalid/wrong-format-constant.json` | Root `format` is not the `whocue_event_handoff` constant. |
+| `handoff/invalid/missing-import-compatible-snapshot.json` | Required envelope section `import_compatible_snapshot` is missing. |
+| `handoff/invalid/snapshot-not-import-shaped.json` | The snapshot carries research metadata (`citation`) that strict import v1 rejects. |
+| `handoff/invalid/unknown-followup-state.json` | A followup action uses a state outside `off` / `me` / `other`. |
+| `handoff/invalid/missing-followup-action.json` | A `followups` object omits one of the six standard actions. |
+| `handoff/invalid/bad-generated-at.json` | `generated_at` is not an RFC 3339 date-time. |
+| `handoff/invalid/envelope-unknown-field.json` | Strict envelope rejects an undeclared root section. |
+| `handoff/invalid/not-a-whocue-import-file-false.json` | The published boundary marker cannot be flipped to `false`. |
+
+"Invalid" here means invalid under the published handoff schema. The WhoCue
+app's own re-import of a handoff export is narrower: it checks only the exact
+`format` marker and validates `import_compatible_snapshot` as strict import v1,
+ignoring every other envelope member. So the app still re-imports the five
+fixtures whose only defect lies outside the snapshot (`bad-generated-at`,
+`envelope-unknown-field`, `missing-followup-action`,
+`not-a-whocue-import-file-false`, and `unknown-followup-state`), and rejects
+`wrong-format-constant`, `missing-import-compatible-snapshot`, and
+`snapshot-not-import-shaped`. Validate against the schema, not against what the
+app happens to tolerate.
+
+### What The Corpus Does Not Carry
+
+Mechanical boundaries live in `../scripts/validate-examples.mjs` as generated
+edge cases rather than committed files, matching how the import corpus handles
+its own 250/251-person cases. A 250-person handoff export would be a large,
+unreadable fixture that demonstrates nothing a generated case cannot. The
+generated handoff cases cover:
+
+- 250 people, 251 people, and zero people. All three pass: the app caps
+  *imports* at 250 people, not events, so an export can legitimately carry more.
+- App-domain maximum string lengths, which are looser than import v1's, and a
+  just-over-limit meeting-notes value.
+- The Q1 strictness decision from both sides: an unknown member inside
+  `who_cue_state` passes, an unknown envelope section fails, and an unknown
+  field inside `import_compatible_snapshot` fails.
+- Summary counts that disagree with the exported records.
+
+Two cross-contract checks also run on every validation: the handoff schema's
+snapshot must still mirror import v1's field set, and each published handoff
+fixture's snapshot must validate as a real import v1 document unless its people
+count falls outside import v1's 1-250 bound. `empty-event-no-people.json` is the
+fixture that exercises that exemption.
 
 ## Naming
 
