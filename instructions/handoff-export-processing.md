@@ -29,10 +29,23 @@ WhoCue has two different JSON shapes:
 | Import file | Bring a focused event people list into WhoCue | Root fields are `schema_version`, `event`, and `people`; validated by `../schema/whocue-import-v1.schema.json` |
 | Handoff export | Take current WhoCue app state out for external follow-up processing | Root field `format` is `whocue_event_handoff` and `not_a_whocue_import_file` is `true`; includes `import_compatible_snapshot` and `who_cue_state`; validated by `../schema/whocue-handoff-v1.schema.json`; not accepted by the WhoCue import schema |
 
-Do not paste a full handoff export back into WhoCue's import flow. If a user
-wants to create a new import file from exported state, produce a separate v1
-import JSON using only the supported import fields and validate it against
-`../schema/whocue-import-v1.schema.json`.
+A handoff export is not a WhoCue import file: it does not validate against
+`../schema/whocue-import-v1.schema.json`, and nothing in this repo's contracts
+changes that. The WhoCue app itself can, however, re-import an unmodified
+handoff export it produced. It recognizes the exact
+`format: "whocue_event_handoff"` marker, reads only `import_compatible_snapshot`,
+and validates that section with the full, strict import v1 rules; everything
+else in the envelope is ignored. So:
+
+- If the user just wants yesterday's event back in WhoCue as-is, they can give
+  the unmodified handoff export to the app. It succeeds only when the snapshot
+  happens to be import-valid (see below).
+- If you are producing something for WhoCue to import — a changed, cleaned, or
+  merged list — output a separate v1 import JSON using only the supported
+  import fields and validate it against `../schema/whocue-import-v1.schema.json`.
+  Do not hand back an edited handoff envelope: other tools that follow the
+  published contracts will not accept it, and the app ignores any changes you
+  make outside `import_compatible_snapshot`.
 
 ### Import-Shaped Is Not Import-Valid
 
@@ -45,7 +58,9 @@ people, more than 250 people, a 200-character person name, notes longer than
 import v1 rejects.
 
 Treat the snapshot as the best starting point for a new import file, not as a
-file WhoCue will accept. `../schema/README.md` has the limit-by-limit
+file WhoCue is guaranteed to accept. When the app re-imports a handoff export
+whose snapshot breaks an import v1 limit, it rejects the whole import with the
+same validation errors an ordinary import file would get. `../schema/README.md` has the limit-by-limit
 comparison.
 
 ## What The Export Contains
