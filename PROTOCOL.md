@@ -226,6 +226,10 @@ types, and enums — but it carries app-local values bounded by the app's looser
 limits, so it may exceed import v1's people count, string lengths, or tag
 limits.
 
+The WhoCue app can still re-import an unmodified handoff export it produced: it
+reads only `import_compatible_snapshot` and validates it as strict import v1.
+That is an app-side convenience, not part of this protocol.
+
 To turn exported state into something WhoCue will import, build a fresh v1
 import file from this protocol, drop the app-only fields (`meeting_notes`,
 `followups`, `local_id`, `created_at`, `updated_at`), and validate it against
