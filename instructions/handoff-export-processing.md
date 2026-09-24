@@ -42,8 +42,15 @@ and validates that section with the full, strict import v1 rules; everything
 else in the envelope is ignored. So:
 
 - If the user just wants yesterday's event back in WhoCue as-is, they can give
-  the unmodified handoff export to the app. It succeeds only when the snapshot
-  happens to be import-valid (see below).
+  the unmodified handoff export to the app — with **Import event** on the
+  Events tab, by sharing or opening the `.json` file with WhoCue, or by copying
+  it and tapping **Paste JSON**. It succeeds only when the snapshot happens to
+  be import-valid (see below), and it still goes through the app's
+  preview-before-import step. Only the snapshot's fields come back: meeting
+  notes and followup states live in `who_cue_state`, which the app does not
+  import. Re-importing into the event while it still exists updates its
+  imported fields and keeps the meeting notes and followups already on the
+  device; re-creating a deleted event brings its people back without them.
 - If you are producing something for WhoCue to import — a changed, cleaned, or
   merged list — output a separate v1 import JSON using only the supported
   import fields and validate it against `../schema/whocue-import-v1.schema.json`.
@@ -64,8 +71,10 @@ import v1 rejects.
 Treat the snapshot as the best starting point for a new import file, not as a
 file WhoCue is guaranteed to accept. When the app re-imports a handoff export
 whose snapshot breaks an import v1 limit, it rejects the whole import with the
-same validation errors an ordinary import file would get. `../schema/README.md` has the limit-by-limit
-comparison.
+same validation errors an ordinary import file would get, with each path
+prefixed by `$.import_compatible_snapshot` (for example
+`$.import_compatible_snapshot.people[3].name`). `../schema/README.md` has the
+limit-by-limit comparison.
 
 ## What The Export Contains
 

@@ -1,7 +1,8 @@
 # Contributing
 
 This repository is published by Cognosco Media LLC as a public **reference** for
-the WhoCue import contract (JSON Schema, examples, and LLM/human instructions).
+the WhoCue file contracts — import and event handoff export (JSON Schemas,
+examples, and LLM/human instructions).
 It is **not an open-source project** and is not seeking external contributions.
 
 - **Pull requests** are generally not accepted. Unsolicited pull requests may be

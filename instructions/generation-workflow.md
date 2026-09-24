@@ -14,7 +14,8 @@ WhoCue does not research people, call an LLM, or sync data. This import
 workflow is for bringing data into WhoCue. For processing updated event state
 exported back out of the app, use `handoff-export-processing.md`. The app
 imports a user-selected `.json` file or `.zip` package through the phone
-document picker.
+document picker, or JSON text copied to the clipboard through its Paste JSON
+action.
 
 ## Source Files To Use
 
@@ -235,6 +236,12 @@ Google Drive, OneDrive, Dropbox, iCloud Drive, AirDrop, or another ordinary file
 transfer route. On the phone, open WhoCue, choose Import, and select the file
 through the document picker.
 
+When the JSON was generated on the phone itself and has no `package_file`
+images, the user can skip the file: copy the JSON (a single fenced
+```` ```json ```` block is fine, but not the surrounding chat prose) and tap
+**Paste JSON** on WhoCue's Events tab. It goes through the same validation and
+preview-before-import step as a picked file.
+
 Do not tell users to import sibling image files next to a JSON file. If local
 images are needed, put the JSON manifest and image files in a ZIP package and
 reference package-relative paths.
@@ -327,4 +334,5 @@ Before import, confirm:
 - The file or ZIP package has been reviewed against the v1 schema and is ready
   for WhoCue import validation.
 - The user has a path to transfer the `.json` or `.zip` to the phone document
-  picker.
+  picker, or, for a JSON-only import produced on the phone, to copy it and use
+  Paste JSON.

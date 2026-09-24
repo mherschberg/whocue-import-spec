@@ -17,6 +17,9 @@ opposite directions:
 
 A handoff export is **not** a WhoCue import file, and import schema v1 does not
 accept one. Publishing a schema for the handoff format does not change that.
+The WhoCue app can still re-import an unmodified handoff export it produced, by
+reading only its `import_compatible_snapshot` as strict import v1 — an app-side
+convenience, not part of either contract (see `PROTOCOL.md`).
 
 ### Import v1
 
@@ -28,8 +31,10 @@ Schema v1 is represented by:
   JSON Schema.
 - `examples/valid/` - synthetic fixtures that must pass validation.
 - `examples/invalid/` - synthetic fixtures that must fail validation.
-- `examples/valid/realistic-demo.zip` - ready-to-import package form of the
-  realistic demo, including synthetic local headshot image files.
+- `examples/valid/realistic-demo.zip`, `realistic-demo-2.zip`, and
+  `realistic-demo-3.zip` - ready-to-import package forms of the three realistic
+  demo events (3, 6, and 10 people), including synthetic local headshot image
+  files.
 - `instructions/human-authoring-guide.md` - guide for people writing or
   reviewing import files.
 - `instructions/generation-workflow.md` - end-to-end workflow and reusable
@@ -86,7 +91,10 @@ When a user asks an LLM to create a WhoCue file for an event:
 6. If the user is generating the file on a laptop or desktop, suggest saving
    the `.json` file, or image-heavy `.zip` package, into a synced folder such
    as Google Drive, OneDrive, Dropbox, or iCloud Drive, then importing it from
-   the phone through WhoCue's document picker.
+   the phone through WhoCue's document picker. If the user is chatting with you
+   on the phone itself, they can instead copy the JSON (a single fenced
+   ```` ```json ```` block is fine) and tap **Paste JSON** on WhoCue's Events
+   tab — no file needed.
 7. Return JSON only when the user is ready for an import file.
 
 The protocol is intentionally small: one event object plus 1-250 people. For
@@ -116,7 +124,10 @@ Do not treat a handoff export as a WhoCue import file. If the user wants a fresh
 WhoCue import file from exported state, create a separate v1 import JSON using
 only the supported fields from `PROTOCOL.md` and validate it against the import
 schema. The snapshot inside a handoff export is a useful starting point, not a
-drop-in import file: it may carry values that exceed import v1's limits.
+drop-in import file: it may carry values that exceed import v1's limits. The
+one exception is the WhoCue app itself, which re-imports an unmodified export
+it produced when that snapshot fits import v1; see
+`instructions/handoff-export-processing.md`.
 
 ## Repository
 
@@ -217,7 +228,8 @@ import files from real users.
 
 ## Scope Guard
 
-This repository owns the public import contract artifacts only. Do not implement
-WhoCue app-side parsing, local schema-copy consistency checks, SQLite merge
+This repository owns the public contract artifacts only — the import v1 and
+event handoff export v1 schemas, their examples, and their instructions. Do not
+implement WhoCue app-side parsing (including the app's handoff unwrap), local schema-copy consistency checks, SQLite merge
 behavior, image processing, or mobile UI here; those belong in the private app
 repo.

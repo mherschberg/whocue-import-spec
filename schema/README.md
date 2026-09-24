@@ -235,8 +235,16 @@ Two consequences follow, and both are deliberate:
   is uncertain.
 
 If you need a file WhoCue will import, build a fresh v1 import document from the
-snapshot and validate it against `whocue-import-v1.schema.json`. Do not hand the
-handoff export to the import flow and expect the contract to accept it.
+snapshot and validate it against `whocue-import-v1.schema.json`. No tool that
+follows the published import contract accepts the handoff envelope.
+
+The WhoCue app itself can re-import an **unmodified** handoff export it
+produced: it recognizes the exact `format: "whocue_event_handoff"` marker, reads
+only `import_compatible_snapshot`, and validates that section as strict import
+v1, ignoring every other envelope member. That is an app-side convenience, not
+part of either contract, and it succeeds only when the snapshot happens to fit
+import v1's bounds (see the consequences above). Edited, cleaned, or merged data
+still belongs in a fresh v1 import file.
 
 ### Rules Enforced Outside Plain JSON Schema
 
