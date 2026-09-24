@@ -30,9 +30,13 @@ confirm the shortlist. Once producing the import file, output JSON only.
 
 ## Transfer To The Phone
 
-WhoCue imports files on the phone through the native document picker. If the
-user is working with an LLM on a laptop or desktop, suggest this workflow before
-the final JSON-only output:
+WhoCue imports files on the phone through the native document picker, or JSON
+text copied to the clipboard through its **Paste JSON** action. If the user is
+chatting with you on the phone itself and the import has no `package_file`
+images, they can copy your JSON (a single fenced ```` ```json ```` block is
+fine) and tap Paste JSON on WhoCue's Events tab. If the user is working with an
+LLM on a laptop or desktop, suggest this workflow before the final JSON-only
+output:
 
 1. Save the generated WhoCue import as a `.json` file, or as a `.zip` package
    when using `package_file` images.

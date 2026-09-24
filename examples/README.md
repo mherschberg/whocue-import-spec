@@ -203,6 +203,17 @@ followup actions present on every `who_cue_state` person.
 | `handoff/invalid/envelope-unknown-field.json` | Strict envelope rejects an undeclared root section. |
 | `handoff/invalid/not-a-whocue-import-file-false.json` | The published boundary marker cannot be flipped to `false`. |
 
+"Invalid" here means invalid under the published handoff schema. The WhoCue
+app's own re-import of a handoff export is narrower: it checks only the exact
+`format` marker and validates `import_compatible_snapshot` as strict import v1,
+ignoring every other envelope member. So the app still re-imports the five
+fixtures whose only defect lies outside the snapshot (`bad-generated-at`,
+`envelope-unknown-field`, `missing-followup-action`,
+`not-a-whocue-import-file-false`, and `unknown-followup-state`), and rejects
+`wrong-format-constant`, `missing-import-compatible-snapshot`, and
+`snapshot-not-import-shaped`. Validate against the schema, not against what the
+app happens to tolerate.
+
 ### What The Corpus Does Not Carry
 
 Mechanical boundaries live in `../scripts/validate-examples.mjs` as generated
