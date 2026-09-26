@@ -14,6 +14,8 @@ required_paths=(
   "package.json"
   "package-lock.json"
   "scripts/validate-examples.mjs"
+  "scripts/build-testers-package.sh"
+  "packaging/testers/README.md"
   "schema/README.md"
   "schema/whocue-import-v1.schema.json"
   "schema/whocue-handoff-v1.schema.json"
