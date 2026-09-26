@@ -163,7 +163,8 @@ schema/          JSON Schema contract files: whocue-import-v1 and whocue-handoff
 examples/        Synthetic valid and invalid import fixture files.
 examples/handoff/ Synthetic valid and invalid handoff export fixture files.
 instructions/    Human-facing and LLM-facing import and handoff instructions.
-scripts/         Local validation tooling used by npm scripts and CI.
+scripts/         Local validation and packaging tooling used by npm scripts and CI.
+packaging/       Sources for packages built from this repo, such as the testers' ZIP.
 PROTOCOL.md      Concise public import file-format protocol.
 ```
 
@@ -216,10 +217,24 @@ To run both local gates:
 npm run check
 ```
 
+Build the testers' package, an email-friendly ZIP of the directions, both
+schemas, and a few synthetic examples, at
+`dist/whocue-import-instructions-for-testers.zip`:
+
+```bash
+npm run package:testers
+```
+
+Its top-level README is `packaging/testers/README.md`; every other file is
+copied unchanged from the repo, and the build fails if a packaged document
+names a file the package doesn't carry. Rebuild it after changing any packaged
+file before sending it to testers.
+
 ## GitHub Actions
 
 The workflow in `.github/workflows/ci.yml` runs the structural check, installs
-the locked Node dependencies with `npm ci`, and runs `npm run validate`.
+the locked Node dependencies with `npm ci`, runs `npm run validate`, and builds
+the testers' package to prove it still has no dangling references.
 
 ## Privacy And Example Data
 
