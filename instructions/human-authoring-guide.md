@@ -82,8 +82,8 @@ the event `timezone`. For example, use `2026-09-14T09:00:00-04:00`, not
 | `phone` | No | 1-40 characters, non-blank. User-supplied only; never research ahead of the event. |
 | `connection_topic` | No | 1-500 characters, non-blank. |
 | `identity_uncertain` | No | Boolean. Use `true` when the record may not refer to the intended person. Omit or use `false` when identity is sufficiently certain. |
-| `priority` | No | One of `low`, `medium`, or `high`. |
-| `status` | No | One of `not_met` or `met`. |
+| `priority` | No | One of `low`, `medium`, or `high`. Re-importing without it keeps the priority set in the app. |
+| `status` | No | One of `not_met` or `met`. Leave it out unless you have already met the person; a re-import never un-marks someone you met. |
 | `tags` | No | Up to 12 unique strings, each 1-40 characters and non-blank. The 12 limit is a hard cap, not a target; keep the event's tag set small and shared (see the tag budget in `people-selection-guide.md`). |
 | `links` | No | Object containing at least one supported HTTPS link. |
 | `image` | No | Image object using one supported image mode. |
@@ -92,6 +92,13 @@ Within one import file, person names must be unique after trimming, collapsing
 repeated whitespace, and case-insensitive comparison. If the file contains two
 records that normalize to the same name, WhoCue rejects the import rather than
 guessing how to merge them.
+
+Importing a file for an event that is already in WhoCue updates it: matching
+people are updated, new people are added, and nobody is deleted. Fields you
+leave out are cleared, except `status`, `priority`, and `image`, which keep
+what the app has, so a refreshed file should keep every detail you want to
+stay. Meeting notes and followups are never touched. `../PROTOCOL.md`,
+"Re-Importing Into An Existing Event", has the full rules.
 
 ## Links
 

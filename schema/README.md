@@ -83,6 +83,10 @@ plain JSON Schema:
   that can pass the schema's conservative character pattern.
 - If an existing local event has duplicate matching person names, the app must
   reject the merge as ambiguous rather than guessing.
+- On a re-import into an existing event, an omitted `status` or `priority`
+  keeps the app's value, `not_met` never un-marks someone the user met, and
+  other omitted optional fields clear the app's value (`PROTOCOL.md`,
+  "Re-Importing Into An Existing Event").
 - Embedded, packaged, and downloaded images must decode successfully, use JPEG,
   PNG, or WebP, and fit within a 2048 x 2048 decoded-pixel envelope.
 - Remote image downloads must use HTTPS, follow at most 2 redirects, complete
