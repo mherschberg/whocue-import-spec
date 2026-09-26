@@ -166,7 +166,8 @@ fields such as `reason`, `confidence`, `citation`, or `speaker_session`.
 
 If the user is refreshing a list they already imported into WhoCue, keep every
 descriptive field that should stay: on a re-import, an omitted field clears the
-app's value, except `status`, `priority`, and `image`, which keep it. See
+app's value, except `status`, `priority`, and `image` (omitted or
+`"mode": "none"`), which keep it. See
 `PROTOCOL.md`, "Re-Importing Into An Existing Event".
 
 ## Links

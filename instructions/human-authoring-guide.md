@@ -95,8 +95,8 @@ guessing how to merge them.
 
 Importing a file for an event that is already in WhoCue updates it: matching
 people are updated, new people are added, and nobody is deleted. Fields you
-leave out are cleared, except `status`, `priority`, and `image`, which keep
-what the app has, so a refreshed file should keep every detail you want to
+leave out are cleared, except `status`, `priority`, and `image` (left out or
+`"mode": "none"`), which keep what the app has, so a refreshed file should keep every detail you want to
 stay. Meeting notes and followups are never touched. `../PROTOCOL.md`,
 "Re-Importing Into An Existing Event", has the full rules.
 
