@@ -50,7 +50,9 @@ The v1 contract uses strict unknown-field rejection, required top-level
 `schema_version`, `event`, and `people`, explicit image modes, bounded field and
 record counts, and synthetic-only public examples. `PROTOCOL.md`, the human
 guide, LLM instructions, and examples README now describe how to repair the
-validation groups surfaced by the WhoCue app.
+validation groups surfaced by the WhoCue app. `PROTOCOL.md` also says what a
+re-import into an existing event changes and what it keeps, such as the
+people the user marked met and the priorities they set.
 
 ### Event Handoff Export v1
 
