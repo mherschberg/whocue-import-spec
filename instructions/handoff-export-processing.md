@@ -52,8 +52,10 @@ else in the envelope is ignored. So:
   imported fields and keeps the meeting notes and followups already on the
   device, as well as anyone marked met there since the export (an import
   never un-marks someone; see `../PROTOCOL.md`, "Re-Importing Into An Existing
-  Event"). Re-creating a deleted event brings its people back without meeting
-  notes or followups.
+  Event"). The snapshot does carry each person's status and any priority as
+  they were at export, so re-importing an older export sets those priorities
+  again and re-marks as met anyone un-marked since. Re-creating a deleted event
+  brings its people back without meeting notes or followups.
 - If you are producing something for WhoCue to import — a changed, cleaned, or
   merged list — output a separate v1 import JSON using only the supported
   import fields and validate it against `../schema/whocue-import-v1.schema.json`.

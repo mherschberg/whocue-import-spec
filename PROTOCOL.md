@@ -167,9 +167,9 @@ A file whose `event.name` matches an event already in the app, after trimming,
 collapsing repeated whitespace, and case-insensitive comparison, updates that
 event instead of creating a second one. Within that event:
 
-- A person whose name matches the same way is updated, and a person with no
-  match is added. People in the app but not in the file are left as they are:
-  an import never deletes anyone.
+- A person whose name matches the same way is updated, taking the file's
+  spelling of the name, and a person with no match is added. People in the app
+  but not in the file are left as they are: an import never deletes anyone.
 - `status` is event-day state the user sets in the app. For a new person, an
   omitted `status` means `not_met`. For a matched person, `met` marks them met,
   and `not_met` or an omitted `status` keeps what the app has, so an import
@@ -178,8 +178,9 @@ event instead of creating a second one. Within that event:
   `priority` means none. For a matched person, a supplied `priority` replaces
   the app's and an omitted one keeps it. An import can't clear a priority; the
   user does that in the app.
-- An omitted `image` keeps the person's current photo. A supplied `image`
-  replaces it, and if that image fails to load, the person shows a placeholder.
+- An omitted `image`, or one with `"mode": "none"`, keeps the person's current
+  photo; import v1 can't remove a photo. An image in any other mode replaces
+  it, and if that image fails to load, the person shows a placeholder.
 - Every other field is written as the file has it, so omitting an optional
   field on a re-import clears the app's value. A refreshed list should carry
   every descriptive field it wants to keep. The event's own fields work the
