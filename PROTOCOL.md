@@ -79,8 +79,8 @@ Allowed fields:
 | `phone` | No | 1-40 characters, non-blank. Include only user-supplied phone numbers. Do not research phone numbers while creating an initial event list. |
 | `connection_topic` | No | 1-500 characters, non-blank. |
 | `identity_uncertain` | No | Boolean. Use `true` when the record may not refer to the intended person. Omit or use `false` when identity is sufficiently certain. |
-| `priority` | No | One of `low`, `medium`, or `high`. |
-| `status` | No | One of `not_met` or `met`. |
+| `priority` | No | One of `low`, `medium`, or `high`. A re-import that omits it keeps the app's priority; see [Re-Importing Into An Existing Event](#re-importing-into-an-existing-event). |
+| `status` | No | One of `not_met` or `met`. A new person without it is `not_met`. A re-import never un-marks someone the user met; see [Re-Importing Into An Existing Event](#re-importing-into-an-existing-event). |
 | `tags` | No | Up to 12 unique non-blank strings, each 1-40 characters. The 12 limit is a hard cap, not a target; keep the event's tag set small and shared. |
 | `links` | No | Object containing at least one supported HTTPS link. |
 | `image` | No | Image object using one supported image mode. |
@@ -160,6 +160,40 @@ Image rules:
 - Package image paths must be safe relative paths inside the ZIP package.
 - Package and remote images must stay within a 2 MiB image-file limit and a
   2048 x 2048 decoded-image envelope.
+
+## Re-Importing Into An Existing Event
+
+A file whose `event.name` matches an event already in the app, after trimming,
+collapsing repeated whitespace, and case-insensitive comparison, updates that
+event instead of creating a second one. Within that event:
+
+- A person whose name matches the same way is updated, taking the file's
+  spelling of the name, and a person with no match is added. People in the app
+  but not in the file are left as they are: an import never deletes anyone.
+- `status` is event-day state the user sets in the app. For a new person, an
+  omitted `status` means `not_met`. For a matched person, `met` marks them met,
+  and `not_met` or an omitted `status` keeps what the app has, so an import
+  never un-marks someone the user met.
+- `priority` is the user's event-day triage. For a new person, an omitted
+  `priority` means none. For a matched person, a supplied `priority` replaces
+  the app's and an omitted one keeps it. An import can't clear a priority; the
+  user does that in the app.
+- An omitted `image`, or one with `"mode": "none"`, keeps the person's current
+  photo; import v1 can't remove a photo. An image in any other mode replaces
+  it, and if that image fails to load, the person shows a placeholder.
+- Every other field is written as the file has it, so omitting an optional
+  field on a re-import clears the app's value. A refreshed list should carry
+  every descriptive field it wants to keep. The event's own fields work the
+  same way.
+- Meeting notes and followup states are recorded in the app and have no import
+  field, so an import never changes them.
+
+When refreshing a list the user already imported, omit `status` unless the user
+says they have met someone, and omit `priority` unless the user asked to re-rank
+people.
+
+Before anything is written, the app's import preview lists which people the
+file adds, updates, or skips because it would change nothing about them.
 
 ## File And Package Limits
 

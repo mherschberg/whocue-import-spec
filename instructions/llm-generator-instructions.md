@@ -141,8 +141,11 @@ Allowed person fields:
 - `identity_uncertain`: optional boolean; set to `true` only when the record
   may not refer to the intended person. Omit or use `false` when identity is
   sufficiently certain.
-- `priority`: optional; allowed values are `low`, `medium`, and `high`.
-- `status`: optional; allowed values are `not_met` and `met`.
+- `priority`: optional; allowed values are `low`, `medium`, and `high`. When
+  refreshing a list the user already imported, omit it unless the user asked
+  to re-rank people; the app keeps the priorities they set.
+- `status`: optional; allowed values are `not_met` and `met`. Omit it unless
+  the user says they have already met someone.
 - `tags`: optional array of up to 12 unique non-blank strings, each 1-40
   characters. The 12 limit is a hard cap, not a target; keep the event's tag set
   small and shared (see the tag budget in `people-selection-guide.md`).
@@ -160,6 +163,12 @@ or conversation. Use `identity_uncertain` only for person-identity uncertainty,
 not as a general confidence score for every field. Do not guess or infer
 `email` or `phone`; phone numbers are user-supplied only. Do not add unsupported
 fields such as `reason`, `confidence`, `citation`, or `speaker_session`.
+
+If the user is refreshing a list they already imported into WhoCue, keep every
+descriptive field that should stay: on a re-import, an omitted field clears the
+app's value, except `status`, `priority`, and `image` (omitted or
+`"mode": "none"`), which keep it. See
+`PROTOCOL.md`, "Re-Importing Into An Existing Event".
 
 ## Links
 
