@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "event": {
-    "name": "Regional Growth Summit 2026",
-    "source_id": "event-rgs-2026",
-    "start_at": "2026-10-08T08:30:00-05:00",
-    "end_at": "2026-10-08T16:45:00-05:00",
+    "name": "Regional Growth Summit 2027",
+    "source_id": "event-rgs-2027",
+    "start_at": "2027-10-07T08:30:00-05:00",
+    "end_at": "2027-10-07T16:45:00-05:00",
     "timezone": "America/Chicago",
     "location": "Lakeview Innovation Center",
     "description": "Synthetic six-person demo event for validating a medium-sized WhoCue import package."
