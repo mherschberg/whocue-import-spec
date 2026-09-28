@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "event": {
-    "name": "Metro Product Forum 2026",
-    "source_id": "event-mpf-2026",
-    "start_at": "2026-09-14T09:00:00-04:00",
-    "end_at": "2026-09-14T17:30:00-04:00",
+    "name": "Metro Product Forum 2027",
+    "source_id": "event-mpf-2027",
+    "start_at": "2027-09-13T09:00:00-04:00",
+    "end_at": "2027-09-13T17:30:00-04:00",
     "timezone": "America/New_York",
     "location": "North Hall Conference Center",
     "description": "Synthetic sample event for validating a practical WhoCue import file."

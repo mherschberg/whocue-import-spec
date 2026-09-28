@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
   "event": {
-    "name": "Civic Tech Expo 2026",
-    "source_id": "event-cte-2026",
-    "start_at": "2026-11-12T09:00:00-08:00",
-    "end_at": "2026-11-13T15:30:00-08:00",
+    "name": "Civic Tech Expo 2027",
+    "source_id": "event-cte-2027",
+    "start_at": "2027-11-11T09:00:00-08:00",
+    "end_at": "2027-11-12T15:30:00-08:00",
     "timezone": "America/Los_Angeles",
     "location": "Pier 4 Civic Hall",
     "description": "Synthetic ten-person demo event for validating a larger WhoCue import package with varied priorities and meeting states."
