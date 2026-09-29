@@ -93,10 +93,14 @@ plain JSON Schema:
   PNG, or WebP, and fit within a 2048 x 2048 decoded-pixel envelope.
 - Remote image downloads must use HTTPS, follow at most 2 redirects, complete
   within a 10 second per-image timeout, and stay within a 2 MiB download limit.
-- ZIP import packages may contain one manifest JSON file plus referenced image
-  files. ZIP packages must reject absolute paths, `.` / `..` path segments, nested
-  archives, unsupported file types, undeclared image files, duplicate entry
-  paths, and packages over 50 MiB total compressed size.
+- ZIP import packages carry one manifest JSON file plus referenced image files,
+  with `package_file` paths relative to the ZIP root. The app sorts entries into
+  three tiers (`PROTOCOL.md`, "ZIP Packages"): it refuses the whole package for
+  a size over 50 MiB, an unreadable ZIP, zero or several manifests, an entry with
+  an unsafe path, a duplicate entry path, or a nested archive; it ignores
+  directories, macOS metadata (`__MACOSX/`, `._` files), unreferenced images,
+  and other files; and it fails only the one image for a missing, oversized, or
+  undecodable package image. The validator doesn't open ZIP files.
 - Image failures are non-fatal for otherwise valid structured imports unless a
   later schema version adds an explicit required-image rule.
 

@@ -46,7 +46,12 @@ output:
    file from the document picker.
 
 For imports with local images, prefer a ZIP package that contains the JSON
-manifest and referenced image files. Do not suggest raw local file paths next to
+manifest and referenced image files. Tell the user to compress the manifest and
+its image folder themselves, not the folder that holds them, because image
+paths are relative to the ZIP's root. WhoCue refuses a ZIP with an unsafe entry
+path, a repeated path, or an archive inside it, and ignores macOS metadata,
+unreferenced images, and other files (`PROTOCOL.md`, "ZIP Packages"). Do not
+suggest raw local file paths next to
 the JSON file; mobile document pickers do not reliably grant access to sibling
 files across iOS and Android, and v1 does not support `local_file` image
 references.
@@ -238,9 +243,11 @@ Image rules:
 - Embedded image data must be canonical padded base64 with no whitespace, data
   URI prefix, or missing padding, and no more than 1,398,104 characters,
   approximately 1 MiB decoded.
-- Package image paths must be relative paths inside the ZIP package. They must
-  not be absolute, include `.` or `..` path segments, include double slashes, or
-  point to unsupported file extensions.
+- Package image paths are relative to the root of the ZIP package and must match
+  an entry's path exactly, case included. A path has 1-255 characters of
+  letters, digits, `.`, `_`, `-`, space, and `/`; no leading `/`, no `//`, and no
+  `.` or `..` segment; and ends in a lowercase `.jpg`, `.jpeg`, `.png`, or
+  `.webp`.
 - Package and remote images must stay within a 2 MiB image-file limit and a 2048
   x 2048 decoded-image envelope.
 

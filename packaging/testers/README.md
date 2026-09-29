@@ -44,6 +44,10 @@ examples/valid/realistic-demo.json
   are kept unless the file changes them.
 - Use `schema/whocue-import-v1.schema.json` if your tool can validate JSON
   Schema.
+- To send photos with your file, select the JSON file and its images folder
+  together and compress them into a ZIP (Finder's Compress on a Mac works). Don't
+  compress the folder that holds them: image paths in the JSON are relative to
+  the ZIP's top level.
 
 WhoCue v1 imports one event plus 1-250 people. Public examples should use
 synthetic data unless you are creating a private file for your own local use.
