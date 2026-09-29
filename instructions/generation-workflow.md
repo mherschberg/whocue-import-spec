@@ -179,7 +179,7 @@ Choose one image approach per person:
 | No reliable image | Omit `image` or use `{ "mode": "none" }`. |
 | Small image should live inside the JSON | Use `embedded` with canonical padded base64 and a supported MIME type. |
 | Local image files should travel with the import | Create a ZIP package and use `package_file` paths inside the package. |
-| Public HTTPS image should be fetched during import | Use `remote_url`; prefer `storage_preference: "save_locally"` for event-day reliability. |
+| Public HTTPS image should be fetched during import | Use `remote_url` with `storage_preference: "save_locally"`, or omit it (the default). `remote_reference` keeps only the link, and WhoCue then shows no photo. |
 
 Do not use raw local filesystem paths. A path such as
 `/Users/name/Desktop/headshot.jpg` or `C:\Users\name\headshot.jpg` cannot be

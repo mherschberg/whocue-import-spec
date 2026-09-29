@@ -39,7 +39,7 @@ valid JSON.
 | `valid/embedded-image.json` | Embedded image mode with a tiny synthetic PNG payload. |
 | `valid/package-file-image.json` | ZIP package image mode with a safe relative image path. |
 | `valid/remote-url-image.json` | HTTPS remote image mode with expected MIME type and storage preference. |
-| `valid/remote-url-reference-preference.json` | HTTPS remote image mode using the alternate `remote_reference` storage preference. |
+| `valid/remote-url-reference-preference.json` | HTTPS remote image mode using the `remote_reference` storage preference: valid v1, but WhoCue keeps only the link and shows a placeholder, never the photo. |
 | `valid/boundary-tags-and-fields.json` | Readable boundary-oriented fixture with all 12 allowed tags and longer optional fields. |
 | `valid/empty-tags-and-none-image.json` | Explicitly empty optional `tags` array and explicit no-image mode. |
 | `valid/numeric-looking-strings.json` | String fields containing `"0"` remain valid because the contract cares about JSON types, not numeric-looking text. |
