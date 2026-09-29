@@ -145,14 +145,16 @@ https://github.com/mherschberg/whocue-import-spec
 See [`LICENSE`](LICENSE) and [`LICENSING.md`](LICENSING.md). Copyright is held by
 Cognosco Media LLC, which retains all rights and grants a limited permission to
 use these files -- and to download and adapt a personal copy -- for generating,
-validating, or authoring WhoCue import files (including by a large language
-model) for use with the WhoCue application; all other rights (including
+validating, or authoring WhoCue import files for use with the WhoCue
+application, and for reading, validating, and processing event handoff exports
+from the WhoCue application (such as drafting a recap or follow-ups), including
+by a large language model; all other rights (including
 publishing, distributing, or otherwise sharing the files or an adapted copy) are
 reserved. The `LICENSE` expressly permits this LLM use despite
 the general AI-use restrictions in Cognosco Media's
 [Terms](https://www.cognoscomedia.com/terms) and
 [User Guidelines](https://www.cognoscomedia.com/user-guidelines), and requires
-personal data in import files to be handled per the
+personal data in import files and handoff exports to be handled per the
 [Privacy Policy](https://www.cognoscomedia.com/privacy).
 `LICENSE-THROUGHSTONE` applies only to retained Throughstone-authored scaffold
 material.

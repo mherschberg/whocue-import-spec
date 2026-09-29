@@ -4,24 +4,27 @@ Copyright (c) 2026 Cognosco Media LLC. All rights reserved.
 
 1. License Grant. Permission is hereby granted, free of charge, to any person
    or automated system obtaining a copy of the files in this repository (the
-   "Files") to read and use the Files solely for the purpose of generating,
-   validating, or authoring WhoCue import files -- including by a large
-   language model or other automated system -- for use with the WhoCue
-   application. This permission includes downloading a personal copy of the
-   Files to your own device and adapting or modifying that copy for that same
-   purpose. All other rights, including any right to publish, distribute,
-   sublicense, sell, or otherwise share the Files or an adapted copy, remain
-   reserved as described in Section 3.
+   "Files") to read and use the Files solely for the purposes of (a)
+   generating, validating, or authoring WhoCue import files for use with the
+   WhoCue application, and (b) reading, validating, and processing event
+   handoff export files exported from the WhoCue application, for example to
+   draft a recap, follow-ups, or a fresh import file -- in each case including
+   by a large language model or other automated system (together, the
+   "Permitted Purposes"). This permission includes downloading a personal copy
+   of the Files to your own device and adapting or modifying that copy for the
+   Permitted Purposes. All other rights, including any right to publish,
+   distribute, sublicense, sell, or otherwise share the Files or an adapted
+   copy, remain reserved as described in Section 3.
 
 2. Generative AI Carve-Out. Notwithstanding any provision of Cognosco Media
    LLC's Terms of Service (https://www.cognoscomedia.com/terms) or User
    Guidelines (https://www.cognoscomedia.com/user-guidelines) that restricts
    the use of Cognosco Media content with generative artificial intelligence,
    the Files are expressly licensed for use with generative AI and other
-   automated systems for the sole purpose of producing WhoCue import files as
-   described in Section 1. This carve-out applies only to the Files in this
-   repository and grants no permission to use any other Cognosco Media content
-   to train or operate generative AI.
+   automated systems solely for the Permitted Purposes described in Section 1.
+   This carve-out applies only to the Files in this repository and grants no
+   permission to use any other Cognosco Media content to train or operate
+   generative AI.
 
 3. Reservation of Rights. Except for the limited permission expressly granted
    above, all rights are reserved by the copyright holder. Without limiting the
@@ -29,12 +32,13 @@ Copyright (c) 2026 Cognosco Media LLC. All rights reserved.
    sell, or create derivative works of the Files, in whole or in part, for any
    other purpose, without the prior written permission of Cognosco Media LLC.
 
-4. Personal Data. Import files may contain personal information about third
-   parties (such as names, email addresses, and phone numbers). Any personal
-   data placed in, generated for, or processed through import files must be
-   handled in accordance with applicable law and Cognosco Media LLC's Privacy
-   Policy (https://www.cognoscomedia.com/privacy). Do not include personal data
-   you are not authorized to use.
+4. Personal Data. Import files and handoff export files may contain personal
+   information about third parties (such as names, email addresses, phone
+   numbers, and meeting notes). Any personal data placed in, generated for, or
+   processed through import files or handoff export files must be handled in
+   accordance with applicable law and Cognosco Media LLC's Privacy Policy
+   (https://www.cognoscomedia.com/privacy). Do not include personal data you
+   are not authorized to use.
 
 5. Relationship to Other Terms. Use of the WhoCue application and related
    services remains subject to Cognosco Media LLC's Terms of Service, User
