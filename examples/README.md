@@ -63,6 +63,9 @@ valid JSON.
 | `invalid/blank-person-name.json` | Person merge key contains no non-whitespace characters. |
 | `invalid/person-name-too-long.json` | Person name exceeds the 120-character v1 limit. |
 | `invalid/null-optional-field.json` | Optional fields are omitted when unknown; `null` is not accepted in v1. |
+| `invalid/null-tags.json` | Optional `tags` array is present as `null`; omit it or use `[]`. |
+| `invalid/null-links.json` | Optional `links` object is present as `null`; omit it. |
+| `invalid/affiliation-invalid-with-company.json` | `affiliation` exceeds the 120-character v1 limit. Both organization fields are validated even though `company` wins when both are present. |
 | `invalid/numeric-source-id.json` | `source_id` must be a string even when the source identifier looks numeric. |
 | `invalid/unknown-field.json` | Strict v1 rejects an undeclared person field. |
 | `invalid/unsupported-research-metadata-fields.json` | Strict v1 rejects generated research metadata fields such as `citation`, `confidence`, `speaker_session`, and `source`. |
@@ -70,6 +73,9 @@ valid JSON.
 | `invalid/invalid-enum-value.json` | `priority` and `status` use unsupported enum values. |
 | `invalid/invalid-date-time.json` | Event timestamps are not RFC 3339 date-time strings; requires validator `format` assertion or an equivalent custom check. |
 | `invalid/date-time-missing-offset.json` | Event timestamps omit the required `Z` or numeric timezone offset. |
+| `invalid/date-time-lowercase-separator.json` | Event timestamp uses a lowercase `t` separator; v1 requires an uppercase `T`, and `Z` or `±HH:MM`. |
+| `invalid/date-time-impossible-date.json` | Event timestamp names February 30, a date that does not exist. |
+| `invalid/event-end-before-start.json` | Event `end_at` is before `start_at`; an event may end when it starts but not before. Checked by the validator's semantic checks, not JSON Schema. |
 | `invalid/invalid-timezone.json` | Event timezone is not an IANA-style area/location value. |
 | `invalid/invalid-link-url.json` | Person link is not a valid HTTPS URL. |
 | `invalid/empty-links.json` | Person links object is present but contains no supported links. |
@@ -107,7 +113,7 @@ groups. Representative public fixtures for each group are:
 |------------------|---------------------------------|
 | File structure and version | `invalid/unsupported-schema-version.json`, `invalid/unknown-field.json` |
 | Missing required content | `invalid/missing-event.json`, `invalid/empty-event-object.json`, `invalid/missing-person-name.json` |
-| Field types and formats | `invalid/numeric-source-id.json`, `invalid/invalid-date-time.json`, `invalid/invalid-link-url.json` |
+| Field types and formats | `invalid/numeric-source-id.json`, `invalid/invalid-date-time.json`, `invalid/invalid-link-url.json`, `invalid/event-end-before-start.json` |
 | Import limits | `invalid/event-name-too-long.json`, `invalid/person-name-too-long.json`, `invalid/too-many-tags.json` |
 | Duplicates | `invalid/duplicate-person-name.json`, `invalid/duplicate-tags.json` |
 | Image references | `invalid/invalid-image-mime-type.json`, `invalid/non-https-remote-image.json`, `invalid/package-file-path-traversal.json` |

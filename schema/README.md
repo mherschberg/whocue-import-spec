@@ -29,7 +29,9 @@ Each import file describes one event-scoped people list.
 
 - `event.name` is required and is the event merge key.
 - `event.start_at`, `event.end_at`, and `event.timezone` are optional. Date-time
-  values must include `Z` or a numeric timezone offset. When an event date is
+  values use an uppercase `T`, include seconds, and end in `Z` or a `±HH:MM`
+  offset (the schemas' shared `date_time` pattern), and `end_at` must not be
+  before `start_at` (a validator semantic check). When an event date is
   known but exact times are not, generators should use `00:00:00` and
   `23:59:59` with the local offset, plus `timezone` for the named event
   timezone.

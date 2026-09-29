@@ -116,8 +116,10 @@ Allowed `event` fields:
 
 - `name`: required, 1-120 characters.
 - `source_id`: optional, 1-128 characters.
-- `start_at`: optional RFC 3339 date-time with `Z` or numeric timezone offset.
-- `end_at`: optional RFC 3339 date-time with `Z` or numeric timezone offset.
+- `start_at`: optional RFC 3339 date-time in the form `YYYY-MM-DDTHH:MM:SS`,
+  with an optional fraction of a second, then `Z` or a `±HH:MM` offset. Use an
+  uppercase `T` and `Z`, include seconds, and use only real dates and times.
+- `end_at`: optional, same form as `start_at`, and not before `start_at`.
 - `timezone`: optional IANA-style value such as `America/New_York`.
 - `location`: optional, 1-160 characters.
 - `description`: optional, 1-1,000 characters.
@@ -135,7 +137,8 @@ Allowed person fields:
 - `source_id`: optional, 1-128 characters.
 - `title`: optional, 1-120 characters.
 - `company`: optional, 1-120 characters.
-- `affiliation`: optional, 1-120 characters.
+- `affiliation`: optional, 1-120 characters. WhoCue keeps one organization per
+  person, so when both are present `company` is used; both must still be valid.
 - `notes`: optional, 1-2,000 characters.
 - `connection_topic`: optional, 1-500 characters.
 - `identity_uncertain`: optional boolean; set to `true` only when the record
@@ -260,7 +263,8 @@ Before producing JSON, check:
   research metadata fields are present.
 - Enum values exactly match the allowed lowercase values.
 - All URLs use HTTPS.
-- Date-time fields include `Z` or a numeric timezone offset.
+- Date-time fields use an uppercase `T`, include seconds, and end in `Z` or a
+  `±HH:MM` offset, and `end_at` is not before `start_at`.
 - Embedded image data is canonical padded base64, not a data URI.
 - Image objects use exactly one supported mode.
 - Person names are unique within the event.

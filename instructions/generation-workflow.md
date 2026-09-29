@@ -321,7 +321,8 @@ Before import, confirm:
 - All objects use only supported v1 fields.
 - Required names are present, non-blank, and unique within the event.
 - Optional unknowns are omitted, not `null`.
-- Date-times include `Z` or a numeric timezone offset.
+- Date-times use an uppercase `T`, include seconds, and end in `Z` or a
+  `±HH:MM` offset, and `end_at` is not before `start_at`.
 - URLs use HTTPS.
 - Images use only `none`, `embedded`, `package_file`, or `remote_url`.
 - Raw `local_file` paths and sibling image-file workflows are absent.

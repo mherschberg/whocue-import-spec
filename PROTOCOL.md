@@ -52,8 +52,8 @@ Allowed fields:
 |-------|----------|------|
 | `name` | Yes | 1-120 characters, non-blank. Event merge key. |
 | `source_id` | No | 1-128 characters, non-blank. External traceability only. |
-| `start_at` | No | RFC 3339 date-time with `Z` or numeric timezone offset. |
-| `end_at` | No | RFC 3339 date-time with `Z` or numeric timezone offset. |
+| `start_at` | No | RFC 3339 date-time in the form `YYYY-MM-DDTHH:MM:SS`, with an optional fraction of a second, then `Z` or a `±HH:MM` offset. Use an uppercase `T` and `Z`, include seconds, and use only real dates and times. |
+| `end_at` | No | Same form as `start_at`. Must not be before `start_at`; it may equal it. |
 | `timezone` | No | IANA-style value, such as `America/New_York`. |
 | `location` | No | 1-160 characters, non-blank. |
 | `description` | No | 1-1,000 characters, non-blank. |
@@ -73,7 +73,7 @@ Allowed fields:
 | `source_id` | No | 1-128 characters, non-blank. External traceability only. |
 | `title` | No | 1-120 characters, non-blank. |
 | `company` | No | 1-120 characters, non-blank. |
-| `affiliation` | No | 1-120 characters, non-blank. |
+| `affiliation` | No | 1-120 characters, non-blank. WhoCue keeps one organization per person: when both are present, `company` is used and `affiliation` is ignored, but both must still be valid. |
 | `notes` | No | 1-2,000 characters, non-blank. |
 | `email` | No | 1-254 characters, non-blank. Include only user-supplied email addresses, or addresses found through an explicit user-approved email lookup. Never guess. |
 | `phone` | No | 1-40 characters, non-blank. Include only user-supplied phone numbers. Do not research phone numbers while creating an initial event list. |
@@ -231,7 +231,8 @@ Before output, verify that:
 - Every object uses only allowed fields.
 - Required names are present and non-blank.
 - Optional fields are omitted when unknown.
-- Date-time fields include `Z` or a numeric timezone offset.
+- Date-time fields use an uppercase `T`, include seconds, and end in `Z` or a
+  `±HH:MM` offset, and `end_at` is not before `start_at`.
 - Enum values exactly match the protocol.
 - URLs use HTTPS.
 - Embedded image data is canonical padded base64, not a data URI.

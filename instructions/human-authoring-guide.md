@@ -57,8 +57,8 @@ numbers; do not research phone numbers while creating an initial event list.
 |-------|----------|------|
 | `name` | Yes | 1-120 characters, non-blank. This is the event merge key. |
 | `source_id` | No | 1-128 characters, non-blank. External traceability only. |
-| `start_at` | No | RFC 3339 date-time string with `Z` or numeric timezone offset. |
-| `end_at` | No | RFC 3339 date-time string with `Z` or numeric timezone offset. |
+| `start_at` | No | RFC 3339 date-time in the form `YYYY-MM-DDTHH:MM:SS`, with an optional fraction of a second, then `Z` or a `±HH:MM` offset. Use an uppercase `T` and `Z`, include seconds, and use only real dates and times. |
+| `end_at` | No | Same form as `start_at`. Must not be before `start_at`; it may equal it. |
 | `timezone` | No | IANA-style area/location value, such as `America/New_York`. |
 | `location` | No | 1-160 characters, non-blank. |
 | `description` | No | 1-1,000 characters, non-blank. |
@@ -76,7 +76,7 @@ the event `timezone`. For example, use `2026-09-14T09:00:00-04:00`, not
 | `source_id` | No | 1-128 characters, non-blank. External traceability only. |
 | `title` | No | 1-120 characters, non-blank. |
 | `company` | No | 1-120 characters, non-blank. |
-| `affiliation` | No | 1-120 characters, non-blank. |
+| `affiliation` | No | 1-120 characters, non-blank. WhoCue keeps one organization per person: when both are present, `company` is used and `affiliation` is ignored, but both must still be valid. |
 | `notes` | No | 1-2,000 characters, non-blank. |
 | `email` | No | 1-254 characters, non-blank. Optional lookup requires explicit user approval; never guess. |
 | `phone` | No | 1-40 characters, non-blank. User-supplied only; never research ahead of the event. |
@@ -196,7 +196,7 @@ When WhoCue rejects a file, the app groups the scrubbed paths by repair area:
 |-----------|---------------|
 | File structure and version | The file is valid JSON, the root is one object, `schema_version` is exactly `"1.0"`, and every object uses only v1 fields. |
 | Missing required content | Required objects and names are present: `event`, `event.name`, `people`, and every person `name`. Blank required strings must become non-blank or the record should be removed. |
-| Field types and formats | Strings are strings, booleans are booleans, enums use exact lowercase values, date-times include `Z` or an offset, timezones look like `Area/Location`, and URLs are HTTPS. |
+| Field types and formats | Strings are strings, booleans are booleans, enums use exact lowercase values, date-times use an uppercase `T`, seconds, and `Z` or a `±HH:MM` offset, an event ends no earlier than it starts, timezones look like `Area/Location`, and URLs are HTTPS. |
 | Import limits | The JSON file, people count, tag count, image payloads, and string lengths fit the limits in this guide. |
 | Duplicates | Person names are unique within the event after trimming/case normalization, and tags are not repeated within one person. |
 | Image references | The `image` object uses exactly one supported mode; embedded data is canonical padded base64; package paths are safe relative image paths; remote image URLs are HTTPS. |
