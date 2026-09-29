@@ -42,11 +42,11 @@ and `handoff-export-processing.md` explains how to move from one to the other.
 ## Using And Adapting These Files
 
 You may download a copy of these instructions to your computer or phone and
-adapt them for your own use in creating WhoCue import files -- for example,
-tailoring the reusable prompt to a specific event. Keep changes to your own
-copy; publishing, distributing, or otherwise sharing the files or an adapted
-copy is not permitted. See the repository [`LICENSE`](../LICENSE) for the full
-terms.
+adapt them for your own use in creating WhoCue import files or processing WhoCue
+handoff exports -- for example, tailoring the reusable prompt to a specific
+event. Keep changes to your own copy; publishing, distributing, or otherwise
+sharing the files or an adapted copy is not permitted. See the repository
+[`LICENSE`](../LICENSE) for the full terms.
 
 ## Privacy
 
