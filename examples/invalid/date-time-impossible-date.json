@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Impossible Date Demo",
+    "start_at": "2026-02-30T09:00:00Z"
+  },
+  "people": [
+    {
+      "name": "Alex Morgan"
+    }
+  ]
+}

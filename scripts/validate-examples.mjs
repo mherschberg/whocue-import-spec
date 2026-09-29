@@ -44,7 +44,7 @@ const snapshot_extra_required_person_fields = ["status"];
  * must stay byte-identical; anything that legitimately diverges belongs in the
  * limits table in `schema/README.md`, not here.
  */
-const shared_defs = ["https_url", "person_links"];
+const shared_defs = ["date_time", "https_url", "person_links"];
 
 /**
  * Reads and parses a JSON file with an error message that names the fixture.
@@ -122,6 +122,14 @@ function normalize_merge_key(value) {
  */
 function validate_semantics(document) {
   const errors = [];
+
+  // An event may end when it starts but not before. Unparseable values are the
+  // schema's to report, so the comparison only runs when both parse.
+  const start_ms = Date.parse(document.event?.start_at);
+  const end_ms = Date.parse(document.event?.end_at);
+  if (!Number.isNaN(start_ms) && !Number.isNaN(end_ms) && end_ms < start_ms) {
+    errors.push("/event/end_at is before /event/start_at");
+  }
 
   if (Array.isArray(document.people)) {
     const seen_names = new Map();
@@ -391,6 +399,67 @@ function import_generated_cases() {
         },
       }),
     },
+    ...date_time_cases(),
+    {
+      name: "event ending when it starts passes",
+      should_pass: true,
+      document: minimal_document({
+        event: { start_at: "2026-09-14T09:00:00Z", end_at: "2026-09-14T09:00:00Z" },
+      }),
+    },
+    {
+      name: "event ending before it starts fails",
+      should_pass: false,
+      document: minimal_document({
+        event: { start_at: "2026-09-14T13:00:00Z", end_at: "2026-09-14T08:00:00-04:00" },
+      }),
+    },
+  ];
+}
+
+/**
+ * Event date-time values the validator must accept or reject exactly as the
+ * app does: uppercase `T`, seconds required, `Z` or `±HH:MM`, and every field
+ * in range (the schema's `date_time` pattern plus `format: date-time`).
+ */
+function date_time_cases() {
+  const passing = [
+    "2028-02-29T09:00:00Z",
+    "2000-02-29T09:00:00Z",
+    "2026-09-14T09:00:00.123456Z",
+    "2026-09-14T09:00:00-05:30",
+    "2026-09-14T09:00:00+23:59",
+  ];
+  const failing = [
+    "2026-02-29T09:00:00Z",
+    "1900-02-29T09:00:00Z",
+    "2026-02-30T09:00:00Z",
+    "2026-04-31T09:00:00Z",
+    "2026-13-01T09:00:00Z",
+    "2026-09-14T24:00:00Z",
+    "2026-09-14T09:60:00Z",
+    "2026-12-31T23:59:60Z",
+    "2026-09-14T09:00:00+24:00",
+    "2026-09-14T09:00:00+05:60",
+    "2026-09-14t09:00:00Z",
+    "2026-09-14T09:00:00z",
+    "2026-09-14 09:00:00Z",
+    "2026-09-14T09:00:00+0400",
+    "2026-09-14T09:00:00+04",
+    "2026-09-14T09:00Z",
+  ];
+
+  return [
+    ...passing.map((value) => ({
+      name: `start_at ${value} passes`,
+      should_pass: true,
+      document: minimal_document({ event: { start_at: value } }),
+    })),
+    ...failing.map((value) => ({
+      name: `start_at ${value} fails`,
+      should_pass: false,
+      document: minimal_document({ event: { start_at: value } }),
+    })),
   ];
 }
 
@@ -603,6 +672,16 @@ function check_snapshot_mirrors_import(handoff_schema, import_schema) {
     import_defs.event.required,
     handoff_defs.snapshot_event.required,
   );
+
+  // The snapshot's event times must accept exactly what import v1 accepts,
+  // because the app imports the snapshot with the import v1 rules.
+  for (const field of ["start_at", "end_at"]) {
+    const import_field = JSON.stringify(import_defs.event.properties[field]);
+    const handoff_field = JSON.stringify(handoff_defs.snapshot_event.properties[field]);
+    if (import_field !== handoff_field) {
+      errors.push(`$defs.snapshot_event.properties.${field} does not match import v1 event.${field}`);
+    }
+  }
   compare_keys(
     "$defs.snapshot_person.properties",
     Object.keys(import_defs.person.properties),
