@@ -183,6 +183,17 @@ function validate_handoff_semantics(document) {
   const snapshot_people = Array.isArray(snapshot?.people) ? snapshot.people : null;
   const state_people = Array.isArray(state?.people) ? state.people : null;
 
+  // The app imports the snapshot with the import v1 rules, so the import
+  // semantic checks (event range, unique names, canonical base64) apply to it
+  // too. Without this, `npm run validate -- <file>` passed a handoff export
+  // the app refuses (STEP-38 review L1).
+  if (snapshot !== null && typeof snapshot === "object") {
+    for (const error of validate_semantics(snapshot)) {
+      // Each message names one or two JSON pointers; prefix every one.
+      errors.push(error.replace(/(^|\s)\//g, "$1/import_compatible_snapshot/"));
+    }
+  }
+
   if (snapshot_people === null || state_people === null || summary === null || typeof summary !== "object") {
     // Structural problems are the schema's job; skip the cross-section checks.
     return errors;
@@ -423,7 +434,11 @@ function import_generated_cases() {
  * in range (the schema's `date_time` pattern plus `format: date-time`).
  */
 function date_time_cases() {
+  // The app rejects any value over 64 characters without parsing it, and the
+  // schema's `maxLength` says the same.
+  const at_length_limit = `2026-09-14T09:00:00.${"1".repeat(43)}Z`;
   const passing = [
+    at_length_limit,
     "2028-02-29T09:00:00Z",
     "2000-02-29T09:00:00Z",
     "2026-09-14T09:00:00.123456Z",
@@ -431,6 +446,7 @@ function date_time_cases() {
     "2026-09-14T09:00:00+23:59",
   ];
   const failing = [
+    `2026-09-14T09:00:00.${"1".repeat(44)}Z`,
     "2026-02-29T09:00:00Z",
     "1900-02-29T09:00:00Z",
     "2026-02-30T09:00:00Z",
@@ -489,6 +505,10 @@ function handoff_generated_cases() {
   app_domain_lengths.who_cue_state.people[0].notes = "N".repeat(4000);
   app_domain_lengths.who_cue_state.people[0].meeting_notes = "M".repeat(4000);
 
+  const reversed_snapshot_range = minimal_handoff_document();
+  reversed_snapshot_range.import_compatible_snapshot.event.start_at = "2026-09-14T17:00:00Z";
+  reversed_snapshot_range.import_compatible_snapshot.event.end_at = "2026-09-14T09:00:00Z";
+
   const over_app_domain_length = minimal_handoff_document();
   over_app_domain_length.who_cue_state.people[0].meeting_notes = "M".repeat(4001);
 
@@ -537,6 +557,11 @@ function handoff_generated_cases() {
       name: "summary counts that disagree with the records fail",
       should_pass: false,
       document: miscounted_summary,
+    },
+    {
+      name: "a snapshot event that ends before it starts fails",
+      should_pass: false,
+      document: reversed_snapshot_range,
     },
   ];
 }

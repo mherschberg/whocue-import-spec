@@ -68,6 +68,7 @@ Schema-enforced limits:
 | Tags per person | 0-12 |
 | Tag length | 1-40 characters |
 | Source ID length | 1-128 characters |
+| Event `start_at` / `end_at` | At most 64 characters |
 | HTTPS URL length | 2,048 characters |
 | Embedded image base64 payload | 1,398,104 characters, approximately 1 MiB decoded |
 
@@ -103,7 +104,7 @@ files:
   three tiers (`PROTOCOL.md`, "ZIP Packages"): it refuses the whole package for
   a size over 50 MiB, an unreadable ZIP, zero or several manifests, an entry with
   an unsafe path, a duplicate entry path, or a nested archive; it ignores
-  directories, macOS metadata (a `__MACOSX` folder, `._` files), unreferenced images,
+  directories, macOS metadata (a top-level `__MACOSX` folder, `._` files), unreferenced images,
   and other files; and it fails only the one image for a missing, oversized, or
   undecodable package image. The validator doesn't open ZIP files.
 - Image failures are non-fatal for otherwise valid structured imports unless a
