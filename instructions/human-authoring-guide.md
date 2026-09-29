@@ -177,27 +177,27 @@ synthetic references for the expected style.
 
 ## Validate Before Import
 
-Install dependencies once:
+These commands work in a clone of the import-spec repository
+(https://github.com/mherschberg/whocue-import-spec), not in the testers' package, which carries no validator. Install
+the dependencies once:
 
 ```bash
 npm ci
 ```
 
-Validate the schema and fixture corpus:
+Validate your own file:
 
 ```bash
-npm run validate
+npm run validate -- path/to/my-event.json
 ```
 
-Run the full local import-spec check:
+It prints `ok` or the file's errors for each file named, as an import v1 file,
+or as a handoff export when the file is one. It checks the JSON only: for a ZIP
+package, validate the manifest JSON before zipping. The app itself enforces the
+ZIP rules, file sizes, and image checks (`PROTOCOL.md`, "ZIP Packages").
 
-```bash
-npm run check
-```
-
-The validation command compiles the schema, checks all valid and invalid
-fixtures, and adds supplemental semantic checks that JSON Schema alone does not
-cover.
+With no file named, `npm run validate` checks the repository's own schemas and
+fixture corpus, and `npm run check` runs every repository check.
 
 ## Repair Common Validation Failures
 

@@ -14,6 +14,7 @@ required_paths=(
   "package.json"
   "package-lock.json"
   "scripts/validate-examples.mjs"
+  "scripts/validate-examples.test.mjs"
   "scripts/build-testers-package.sh"
   "packaging/testers/README.md"
   "schema/README.md"

@@ -780,9 +780,78 @@ async function validate_contract(contract) {
 }
 
 /**
- * Validates every published contract plus the cross-contract drift checks.
+ * Validates each named JSON file and reports it, instead of the corpus.
+ *
+ * `npm run validate -- <file>...` lands here. npm runs scripts from the
+ * repository root, so a relative path resolves against the directory npm was
+ * started from (`INIT_CWD`). A handoff envelope is validated as a handoff
+ * export, anything else as an import v1 file, each with its semantic checks.
+ * ZIP packages aren't opened: validate the manifest JSON before zipping.
+ * Returns the number of files that failed.
+ */
+async function validate_named_files(file_arguments) {
+  const base_dir = process.env.INIT_CWD ?? process.cwd();
+  const validators = {
+    "import v1": {
+      validate: create_validator(await read_json(import_schema_path), import_schema_path),
+      validate_semantics,
+    },
+    "handoff v1": {
+      validate: create_validator(await read_json(handoff_schema_path), handoff_schema_path),
+      validate_semantics: validate_handoff_semantics,
+    },
+  };
+  let failures = 0;
+
+  for (const file_argument of file_arguments) {
+    const file_path = path.resolve(base_dir, file_argument);
+    let document;
+    try {
+      document = JSON.parse(await readFile(file_path, "utf8"));
+    } catch (error) {
+      failures += 1;
+      const reason = error instanceof SyntaxError ? `not valid JSON: ${error.message}` : `cannot read: ${error.code ?? error.message}`;
+      console.error(`fail ${file_argument}: ${reason}`);
+      continue;
+    }
+
+    const is_handoff = document !== null && typeof document === "object" && document.format === "whocue_event_handoff";
+    const contract = is_handoff ? "handoff v1" : "import v1";
+    const { validate, validate_semantics: semantic_check } = validators[contract];
+    const schema_ok = validate(document);
+    const semantic_errors = document !== null && typeof document === "object" ? semantic_check(document) : [];
+
+    if (schema_ok && semantic_errors.length === 0) {
+      console.log(`ok ${file_argument} (${contract})`);
+      continue;
+    }
+    failures += 1;
+    console.error(`fail ${file_argument} (${contract})`);
+    if (!schema_ok) {
+      console.error(format_errors(validate.errors).replace(/^/gm, "  "));
+    }
+    for (const semantic_error of semantic_errors) {
+      console.error(`  ${semantic_error}`);
+    }
+  }
+
+  return failures;
+}
+
+/**
+ * Validates every published contract plus the cross-contract drift checks, or
+ * only the files named on the command line.
  */
 async function main() {
+  const file_arguments = process.argv.slice(2);
+  if (file_arguments.length > 0) {
+    const failures = await validate_named_files(file_arguments);
+    if (failures > 0) {
+      process.exitCode = 1;
+    }
+    return;
+  }
+
   const contracts = [
     {
       name: "import v1",

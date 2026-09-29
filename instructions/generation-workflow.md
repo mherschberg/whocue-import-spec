@@ -25,7 +25,8 @@ action.
 - `human-authoring-guide.md` - human review and validation reference.
 - `../schema/whocue-import-v1.schema.json` - machine-readable schema.
 - `../examples/valid/` - synthetic valid output models.
-- `../examples/invalid/` - examples of rejected shapes.
+- [Invalid examples](https://github.com/mherschberg/whocue-import-spec/tree/main/examples/invalid) in the import-spec
+  repository - examples of rejected shapes.
 
 ## Workflow
 
@@ -196,28 +197,29 @@ or placeholder values for unknown real data.
 
 ### 8. Validate And Repair
 
-Install dependencies once in the import-spec repo:
+These commands work in a clone of the import-spec repository
+(https://github.com/mherschberg/whocue-import-spec), not in the testers' package, which carries no validator. Install
+the dependencies once:
 
 ```bash
 npm ci
 ```
 
-Validate the repository schema and fixture corpus:
+Validate your own file:
 
 ```bash
-npm run validate
+npm run validate -- path/to/my-event.json
 ```
 
-Run the full local check:
-
-```bash
-npm run check
-```
+It prints `ok` or the file's errors for each file named, as an import v1 file,
+or as a handoff export when the file is one. It checks the JSON only: for a ZIP
+package, validate the manifest JSON before zipping. The app itself enforces the
+ZIP rules, file sizes, and image checks (`PROTOCOL.md`, "ZIP Packages").
 
 Use `../schema/whocue-import-v1.schema.json`, `../PROTOCOL.md`, and the valid
-fixtures as the contract while reviewing a generated file. The current repo
-command validates the checked-in schema and examples; WhoCue also validates the
-selected `.json` or `.zip` during import and reports grouped repair guidance.
+fixtures as the contract while reviewing a generated file. WhoCue also
+validates the selected `.json` or `.zip` during import and reports grouped
+repair guidance.
 
 If WhoCue reports a validation group, repair the smallest relevant part of the
 file. Fix structure and version first, then required content, field formats,

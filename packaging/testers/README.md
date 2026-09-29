@@ -23,11 +23,14 @@ For a minimal JSON-only import example, use:
 examples/valid/minimal.json
 ```
 
-For a richer JSON example without bundled image files, use:
+For a richer JSON example, use:
 
 ```text
 examples/valid/realistic-demo.json
 ```
+
+It is the same event as the ZIP, but its people's photos live in the ZIP, so
+imported on its own it shows a placeholder for each of the three photos.
 
 ## How To Create Your Own Import File
 
@@ -40,8 +43,9 @@ examples/valid/realistic-demo.json
   which event-relevant people should be included.
 - Use `PROTOCOL.md` for a concise reference. Its "Re-Importing Into An Existing
   Event" section explains what happens when you import an updated list for an
-  event already in WhoCue: the people you marked met and the priorities you set
-  are kept unless the file changes them.
+  event already in WhoCue. Someone you marked met stays met, whatever the file
+  says. Your priorities and photos stay unless the file sets new ones. Other
+  fields the file leaves out are cleared.
 - Use `schema/whocue-import-v1.schema.json` if your tool can validate JSON
   Schema.
 - To send photos with your file, select the JSON file and its images folder
