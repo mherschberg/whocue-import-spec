@@ -112,8 +112,11 @@ v1 supports:
 - `embedded`: base64 image data with a declared `mime_type`.
 - `package_file`: image file packaged next to the manifest inside a ZIP import,
   referenced by safe relative path and declared `mime_type`.
-- `remote_url`: HTTPS URL fetched during explicit import, with optional
-  `expected_mime_type` and `storage_preference`.
+- `remote_url`: HTTPS URL with optional `expected_mime_type` and
+  `storage_preference`. With `save_locally` (the default), the app downloads the
+  image once during explicit import and keeps its own copy. With
+  `remote_reference`, it keeps only the link and never downloads or shows the
+  image (`PROTOCOL.md`, image rules).
 
 Embedded images are valid in v1 and are convenient for small, self-contained
 imports. For image-heavy imports, prefer a ZIP package with `package_file`

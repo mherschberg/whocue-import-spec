@@ -125,7 +125,7 @@ Supported v1 image modes:
 | `none` | `mode` | You want to explicitly say no image is supplied. |
 | `embedded` | `mode`, `mime_type`, `data` | The image is small and should travel inside the JSON file. |
 | `package_file` | `mode`, `path`, `mime_type` | The import will be a ZIP package with image files next to the manifest. |
-| `remote_url` | `mode`, `url` | WhoCue should fetch an HTTPS image URL during import. |
+| `remote_url` | `mode`, `url` | WhoCue should download an HTTPS image once, during import, and keep a copy. |
 
 Supported image MIME types are `image/jpeg`, `image/png`, and `image/webp`.
 
@@ -147,8 +147,11 @@ entry path, a repeated path, or an archive inside it, and ignores unreferenced
 images and other files (`PROTOCOL.md`, "ZIP Packages").
 
 `remote_url.url` must use HTTPS. Remote image downloads may follow at most 2
-redirects and must complete within a 10 second per-image timeout. Optional
-`storage_preference` values are `save_locally` and `remote_reference`.
+redirects and must complete within a 10 second per-image timeout. The optional
+`storage_preference` is `save_locally` (the default): WhoCue downloads the image
+once, during the import, and keeps its own copy. With `remote_reference`, WhoCue
+keeps only the link, never downloads the image, and shows a placeholder saying
+the photo wasn't downloaded; use it only when a copy mustn't be kept.
 
 Raw `local_file` references outside a ZIP package are not supported in v1.
 

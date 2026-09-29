@@ -152,8 +152,14 @@ Image rules:
 - Supported MIME types: `image/jpeg`, `image/png`, `image/webp`.
 - Raw `local_file` image references are unsupported in v1.
 - Remote image URLs must use HTTPS.
-- `storage_preference`, when present, must be `save_locally` or
-  `remote_reference`.
+- `storage_preference` says whether WhoCue keeps a copy of a `remote_url` image:
+  - `save_locally` (the default when omitted, and recommended): WhoCue downloads
+    the image once, during the import, checks it, and keeps its own copy. After
+    that it never contacts the image host.
+  - `remote_reference`: WhoCue keeps only the link. It never downloads the
+    image, during the import or when the person is viewed, and shows a
+    placeholder saying the photo wasn't downloaded. Use it only when a copy
+    mustn't be kept.
 - Embedded image data must be canonical padded base64 with no whitespace, data
   URI prefix, or missing padding, and no more than 1,398,104 characters,
   approximately 1 MiB decoded.
