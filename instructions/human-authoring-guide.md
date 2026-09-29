@@ -134,9 +134,17 @@ or missing padding, and are limited to 1,398,104 characters, approximately 1 MiB
 decoded. Package and remote images must stay within a 2 MiB image-file limit and
 a 2048 x 2048 decoded-image envelope.
 
-`package_file.path` must be a safe relative path inside the ZIP package. It may
-not be absolute, contain `.` or `..` path segments, contain double slashes, or
-point to anything other than `.jpg`, `.jpeg`, `.png`, or `.webp`.
+`package_file.path` is relative to the root of the ZIP package and must match an
+entry's path exactly, case included. It has 1-255 characters of letters,
+digits, `.`, `_`, `-`, space, and `/`; no leading `/`, no `//`, and no `.` or
+`..` segment; and it ends in a lowercase `.jpg`, `.jpeg`, `.png`, or `.webp`.
+
+To build the package, select the manifest and its image folder together and
+compress them. On a Mac, Finder's Compress works: WhoCue ignores the `__MACOSX`
+metadata it adds. Don't compress the folder that holds them, which would put
+every path under that folder's name. WhoCue refuses a package with an unsafe
+entry path, a repeated path, or an archive inside it, and ignores unreferenced
+images and other files (`PROTOCOL.md`, "ZIP Packages").
 
 `remote_url.url` must use HTTPS. Remote image downloads may follow at most 2
 redirects and must complete within a 10 second per-image timeout. Optional

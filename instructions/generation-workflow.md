@@ -244,7 +244,9 @@ preview-before-import step as a picked file.
 
 Do not tell users to import sibling image files next to a JSON file. If local
 images are needed, put the JSON manifest and image files in a ZIP package and
-reference package-relative paths.
+reference paths relative to the ZIP's root. Compress the manifest and its image
+folder themselves, not the folder that holds them (`PROTOCOL.md`, "ZIP
+Packages").
 
 ## Reusable Prompt Template
 

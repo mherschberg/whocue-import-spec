@@ -157,9 +157,42 @@ Image rules:
 - Embedded image data must be canonical padded base64 with no whitespace, data
   URI prefix, or missing padding, and no more than 1,398,104 characters,
   approximately 1 MiB decoded.
-- Package image paths must be safe relative paths inside the ZIP package.
+- Package image paths follow the rules in [ZIP Packages](#zip-packages).
 - Package and remote images must stay within a 2 MiB image-file limit and a
   2048 x 2048 decoded-image envelope.
+
+## ZIP Packages
+
+A ZIP package carries one manifest JSON file plus the image files its people
+reference with `package_file`.
+
+- A `package_file.path` is relative to the root of the ZIP and must match an
+  entry's path exactly, case included. Compress the manifest and its image
+  folder themselves, not the folder that holds them: compressing an enclosing
+  folder puts every entry under that folder's name, so no path matches.
+- A package path has 1-255 characters of letters, digits, `.`, `_`, `-`, space, and `/`; no
+  leading `/`, no `//`, and no `.` or `..` segment; ending in a lowercase `.jpg`,
+  `.jpeg`, `.png`, or `.webp`.
+- The manifest is the package's one `.json` file, at any depth, not counting
+  ignored entries.
+
+WhoCue sorts a package's entries into three tiers:
+
+1. **The package is refused and nothing is imported** when it is over 50 MiB
+   or isn't a readable ZIP; has no manifest or more than one; has a manifest over
+   10 MiB or not in UTF-8; or has any entry with an unsafe path (absolute, a
+   backslash, a colon, or an empty, `.`, or `..` segment), the same path twice,
+   or another archive inside it (`.zip`, `.tar`, `.gz`, `.tgz`, `.bz2`, `.xz`,
+   `.7z`, or `.rar`).
+2. **Entries are ignored**: directory entries, macOS metadata (anything under
+   `__MACOSX/`, and files whose names start with `._`, which Finder adds when it
+   makes a ZIP), images no person references, and any other file.
+3. **One image fails and its person imports with a placeholder** when the
+   image's path is missing from the package, or the file is over 2 MiB or isn't a
+   decodable JPEG, PNG, or WebP within 2048 x 2048.
+
+The WhoCue app enforces these rules. The JSON Schema validator checks the
+manifest, including the package-path pattern, but doesn't open ZIP files.
 
 ## Re-Importing Into An Existing Event
 
