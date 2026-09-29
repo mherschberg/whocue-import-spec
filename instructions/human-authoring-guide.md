@@ -144,7 +144,10 @@ compress them. On a Mac, Finder's Compress works: WhoCue ignores the `__MACOSX`
 metadata it adds. Don't compress the folder that holds them, which would put
 every path under that folder's name. WhoCue refuses a package with an unsafe
 entry path, a repeated path, or an archive inside it, and ignores unreferenced
-images and other files (`PROTOCOL.md`, "ZIP Packages").
+images and other files (`PROTOCOL.md`, "ZIP Packages"). A backslash counts as
+unsafe: if a ZIP made on Windows is refused for an unsafe path, the tool
+probably wrote `\` separators (older versions of PowerShell's
+`Compress-Archive` do); make it with File Explorer's compress command instead.
 
 `remote_url.url` must use HTTPS. Remote image downloads may follow at most 2
 redirects and must complete within a 10 second per-image timeout. The optional

@@ -190,12 +190,14 @@ WhoCue sorts a package's entries into three tiers:
    backslash, a colon, or an empty, `.`, or `..` segment), the same path twice,
    or another archive inside it (`.zip`, `.tar`, `.gz`, `.tgz`, `.bz2`, `.xz`,
    `.7z`, or `.rar`).
-2. **Entries are ignored**: directory entries, macOS metadata (anything under
-   a `__MACOSX` folder, and files whose names start with `._`, which Finder adds when it
-   makes a ZIP), images no person references, and any other file.
+2. **Entries are ignored**: directory entries, macOS metadata (anything in a
+   `__MACOSX` folder at the top of the ZIP, and files anywhere whose names start
+   with `._`, which Finder adds when it makes a ZIP), images no person
+   references, and any other file. So a package path can't point into that
+   metadata.
 3. **One image fails and its person imports with a placeholder** when the
-   image's path is missing from the package, or the file is over 2 MiB or isn't a
-   decodable JPEG, PNG, or WebP within 2048 x 2048.
+   image's path is missing from the package, or the file can't be unpacked, is
+   over 2 MiB, or isn't a decodable JPEG, PNG, or WebP within 2048 x 2048.
 
 The WhoCue app enforces these rules. The JSON Schema validator checks the
 manifest, including the package-path pattern, but doesn't open ZIP files.

@@ -2,6 +2,8 @@
 // Run with `npm test` (Node's built-in test runner; no extra dependency).
 
 import { spawnSync } from "node:child_process";
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import path from "node:path";
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -53,6 +55,27 @@ test("a handoff envelope is validated as a handoff export", () => {
 
   assert.equal(result.status, 0);
   assert.match(result.stdout, /\(handoff v1\)$/m);
+});
+
+test("a handoff export whose snapshot the app would refuse fails", () => {
+  const handoff = JSON.parse(
+    readFileSync(path.join(repo_root, "examples/handoff/valid/minimal-single-person.json"), "utf8"),
+  );
+  handoff.import_compatible_snapshot.event.start_at = "2026-09-14T17:00:00Z";
+  handoff.import_compatible_snapshot.event.end_at = "2026-09-14T09:00:00Z";
+  const directory = mkdtempSync(path.join(tmpdir(), "whocue-validate-"));
+  const file_path = path.join(directory, "reversed-handoff.json");
+  writeFileSync(file_path, JSON.stringify(handoff));
+
+  try {
+    const result = run_validator([file_path]);
+
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /\(handoff v1\)$/m);
+    assert.match(result.stderr, /\/import_compatible_snapshot\/event\/end_at is before \/import_compatible_snapshot\/event\/start_at/);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
 });
 
 test("every file is reported, and one failure fails the run", () => {

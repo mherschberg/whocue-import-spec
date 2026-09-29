@@ -136,9 +136,10 @@ Schema constraints:
 - Embedded image data must be canonical padded base64. Supplemental validation
   rejects data URI prefixes, whitespace, malformed content, and missing padding
   that can pass the schema's conservative character pattern.
-- ZIP package constraints such as undeclared files, duplicate entries, nested
-  archives, compressed size, and actual image decode dimensions require package
-  validation outside the manifest schema.
+- ZIP package rules (`PROTOCOL.md`, "ZIP Packages"): unsafe entry paths,
+  duplicate entries, nested archives, the compressed-size cap, and actual image
+  decode dimensions need package inspection outside the manifest schema. The app
+  applies them; undeclared images and other files are ignored.
 - Remote image timeout, redirect, download-size, response MIME, and decoded-image
   constraints require app/tooling validation outside the manifest schema.
 
@@ -164,9 +165,9 @@ deterministic:
 | Problem case | Coverage owner |
 |--------------|----------------|
 | Missing package entry | App contract/import tests with generated ZIP packages; this is not a JSON Schema failure because the manifest path is syntactically valid. |
-| Undeclared package entry | App ZIP resolver tests; requires inspecting ZIP entries outside the manifest schema. |
-| Duplicate package entry | App ZIP resolver tests; requires archive-level duplicate path detection. |
-| Nested archive | App ZIP resolver tests; requires archive-level entry inspection. |
+| Undeclared image or other file | App ZIP scan and import tests with generated packages: ignored, and every declared photo still imports. |
+| Unsafe entry path, duplicate entry, or nested archive | App ZIP scan and import tests with generated packages: the whole package is refused before anything is parsed. |
+| macOS metadata (`__MACOSX`, `._` files) | App ZIP import tests with a Finder-made entry layout: ignored. |
 | Corrupt image bytes | App contract/import and image processor tests; the manifest can be valid while bytes fail decode. |
 | Unsupported MIME or type mismatch | Public invalid JSON fixture for unsupported declared MIME; app contract/image tests for byte-level mismatch. |
 | Oversized image payload | Generated import-spec edge cases for embedded payload limits; app contract/image tests for package and remote byte limits. |
