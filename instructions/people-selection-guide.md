@@ -198,7 +198,8 @@ Map relevance into the existing v1 fields:
 - Use `identity_uncertain: true` only when the selected profile may not be the
   intended person; do not use it as a general confidence score.
 - Use `image.mode: "remote_url"` only for HTTPS image URLs that are public and
-  likely to be stable; otherwise omit `image` or use `{ "mode": "none" }`.
+  likely to be stable, with `storage_preference: "save_locally"` or none;
+  otherwise omit `image` or use `{ "mode": "none" }`.
 - When recent online activity was reviewed, fold useful public findings into
   `notes`, `connection_topic`, `tags`, and supported `links`; do not add
   unsupported fields for activity summaries, citations, or research metadata.

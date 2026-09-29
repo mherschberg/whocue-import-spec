@@ -29,7 +29,9 @@ Each import file describes one event-scoped people list.
 
 - `event.name` is required and is the event merge key.
 - `event.start_at`, `event.end_at`, and `event.timezone` are optional. Date-time
-  values must include `Z` or a numeric timezone offset. When an event date is
+  values use an uppercase `T`, include seconds, and end in `Z` or a `±HH:MM`
+  offset (the schemas' shared `date_time` pattern), and `end_at` must not be
+  before `start_at` (a validator semantic check). When an event date is
   known but exact times are not, generators should use `00:00:00` and
   `23:59:59` with the local offset, plus `timezone` for the named event
   timezone.
@@ -66,37 +68,53 @@ Schema-enforced limits:
 | Tags per person | 0-12 |
 | Tag length | 1-40 characters |
 | Source ID length | 1-128 characters |
+| Event `start_at` / `end_at` | At most 64 characters |
 | HTTPS URL length | 2,048 characters |
 | Embedded image base64 payload | 1,398,104 characters, approximately 1 MiB decoded |
 
-Rules enforced by import tooling, fixtures, or app implementation rather than
-plain JSON Schema:
+Rules outside plain JSON Schema come in three kinds.
 
-- Total import JSON file size must not exceed 10 MiB.
+Checked by the validator's semantic checks (`npm run validate`) and by the
+app:
+
+- `end_at` must not be before `start_at`; it may equal it.
 - Person names must be unique within a single import file after app-defined
   merge-key normalization.
-- If only an event date is known, import authors should provide `start_at` at
-  local midnight and `end_at` at local `23:59:59`, include the offset in each
-  timestamp, and use `timezone` to identify the named event timezone.
 - Embedded image data must be canonical padded base64. Supplemental validation
   rejects data URI prefixes, whitespace, malformed content, and missing padding
   that can pass the schema's conservative character pattern.
+
+Enforced only by the WhoCue app. The validator checks JSON and doesn't open ZIP
+files:
+
+- Total import JSON file size must not exceed 10 MiB.
 - If an existing local event has duplicate matching person names, the app must
   reject the merge as ambiguous rather than guessing.
-- On a re-import into an existing event, an omitted `status` or `priority`
-  keeps the app's value, `not_met` never un-marks someone the user met, and
+- On a re-import into an existing event, an omitted `status`, `priority`, or
+  `image` (or `image.mode: "none"`) keeps the app's value, so a refreshed list
+  never erases a photo; `not_met` never un-marks someone the user met; and
   other omitted optional fields clear the app's value (`PROTOCOL.md`,
   "Re-Importing Into An Existing Event").
 - Embedded, packaged, and downloaded images must decode successfully, use JPEG,
   PNG, or WebP, and fit within a 2048 x 2048 decoded-pixel envelope.
 - Remote image downloads must use HTTPS, follow at most 2 redirects, complete
   within a 10 second per-image timeout, and stay within a 2 MiB download limit.
-- ZIP import packages may contain one manifest JSON file plus referenced image
-  files. ZIP packages must reject absolute paths, `.` / `..` path segments, nested
-  archives, unsupported file types, undeclared image files, duplicate entry
-  paths, and packages over 50 MiB total compressed size.
+- ZIP import packages carry one manifest JSON file plus referenced image files,
+  with `package_file` paths relative to the ZIP root. The app sorts entries into
+  three tiers (`PROTOCOL.md`, "ZIP Packages"): it refuses the whole package for
+  a size over 50 MiB, an unreadable ZIP, zero or several manifests, an entry with
+  an unsafe path, a duplicate entry path, or a nested archive; it ignores
+  directories, macOS metadata (a top-level `__MACOSX` folder, `._` files), unreferenced images,
+  and other files; and it fails only the one image for a missing, oversized, or
+  undecodable package image. The validator doesn't open ZIP files.
 - Image failures are non-fatal for otherwise valid structured imports unless a
   later schema version adds an explicit required-image rule.
+
+Guidance for authors, not enforced:
+
+- If only an event date is known, import authors should provide `start_at` at
+  local midnight and `end_at` at local `23:59:59`, include the offset in each
+  timestamp, and use `timezone` to identify the named event timezone.
 
 ## Image Modes
 
@@ -104,10 +122,13 @@ v1 supports:
 
 - `none`: no image supplied. A person may also omit `image` entirely.
 - `embedded`: base64 image data with a declared `mime_type`.
-- `package_file`: image file packaged next to the manifest inside a ZIP import,
-  referenced by safe relative path and declared `mime_type`.
-- `remote_url`: HTTPS URL fetched during explicit import, with optional
-  `expected_mime_type` and `storage_preference`.
+- `package_file`: image file inside a ZIP import, referenced by a path relative
+  to the ZIP root and a declared `mime_type`.
+- `remote_url`: HTTPS URL with optional `expected_mime_type` and
+  `storage_preference`. With `save_locally` (the default), the app downloads the
+  image once during explicit import and keeps its own copy. With
+  `remote_reference`, it keeps only the link and never downloads or shows the
+  image (`PROTOCOL.md`, image rules).
 
 Embedded images are valid in v1 and are convenient for small, self-contained
 imports. For image-heavy imports, prefer a ZIP package with `package_file`
@@ -127,8 +148,7 @@ Android.
 - Supported `format_version`: `"1.0"`
 
 The WhoCue app generates this document when a user explicitly exports one
-event. The schema is derived from the app's generator
-(`app/lib/src/export_handoff/event_handoff_export.dart`), not from prose: where
+event. The schema is derived from the app's handoff generator, not from prose: where
 the two disagreed, the generator won and the prose was corrected.
 
 ### Envelope
@@ -198,7 +218,8 @@ A `$ref` was rejected for two reasons:
    generator output.
 
 The drift hazard a `$ref` would have prevented is handled mechanically instead.
-`scripts/validate-examples.mjs` compares the two schemas on every run and fails
+The import-spec repository's validator (`npm run validate`) compares the two
+schemas on every run and fails
 if the snapshot's field names, required fields, enum values, or shared `$defs`
 stop mirroring import v1. Fields the generator deliberately never emits
 (`affiliation`, `image`) are declared in that check rather than left invisible.
@@ -252,7 +273,7 @@ still belongs in a fresh v1 import file.
 
 ### Rules Enforced Outside Plain JSON Schema
 
-`scripts/validate-examples.mjs` also checks internal consistency that JSON
+The validator (`npm run validate`) also checks internal consistency that JSON
 Schema cannot express:
 
 - `summary.people_count`, `met_count`, `not_met_count`, `followup_me_count`, and

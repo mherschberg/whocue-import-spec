@@ -19,7 +19,8 @@ The handoff format has a published JSON Schema:
 `../schema/whocue-handoff-v1.schema.json` (draft 2020-12). Validate a document
 against it before acting on the contents. `../schema/README.md`, section
 "Handoff Export v1", is the field-by-field reference, and
-`../examples/handoff/valid/` shows what real exports look like.
+[the valid handoff fixtures](https://github.com/mherschberg/whocue-import-spec/tree/main/examples/handoff/valid) in the
+import-spec repository show what real exports look like.
 
 This guide is the prose companion to that schema. Where the two disagree, the
 schema wins, because the schema is derived from the app's generator.

@@ -25,7 +25,8 @@ action.
 - `human-authoring-guide.md` - human review and validation reference.
 - `../schema/whocue-import-v1.schema.json` - machine-readable schema.
 - `../examples/valid/` - synthetic valid output models.
-- `../examples/invalid/` - examples of rejected shapes.
+- [Invalid examples](https://github.com/mherschberg/whocue-import-spec/tree/main/examples/invalid) in the import-spec
+  repository - examples of rejected shapes.
 
 ## Workflow
 
@@ -179,7 +180,7 @@ Choose one image approach per person:
 | No reliable image | Omit `image` or use `{ "mode": "none" }`. |
 | Small image should live inside the JSON | Use `embedded` with canonical padded base64 and a supported MIME type. |
 | Local image files should travel with the import | Create a ZIP package and use `package_file` paths inside the package. |
-| Public HTTPS image should be fetched during import | Use `remote_url`; prefer `storage_preference: "save_locally"` for event-day reliability. |
+| Public HTTPS image should be fetched during import | Use `remote_url` with `storage_preference: "save_locally"`, or omit it (the default). `remote_reference` keeps only the link, and WhoCue then shows no photo. |
 
 Do not use raw local filesystem paths. A path such as
 `/Users/name/Desktop/headshot.jpg` or `C:\Users\name\headshot.jpg` cannot be
@@ -196,28 +197,29 @@ or placeholder values for unknown real data.
 
 ### 8. Validate And Repair
 
-Install dependencies once in the import-spec repo:
+These commands work in a clone of the import-spec repository
+(https://github.com/mherschberg/whocue-import-spec), not in the testers' package, which carries no validator. Install
+the dependencies once:
 
 ```bash
 npm ci
 ```
 
-Validate the repository schema and fixture corpus:
+Validate your own file:
 
 ```bash
-npm run validate
+npm run validate -- path/to/my-event.json
 ```
 
-Run the full local check:
-
-```bash
-npm run check
-```
+It prints `ok` or the file's errors for each file named, as an import v1 file,
+or as a handoff export when the file is one. It checks the JSON only: for a ZIP
+package, validate the manifest JSON before zipping. The app itself enforces the
+ZIP rules, file sizes, and image checks (`PROTOCOL.md`, "ZIP Packages").
 
 Use `../schema/whocue-import-v1.schema.json`, `../PROTOCOL.md`, and the valid
-fixtures as the contract while reviewing a generated file. The current repo
-command validates the checked-in schema and examples; WhoCue also validates the
-selected `.json` or `.zip` during import and reports grouped repair guidance.
+fixtures as the contract while reviewing a generated file. WhoCue also
+validates the selected `.json` or `.zip` during import and reports grouped
+repair guidance.
 
 If WhoCue reports a validation group, repair the smallest relevant part of the
 file. Fix structure and version first, then required content, field formats,
@@ -244,7 +246,9 @@ preview-before-import step as a picked file.
 
 Do not tell users to import sibling image files next to a JSON file. If local
 images are needed, put the JSON manifest and image files in a ZIP package and
-reference package-relative paths.
+reference paths relative to the ZIP's root. Compress the manifest and its image
+folder themselves, not the folder that holds them (`PROTOCOL.md`, "ZIP
+Packages").
 
 ## Reusable Prompt Template
 
@@ -321,7 +325,8 @@ Before import, confirm:
 - All objects use only supported v1 fields.
 - Required names are present, non-blank, and unique within the event.
 - Optional unknowns are omitted, not `null`.
-- Date-times include `Z` or a numeric timezone offset.
+- Date-times use an uppercase `T`, include seconds, and end in `Z` or a
+  `±HH:MM` offset, and `end_at` is not before `start_at`.
 - URLs use HTTPS.
 - Images use only `none`, `embedded`, `package_file`, or `remote_url`.
 - Raw `local_file` paths and sibling image-file workflows are absent.

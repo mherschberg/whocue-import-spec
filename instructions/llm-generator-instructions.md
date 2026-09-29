@@ -46,7 +46,12 @@ output:
    file from the document picker.
 
 For imports with local images, prefer a ZIP package that contains the JSON
-manifest and referenced image files. Do not suggest raw local file paths next to
+manifest and referenced image files. Tell the user to compress the manifest and
+its image folder themselves, not the folder that holds them, because image
+paths are relative to the ZIP's root. WhoCue refuses a ZIP with an unsafe entry
+path, a repeated path, or an archive inside it, and ignores macOS metadata,
+unreferenced images, and other files (`PROTOCOL.md`, "ZIP Packages"). Do not
+suggest raw local file paths next to
 the JSON file; mobile document pickers do not reliably grant access to sibling
 files across iOS and Android, and v1 does not support `local_file` image
 references.
@@ -116,8 +121,10 @@ Allowed `event` fields:
 
 - `name`: required, 1-120 characters.
 - `source_id`: optional, 1-128 characters.
-- `start_at`: optional RFC 3339 date-time with `Z` or numeric timezone offset.
-- `end_at`: optional RFC 3339 date-time with `Z` or numeric timezone offset.
+- `start_at`: optional RFC 3339 date-time in the form `YYYY-MM-DDTHH:MM:SS`,
+  with an optional fraction of a second, then `Z` or a `±HH:MM` offset. Use an
+  uppercase `T` and `Z`, include seconds, and use only real dates and times.
+- `end_at`: optional, same form as `start_at`, and not before `start_at`.
 - `timezone`: optional IANA-style value such as `America/New_York`.
 - `location`: optional, 1-160 characters.
 - `description`: optional, 1-1,000 characters.
@@ -135,8 +142,14 @@ Allowed person fields:
 - `source_id`: optional, 1-128 characters.
 - `title`: optional, 1-120 characters.
 - `company`: optional, 1-120 characters.
-- `affiliation`: optional, 1-120 characters.
+- `affiliation`: optional, 1-120 characters. WhoCue keeps one organization per
+  person, so when both are present `company` is used; both must still be valid.
 - `notes`: optional, 1-2,000 characters.
+- `email`: optional, 1-254 characters. Include only an address the user
+  supplied, or one found through an email lookup the user explicitly approved.
+  Never guess one.
+- `phone`: optional, 1-40 characters. Include only a number the user supplied;
+  don't research phone numbers.
 - `connection_topic`: optional, 1-500 characters.
 - `identity_uncertain`: optional boolean; set to `true` only when the record
   may not refer to the intended person. Omit or use `false` when identity is
@@ -147,9 +160,10 @@ Allowed person fields:
 - `status`: optional; allowed values are `not_met` and `met`. Omit it unless
   the user says they have already met someone.
 - `tags`: optional array of up to 12 unique non-blank strings, each 1-40
-  characters. The 12 limit is a hard cap, not a target; keep the event's tag set
+  characters. Omit it rather than writing `null`. The 12 limit is a hard cap, not a target; keep the event's tag set
   small and shared (see the tag budget in `people-selection-guide.md`).
-- `links`: optional object with at least one supported HTTPS link.
+- `links`: optional object with at least one supported HTTPS link. Omit it
+  rather than writing `null`.
 - `image`: optional image object using one supported image mode.
 
 Person names must be unique within the import after trimming, collapsing
@@ -230,14 +244,22 @@ Image rules:
 - Supported MIME types are `image/jpeg`, `image/png`, and `image/webp`.
 - Do not use raw `local_file`; it is unsupported in v1.
 - Remote image URLs must use HTTPS.
-- `storage_preference`, when present, must be `save_locally` or
-  `remote_reference`.
+- `storage_preference` says whether WhoCue keeps a copy of a `remote_url` image:
+  - `save_locally` (the default when omitted, and recommended): WhoCue downloads
+    the image once, during the import, checks it, and keeps its own copy. After
+    that it never contacts the image host.
+  - `remote_reference`: WhoCue keeps only the link. It never downloads the
+    image, during the import or when the person is viewed, and shows a
+    placeholder saying the photo wasn't downloaded. Use it only when a copy
+    mustn't be kept; otherwise use `save_locally` or omit the field.
 - Embedded image data must be canonical padded base64 with no whitespace, data
   URI prefix, or missing padding, and no more than 1,398,104 characters,
   approximately 1 MiB decoded.
-- Package image paths must be relative paths inside the ZIP package. They must
-  not be absolute, include `.` or `..` path segments, include double slashes, or
-  point to unsupported file extensions.
+- Package image paths are relative to the root of the ZIP package and must match
+  an entry's path exactly, case included. A path has 1-255 characters of
+  letters, digits, `.`, `_`, `-`, space, and `/`; no leading `/`, no `//`, and no
+  `.` or `..` segment; and ends in a lowercase `.jpg`, `.jpeg`, `.png`, or
+  `.webp`.
 - Package and remote images must stay within a 2 MiB image-file limit and a 2048
   x 2048 decoded-image envelope.
 
@@ -260,7 +282,8 @@ Before producing JSON, check:
   research metadata fields are present.
 - Enum values exactly match the allowed lowercase values.
 - All URLs use HTTPS.
-- Date-time fields include `Z` or a numeric timezone offset.
+- Date-time fields use an uppercase `T`, include seconds, and end in `Z` or a
+  `±HH:MM` offset, and `end_at` is not before `start_at`.
 - Embedded image data is canonical padded base64, not a data URI.
 - Image objects use exactly one supported mode.
 - Person names are unique within the event.

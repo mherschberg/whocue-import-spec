@@ -44,7 +44,7 @@ const snapshot_extra_required_person_fields = ["status"];
  * must stay byte-identical; anything that legitimately diverges belongs in the
  * limits table in `schema/README.md`, not here.
  */
-const shared_defs = ["https_url", "person_links"];
+const shared_defs = ["date_time", "https_url", "person_links"];
 
 /**
  * Reads and parses a JSON file with an error message that names the fixture.
@@ -123,6 +123,14 @@ function normalize_merge_key(value) {
 function validate_semantics(document) {
   const errors = [];
 
+  // An event may end when it starts but not before. Unparseable values are the
+  // schema's to report, so the comparison only runs when both parse.
+  const start_ms = Date.parse(document.event?.start_at);
+  const end_ms = Date.parse(document.event?.end_at);
+  if (!Number.isNaN(start_ms) && !Number.isNaN(end_ms) && end_ms < start_ms) {
+    errors.push("/event/end_at is before /event/start_at");
+  }
+
   if (Array.isArray(document.people)) {
     const seen_names = new Map();
 
@@ -174,6 +182,17 @@ function validate_handoff_semantics(document) {
   const state = document.who_cue_state;
   const snapshot_people = Array.isArray(snapshot?.people) ? snapshot.people : null;
   const state_people = Array.isArray(state?.people) ? state.people : null;
+
+  // The app imports the snapshot with the import v1 rules, so the import
+  // semantic checks (event range, unique names, canonical base64) apply to it
+  // too. Without this, `npm run validate -- <file>` passed a handoff export
+  // the app refuses (STEP-38 review L1).
+  if (snapshot !== null && typeof snapshot === "object") {
+    for (const error of validate_semantics(snapshot)) {
+      // Each message names one or two JSON pointers; prefix every one.
+      errors.push(error.replace(/(^|\s)\//g, "$1/import_compatible_snapshot/"));
+    }
+  }
 
   if (snapshot_people === null || state_people === null || summary === null || typeof summary !== "object") {
     // Structural problems are the schema's job; skip the cross-section checks.
@@ -391,6 +410,72 @@ function import_generated_cases() {
         },
       }),
     },
+    ...date_time_cases(),
+    {
+      name: "event ending when it starts passes",
+      should_pass: true,
+      document: minimal_document({
+        event: { start_at: "2026-09-14T09:00:00Z", end_at: "2026-09-14T09:00:00Z" },
+      }),
+    },
+    {
+      name: "event ending before it starts fails",
+      should_pass: false,
+      document: minimal_document({
+        event: { start_at: "2026-09-14T13:00:00Z", end_at: "2026-09-14T08:00:00-04:00" },
+      }),
+    },
+  ];
+}
+
+/**
+ * Event date-time values the validator must accept or reject exactly as the
+ * app does: uppercase `T`, seconds required, `Z` or `±HH:MM`, and every field
+ * in range (the schema's `date_time` pattern plus `format: date-time`).
+ */
+function date_time_cases() {
+  // The app rejects any value over 64 characters without parsing it, and the
+  // schema's `maxLength` says the same.
+  const at_length_limit = `2026-09-14T09:00:00.${"1".repeat(43)}Z`;
+  const passing = [
+    at_length_limit,
+    "2028-02-29T09:00:00Z",
+    "2000-02-29T09:00:00Z",
+    "2026-09-14T09:00:00.123456Z",
+    "2026-09-14T09:00:00-05:30",
+    "2026-09-14T09:00:00+23:59",
+  ];
+  const failing = [
+    `2026-09-14T09:00:00.${"1".repeat(44)}Z`,
+    "2026-02-29T09:00:00Z",
+    "1900-02-29T09:00:00Z",
+    "2026-02-30T09:00:00Z",
+    "2026-04-31T09:00:00Z",
+    "2026-13-01T09:00:00Z",
+    "2026-09-14T24:00:00Z",
+    "2026-09-14T09:60:00Z",
+    "2026-12-31T23:59:60Z",
+    "2026-09-14T09:00:00+24:00",
+    "2026-09-14T09:00:00+05:60",
+    "2026-09-14t09:00:00Z",
+    "2026-09-14T09:00:00z",
+    "2026-09-14 09:00:00Z",
+    "2026-09-14T09:00:00+0400",
+    "2026-09-14T09:00:00+04",
+    "2026-09-14T09:00Z",
+  ];
+
+  return [
+    ...passing.map((value) => ({
+      name: `start_at ${value} passes`,
+      should_pass: true,
+      document: minimal_document({ event: { start_at: value } }),
+    })),
+    ...failing.map((value) => ({
+      name: `start_at ${value} fails`,
+      should_pass: false,
+      document: minimal_document({ event: { start_at: value } }),
+    })),
   ];
 }
 
@@ -419,6 +504,10 @@ function handoff_generated_cases() {
   app_domain_lengths.import_compatible_snapshot.people[0].tags = ["G".repeat(80)];
   app_domain_lengths.who_cue_state.people[0].notes = "N".repeat(4000);
   app_domain_lengths.who_cue_state.people[0].meeting_notes = "M".repeat(4000);
+
+  const reversed_snapshot_range = minimal_handoff_document();
+  reversed_snapshot_range.import_compatible_snapshot.event.start_at = "2026-09-14T17:00:00Z";
+  reversed_snapshot_range.import_compatible_snapshot.event.end_at = "2026-09-14T09:00:00Z";
 
   const over_app_domain_length = minimal_handoff_document();
   over_app_domain_length.who_cue_state.people[0].meeting_notes = "M".repeat(4001);
@@ -468,6 +557,11 @@ function handoff_generated_cases() {
       name: "summary counts that disagree with the records fail",
       should_pass: false,
       document: miscounted_summary,
+    },
+    {
+      name: "a snapshot event that ends before it starts fails",
+      should_pass: false,
+      document: reversed_snapshot_range,
     },
   ];
 }
@@ -603,6 +697,16 @@ function check_snapshot_mirrors_import(handoff_schema, import_schema) {
     import_defs.event.required,
     handoff_defs.snapshot_event.required,
   );
+
+  // The snapshot's event times must accept exactly what import v1 accepts,
+  // because the app imports the snapshot with the import v1 rules.
+  for (const field of ["start_at", "end_at"]) {
+    const import_field = JSON.stringify(import_defs.event.properties[field]);
+    const handoff_field = JSON.stringify(handoff_defs.snapshot_event.properties[field]);
+    if (import_field !== handoff_field) {
+      errors.push(`$defs.snapshot_event.properties.${field} does not match import v1 event.${field}`);
+    }
+  }
   compare_keys(
     "$defs.snapshot_person.properties",
     Object.keys(import_defs.person.properties),
@@ -701,9 +805,78 @@ async function validate_contract(contract) {
 }
 
 /**
- * Validates every published contract plus the cross-contract drift checks.
+ * Validates each named JSON file and reports it, instead of the corpus.
+ *
+ * `npm run validate -- <file>...` lands here. npm runs scripts from the
+ * repository root, so a relative path resolves against the directory npm was
+ * started from (`INIT_CWD`). A handoff envelope is validated as a handoff
+ * export, anything else as an import v1 file, each with its semantic checks.
+ * ZIP packages aren't opened: validate the manifest JSON before zipping.
+ * Returns the number of files that failed.
+ */
+async function validate_named_files(file_arguments) {
+  const base_dir = process.env.INIT_CWD ?? process.cwd();
+  const validators = {
+    "import v1": {
+      validate: create_validator(await read_json(import_schema_path), import_schema_path),
+      validate_semantics,
+    },
+    "handoff v1": {
+      validate: create_validator(await read_json(handoff_schema_path), handoff_schema_path),
+      validate_semantics: validate_handoff_semantics,
+    },
+  };
+  let failures = 0;
+
+  for (const file_argument of file_arguments) {
+    const file_path = path.resolve(base_dir, file_argument);
+    let document;
+    try {
+      document = JSON.parse(await readFile(file_path, "utf8"));
+    } catch (error) {
+      failures += 1;
+      const reason = error instanceof SyntaxError ? `not valid JSON: ${error.message}` : `cannot read: ${error.code ?? error.message}`;
+      console.error(`fail ${file_argument}: ${reason}`);
+      continue;
+    }
+
+    const is_handoff = document !== null && typeof document === "object" && document.format === "whocue_event_handoff";
+    const contract = is_handoff ? "handoff v1" : "import v1";
+    const { validate, validate_semantics: semantic_check } = validators[contract];
+    const schema_ok = validate(document);
+    const semantic_errors = document !== null && typeof document === "object" ? semantic_check(document) : [];
+
+    if (schema_ok && semantic_errors.length === 0) {
+      console.log(`ok ${file_argument} (${contract})`);
+      continue;
+    }
+    failures += 1;
+    console.error(`fail ${file_argument} (${contract})`);
+    if (!schema_ok) {
+      console.error(format_errors(validate.errors).replace(/^/gm, "  "));
+    }
+    for (const semantic_error of semantic_errors) {
+      console.error(`  ${semantic_error}`);
+    }
+  }
+
+  return failures;
+}
+
+/**
+ * Validates every published contract plus the cross-contract drift checks, or
+ * only the files named on the command line.
  */
 async function main() {
+  const file_arguments = process.argv.slice(2);
+  if (file_arguments.length > 0) {
+    const failures = await validate_named_files(file_arguments);
+    if (failures > 0) {
+      process.exitCode = 1;
+    }
+    return;
+  }
+
   const contracts = [
     {
       name: "import v1",

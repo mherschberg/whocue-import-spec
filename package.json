@@ -7,7 +7,8 @@
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate-examples.mjs",
-    "check": "bash .github/scripts/check-structure.sh && npm run validate",
+    "test": "node --test scripts/validate-examples.test.mjs",
+    "check": "bash .github/scripts/check-structure.sh && npm run validate && npm test && npm run package:testers",
     "package:testers": "bash scripts/build-testers-package.sh"
   },
   "devDependencies": {

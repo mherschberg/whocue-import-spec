@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "event": {
+    "name": "Affiliation Beside Company Demo"
+  },
+  "people": [
+    {
+      "name": "Jordan Lee",
+      "company": "Harbor Collective",
+      "affiliation": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    }
+  ]
+}

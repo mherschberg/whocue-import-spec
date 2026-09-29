@@ -52,8 +52,8 @@ Allowed fields:
 |-------|----------|------|
 | `name` | Yes | 1-120 characters, non-blank. Event merge key. |
 | `source_id` | No | 1-128 characters, non-blank. External traceability only. |
-| `start_at` | No | RFC 3339 date-time with `Z` or numeric timezone offset. |
-| `end_at` | No | RFC 3339 date-time with `Z` or numeric timezone offset. |
+| `start_at` | No | RFC 3339 date-time in the form `YYYY-MM-DDTHH:MM:SS`, with an optional fraction of a second, then `Z` or a `±HH:MM` offset. Use an uppercase `T` and `Z`, include seconds, and use only real dates and times. |
+| `end_at` | No | Same form as `start_at`. Must not be before `start_at`; it may equal it. |
 | `timezone` | No | IANA-style value, such as `America/New_York`. |
 | `location` | No | 1-160 characters, non-blank. |
 | `description` | No | 1-1,000 characters, non-blank. |
@@ -73,7 +73,7 @@ Allowed fields:
 | `source_id` | No | 1-128 characters, non-blank. External traceability only. |
 | `title` | No | 1-120 characters, non-blank. |
 | `company` | No | 1-120 characters, non-blank. |
-| `affiliation` | No | 1-120 characters, non-blank. |
+| `affiliation` | No | 1-120 characters, non-blank. WhoCue keeps one organization per person: when both are present, `company` is used and `affiliation` is ignored, but both must still be valid. |
 | `notes` | No | 1-2,000 characters, non-blank. |
 | `email` | No | 1-254 characters, non-blank. Include only user-supplied email addresses, or addresses found through an explicit user-approved email lookup. Never guess. |
 | `phone` | No | 1-40 characters, non-blank. Include only user-supplied phone numbers. Do not research phone numbers while creating an initial event list. |
@@ -152,14 +152,55 @@ Image rules:
 - Supported MIME types: `image/jpeg`, `image/png`, `image/webp`.
 - Raw `local_file` image references are unsupported in v1.
 - Remote image URLs must use HTTPS.
-- `storage_preference`, when present, must be `save_locally` or
-  `remote_reference`.
+- `storage_preference` says whether WhoCue keeps a copy of a `remote_url` image:
+  - `save_locally` (the default when omitted, and recommended): WhoCue downloads
+    the image once, during the import, checks it, and keeps its own copy. After
+    that it never contacts the image host.
+  - `remote_reference`: WhoCue keeps only the link. It never downloads the
+    image, during the import or when the person is viewed, and shows a
+    placeholder saying the photo wasn't downloaded. Use it only when a copy
+    mustn't be kept.
 - Embedded image data must be canonical padded base64 with no whitespace, data
   URI prefix, or missing padding, and no more than 1,398,104 characters,
   approximately 1 MiB decoded.
-- Package image paths must be safe relative paths inside the ZIP package.
+- Package image paths follow the rules in [ZIP Packages](#zip-packages).
 - Package and remote images must stay within a 2 MiB image-file limit and a
   2048 x 2048 decoded-image envelope.
+
+## ZIP Packages
+
+A ZIP package carries one manifest JSON file plus the image files its people
+reference with `package_file`.
+
+- A `package_file.path` is relative to the root of the ZIP and must match an
+  entry's path exactly, case included. Compress the manifest and its image
+  folder themselves, not the folder that holds them: compressing an enclosing
+  folder puts every entry under that folder's name, so no path matches.
+- A package path has 1-255 characters of letters, digits, `.`, `_`, `-`, space, and `/`; no
+  leading `/`, no `//`, and no `.` or `..` segment; ending in a lowercase `.jpg`,
+  `.jpeg`, `.png`, or `.webp`.
+- The manifest is the package's one `.json` file, at any depth, not counting
+  ignored entries.
+
+WhoCue sorts a package's entries into three tiers:
+
+1. **The package is refused and nothing is imported** when it is over 50 MiB
+   or isn't a readable ZIP; has no manifest or more than one; has a manifest over
+   10 MiB or not in UTF-8; or has any entry with an unsafe path (absolute, a
+   backslash, a colon, or an empty, `.`, or `..` segment), the same path twice,
+   or another archive inside it (`.zip`, `.tar`, `.gz`, `.tgz`, `.bz2`, `.xz`,
+   `.7z`, or `.rar`).
+2. **Entries are ignored**: directory entries, macOS metadata (anything in a
+   `__MACOSX` folder at the top of the ZIP, and files anywhere whose names start
+   with `._`, which Finder adds when it makes a ZIP), images no person
+   references, and any other file. So a package path can't point into that
+   metadata.
+3. **One image fails and its person imports with a placeholder** when the
+   image's path is missing from the package, or the file can't be unpacked, is
+   over 2 MiB, or isn't a decodable JPEG, PNG, or WebP within 2048 x 2048.
+
+The WhoCue app enforces these rules. The JSON Schema validator checks the
+manifest, including the package-path pattern, but doesn't open ZIP files.
 
 ## Re-Importing Into An Existing Event
 
@@ -231,7 +272,8 @@ Before output, verify that:
 - Every object uses only allowed fields.
 - Required names are present and non-blank.
 - Optional fields are omitted when unknown.
-- Date-time fields include `Z` or a numeric timezone offset.
+- Date-time fields use an uppercase `T`, include seconds, and end in `Z` or a
+  `±HH:MM` offset, and `end_at` is not before `start_at`.
 - Enum values exactly match the protocol.
 - URLs use HTTPS.
 - Embedded image data is canonical padded base64, not a data URI.
@@ -247,7 +289,8 @@ document. That is a different contract, in the opposite direction:
 - Schema: `schema/whocue-handoff-v1.schema.json`
 - Reference: `schema/README.md`, section "Handoff Export v1"
 - Processing guidance: `instructions/handoff-export-processing.md`
-- Fixtures: `examples/handoff/valid/` and `examples/handoff/invalid/`
+- Fixtures: [valid and invalid handoff exports](https://github.com/mherschberg/whocue-import-spec/tree/main/examples/handoff)
+  in the import-spec repository
 
 Recognize one by its root `format` field, which is exactly
 `"whocue_event_handoff"`. It also carries `not_a_whocue_import_file: true`,

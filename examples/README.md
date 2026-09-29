@@ -28,18 +28,18 @@ valid JSON.
 |---------|---------|
 | `valid/minimal.json` | Smallest practical v1 import: schema version, event name, and one named person. |
 | `valid/realistic-demo.json` | Realistic multi-person event with optional event fields, tags, status, priority, identity uncertainty, notes, connection topics, links, and package-file headshot references. |
-| `valid/realistic-demo.zip` | Ready-to-import package form of `realistic-demo.json` with the referenced synthetic headshots under `images/`. |
+| `valid/realistic-demo.zip` | Ready-to-import package form of `valid/realistic-demo.json` with the referenced synthetic headshots in an `images` folder. |
 | `valid/realistic-demo-2.json` | Six-person realistic demo event with synthetic companies, meeting context, and package-file headshot references. |
-| `valid/realistic-demo-2.zip` | Ready-to-import package form of `realistic-demo-2.json` with the referenced synthetic headshots under `images/`. |
+| `valid/realistic-demo-2.zip` | Ready-to-import package form of `valid/realistic-demo-2.json` with the referenced synthetic headshots in an `images` folder. |
 | `valid/realistic-demo-3.json` | Ten-person realistic demo event with synthetic companies, varied priorities, meeting states, and package-file headshot references. |
-| `valid/realistic-demo-3.zip` | Ready-to-import package form of `realistic-demo-3.json` with the referenced synthetic headshots under `images/`. |
+| `valid/realistic-demo-3.zip` | Ready-to-import package form of `valid/realistic-demo-3.json` with the referenced synthetic headshots in an `images` folder. |
 | `valid/llm-researched-shortlist.json` | Model for an LLM-researched, user-reviewed shortlist with event-specific priorities, tags, supported links, connection topics, and an explicit identity-uncertainty flag. |
 | `valid/manual-sparse-shortlist.json` | Model for a manually authored shortlist that stays useful while omitting unknown optional fields instead of using placeholders or `null`. |
 | `valid/image-package-shortlist.json` | Model for mixed image handling in a generated package manifest: one package-file image, one explicit no-image record, and one omitted image. |
 | `valid/embedded-image.json` | Embedded image mode with a tiny synthetic PNG payload. |
 | `valid/package-file-image.json` | ZIP package image mode with a safe relative image path. |
 | `valid/remote-url-image.json` | HTTPS remote image mode with expected MIME type and storage preference. |
-| `valid/remote-url-reference-preference.json` | HTTPS remote image mode using the alternate `remote_reference` storage preference. |
+| `valid/remote-url-reference-preference.json` | HTTPS remote image mode using the `remote_reference` storage preference: valid v1, but WhoCue keeps only the link and shows a placeholder, never the photo. |
 | `valid/boundary-tags-and-fields.json` | Readable boundary-oriented fixture with all 12 allowed tags and longer optional fields. |
 | `valid/empty-tags-and-none-image.json` | Explicitly empty optional `tags` array and explicit no-image mode. |
 | `valid/numeric-looking-strings.json` | String fields containing `"0"` remain valid because the contract cares about JSON types, not numeric-looking text. |
@@ -63,6 +63,9 @@ valid JSON.
 | `invalid/blank-person-name.json` | Person merge key contains no non-whitespace characters. |
 | `invalid/person-name-too-long.json` | Person name exceeds the 120-character v1 limit. |
 | `invalid/null-optional-field.json` | Optional fields are omitted when unknown; `null` is not accepted in v1. |
+| `invalid/null-tags.json` | Optional `tags` array is present as `null`; omit it or use `[]`. |
+| `invalid/null-links.json` | Optional `links` object is present as `null`; omit it. |
+| `invalid/affiliation-invalid-with-company.json` | `affiliation` exceeds the 120-character v1 limit. Both organization fields are validated even though `company` wins when both are present. |
 | `invalid/numeric-source-id.json` | `source_id` must be a string even when the source identifier looks numeric. |
 | `invalid/unknown-field.json` | Strict v1 rejects an undeclared person field. |
 | `invalid/unsupported-research-metadata-fields.json` | Strict v1 rejects generated research metadata fields such as `citation`, `confidence`, `speaker_session`, and `source`. |
@@ -70,6 +73,9 @@ valid JSON.
 | `invalid/invalid-enum-value.json` | `priority` and `status` use unsupported enum values. |
 | `invalid/invalid-date-time.json` | Event timestamps are not RFC 3339 date-time strings; requires validator `format` assertion or an equivalent custom check. |
 | `invalid/date-time-missing-offset.json` | Event timestamps omit the required `Z` or numeric timezone offset. |
+| `invalid/date-time-lowercase-separator.json` | Event timestamp uses a lowercase `t` separator; v1 requires an uppercase `T`, and `Z` or `±HH:MM`. |
+| `invalid/date-time-impossible-date.json` | Event timestamp names February 30, a date that does not exist. |
+| `invalid/event-end-before-start.json` | Event `end_at` is before `start_at`; an event may end when it starts but not before. Checked by the validator's semantic checks, not JSON Schema. |
 | `invalid/invalid-timezone.json` | Event timezone is not an IANA-style area/location value. |
 | `invalid/invalid-link-url.json` | Person link is not a valid HTTPS URL. |
 | `invalid/empty-links.json` | Person links object is present but contains no supported links. |
@@ -107,7 +113,7 @@ groups. Representative public fixtures for each group are:
 |------------------|---------------------------------|
 | File structure and version | `invalid/unsupported-schema-version.json`, `invalid/unknown-field.json` |
 | Missing required content | `invalid/missing-event.json`, `invalid/empty-event-object.json`, `invalid/missing-person-name.json` |
-| Field types and formats | `invalid/numeric-source-id.json`, `invalid/invalid-date-time.json`, `invalid/invalid-link-url.json` |
+| Field types and formats | `invalid/numeric-source-id.json`, `invalid/invalid-date-time.json`, `invalid/invalid-link-url.json`, `invalid/event-end-before-start.json` |
 | Import limits | `invalid/event-name-too-long.json`, `invalid/person-name-too-long.json`, `invalid/too-many-tags.json` |
 | Duplicates | `invalid/duplicate-person-name.json`, `invalid/duplicate-tags.json` |
 | Image references | `invalid/invalid-image-mime-type.json`, `invalid/non-https-remote-image.json`, `invalid/package-file-path-traversal.json` |
@@ -124,15 +130,16 @@ Schema constraints:
 - `invalid/near-duplicate-person-name.json` must fail the same duplicate
   merge-key check after trimming, repeated-whitespace collapse, and
   case-insensitive comparison.
-- Generated edge cases in `scripts/validate-examples.mjs` cover large mechanical
+- Generated edge cases in the validator (`npm run validate`) cover large mechanical
   boundaries such as 250 valid people, 251 invalid people, maximum field lengths,
   and just-over-limit values without committing oversized fixture files.
 - Embedded image data must be canonical padded base64. Supplemental validation
   rejects data URI prefixes, whitespace, malformed content, and missing padding
   that can pass the schema's conservative character pattern.
-- ZIP package constraints such as undeclared files, duplicate entries, nested
-  archives, compressed size, and actual image decode dimensions require package
-  validation outside the manifest schema.
+- ZIP package rules (`PROTOCOL.md`, "ZIP Packages"): unsafe entry paths,
+  duplicate entries, nested archives, the compressed-size cap, and actual image
+  decode dimensions need package inspection outside the manifest schema. The app
+  applies them; undeclared images and other files are ignored.
 - Remote image timeout, redirect, download-size, response MIME, and decoded-image
   constraints require app/tooling validation outside the manifest schema.
 
@@ -158,9 +165,9 @@ deterministic:
 | Problem case | Coverage owner |
 |--------------|----------------|
 | Missing package entry | App contract/import tests with generated ZIP packages; this is not a JSON Schema failure because the manifest path is syntactically valid. |
-| Undeclared package entry | App ZIP resolver tests; requires inspecting ZIP entries outside the manifest schema. |
-| Duplicate package entry | App ZIP resolver tests; requires archive-level duplicate path detection. |
-| Nested archive | App ZIP resolver tests; requires archive-level entry inspection. |
+| Undeclared image or other file | App ZIP scan and import tests with generated packages: ignored, and every declared photo still imports. |
+| Unsafe entry path, duplicate entry, or nested archive | App ZIP scan and import tests with generated packages: the whole package is refused before anything is parsed. |
+| macOS metadata (`__MACOSX`, `._` files) | App ZIP import tests with a Finder-made entry layout: ignored. |
 | Corrupt image bytes | App contract/import and image processor tests; the manifest can be valid while bytes fail decode. |
 | Unsupported MIME or type mismatch | Public invalid JSON fixture for unsupported declared MIME; app contract/image tests for byte-level mismatch. |
 | Oversized image payload | Generated import-spec edge cases for embedded payload limits; app contract/image tests for package and remote byte limits. |
@@ -216,7 +223,7 @@ app happens to tolerate.
 
 ### What The Corpus Does Not Carry
 
-Mechanical boundaries live in `../scripts/validate-examples.mjs` as generated
+Mechanical boundaries live in the validator (`npm run validate`) as generated
 edge cases rather than committed files, matching how the import corpus handles
 its own 250/251-person cases. A 250-person handoff export would be a large,
 unreadable fixture that demonstrates nothing a generated case cannot. The
@@ -234,13 +241,13 @@ generated handoff cases cover:
 Two cross-contract checks also run on every validation: the handoff schema's
 snapshot must still mirror import v1's field set, and each published handoff
 fixture's snapshot must validate as a real import v1 document unless its people
-count falls outside import v1's 1-250 bound. `empty-event-no-people.json` is the
+count falls outside import v1's 1-250 bound. `handoff/valid/empty-event-no-people.json` is the
 fixture that exercises that exemption.
 
 ## Naming
 
 Use lowercase kebab-case filenames that name the behavior being tested, such as
-`minimal.json` or `non-https-remote-image.json`. Keep each fixture focused on
+`valid/minimal.json` or `invalid/non-https-remote-image.json`. Keep each fixture focused on
 one primary behavior so validation failures are easy to diagnose.
 
 ## Privacy
