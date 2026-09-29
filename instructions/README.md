@@ -32,7 +32,8 @@ require no additional documentation.
 - Schema summaries, limits, and the two contracts' relationship:
   `../schema/README.md`
 - Valid and invalid import fixtures: `../examples/`
-- Valid and invalid handoff export fixtures: `../examples/handoff/`
+- Valid and invalid handoff export fixtures: [examples/handoff](https://github.com/mherschberg/whocue-import-spec/tree/main/examples/handoff)
+  in the import-spec repository
 - Local validation command: `npm run validate`
 
 A handoff export is not a WhoCue import file. The two contracts are separate,

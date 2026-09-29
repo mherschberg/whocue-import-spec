@@ -7,10 +7,12 @@
 # Output: dist/whocue-import-instructions-for-testers.zip (dist/ is ignored).
 # The package's top-level README comes from packaging/testers/README.md; every
 # other file is copied unchanged from the repository. The build fails if a
-# listed file is missing or if a Markdown file in the package names a file the
-# package doesn't carry, so a doc change can't leave testers with a dangling
-# reference. (examples/README.md is exempt: it catalogs the whole fixture
-# corpus, and the package carries only a few examples.)
+# listed file is missing or if a Markdown file in the package names a file or
+# directory the package doesn't carry, so a doc change can't leave testers with
+# a dangling reference. `referenced_paths` says exactly which names count.
+# examples/README.md is checked too, except for its references into the
+# fixture corpus (`valid/`, `invalid/`, `handoff/`), which it catalogs in full
+# while the package carries only a few examples.
 
 set -euo pipefail
 
@@ -58,17 +60,33 @@ stage_package() {
   done
 }
 
-# Prints every file path a Markdown file names: backticked paths ending in
-# .md, .json, or .zip, and relative Markdown link targets.
+# Extensions of the file names the reference check follows.
+readonly REFERENCED_EXTENSIONS='md|json|zip|mjs|js|dart|sh|yml|yaml'
+
+# Prints every path a Markdown file names:
+# - backticked file paths ending in one of REFERENCED_EXTENSIONS;
+# - the backticked license files (`LICENSE`, `LICENSE-THROUGHSTONE`);
+# - backticked directory paths, written with a trailing `/`;
+# - a fenced code block line that is nothing but such a file path, as the
+#   testers README writes the files to import;
+# - relative Markdown link targets (any `#fragment` dropped).
+# URLs never match: a `:` isn't a path character here.
 referenced_paths() {
   local markdown_file="$1"
+  local path_chars='[A-Za-z0-9_./-]'
 
   {
-    grep -oE '`(\.\./|\./)?[A-Za-z0-9_./-]+\.(md|json|zip)`' "${markdown_file}" |
+    grep -oE "\`(\.\./|\./)?${path_chars}+\.(${REFERENCED_EXTENSIONS})\`" "${markdown_file}" |
       tr -d '`' || true
-    grep -oE '\]\((\.\./|\./)?[A-Za-z0-9_./-]+\)' "${markdown_file}" |
-      sed -E 's/^\]\(//; s/\)$//' || true
-  } | sort -u
+    grep -oE '`LICENSE(-[A-Z]+)?`' "${markdown_file}" | tr -d '`' || true
+    grep -oE "\`(\.\./|\./)?[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*/\`" "${markdown_file}" |
+      tr -d '`' || true
+    awk '/^[[:space:]]*```/ { fenced = !fenced; next } fenced { print }' "${markdown_file}" |
+      grep -oE "^[[:space:]]*(\.\./|\./)?${path_chars}+\.(${REFERENCED_EXTENSIONS})[[:space:]]*$" |
+      sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//' || true
+    grep -oE '\]\((\.\./|\./)?[A-Za-z0-9_./-]+(#[A-Za-z0-9_-]*)?\)' "${markdown_file}" |
+      sed -E 's/^\]\(//; s/\)$//; s/#.*$//' || true
+  } | grep -v '^$' | sort -u
 }
 
 # Fails when a packaged Markdown file names a file the package lacks. A
@@ -81,11 +99,12 @@ check_references() {
   local missing=0
 
   while IFS= read -r markdown_file; do
-    if [[ "${markdown_file}" == "${package_dir}/examples/README.md" ]]; then
-      continue
-    fi
     while IFS= read -r reference; do
       [[ -z "${reference}" ]] && continue
+      if [[ "${markdown_file}" == "${package_dir}/examples/README.md" &&
+        "${reference}" =~ ^(examples/)?(valid|invalid|handoff)/ ]]; then
+        continue
+      fi
       if [[ ! -e "$(dirname "${markdown_file}")/${reference}" &&
         ! -e "${package_dir}/${reference}" ]]; then
         echo "dangling reference in ${markdown_file#"${package_dir}"/}: ${reference}" >&2

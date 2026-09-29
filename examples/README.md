@@ -28,11 +28,11 @@ valid JSON.
 |---------|---------|
 | `valid/minimal.json` | Smallest practical v1 import: schema version, event name, and one named person. |
 | `valid/realistic-demo.json` | Realistic multi-person event with optional event fields, tags, status, priority, identity uncertainty, notes, connection topics, links, and package-file headshot references. |
-| `valid/realistic-demo.zip` | Ready-to-import package form of `realistic-demo.json` with the referenced synthetic headshots under `images/`. |
+| `valid/realistic-demo.zip` | Ready-to-import package form of `valid/realistic-demo.json` with the referenced synthetic headshots in an `images` folder. |
 | `valid/realistic-demo-2.json` | Six-person realistic demo event with synthetic companies, meeting context, and package-file headshot references. |
-| `valid/realistic-demo-2.zip` | Ready-to-import package form of `realistic-demo-2.json` with the referenced synthetic headshots under `images/`. |
+| `valid/realistic-demo-2.zip` | Ready-to-import package form of `valid/realistic-demo-2.json` with the referenced synthetic headshots in an `images` folder. |
 | `valid/realistic-demo-3.json` | Ten-person realistic demo event with synthetic companies, varied priorities, meeting states, and package-file headshot references. |
-| `valid/realistic-demo-3.zip` | Ready-to-import package form of `realistic-demo-3.json` with the referenced synthetic headshots under `images/`. |
+| `valid/realistic-demo-3.zip` | Ready-to-import package form of `valid/realistic-demo-3.json` with the referenced synthetic headshots in an `images` folder. |
 | `valid/llm-researched-shortlist.json` | Model for an LLM-researched, user-reviewed shortlist with event-specific priorities, tags, supported links, connection topics, and an explicit identity-uncertainty flag. |
 | `valid/manual-sparse-shortlist.json` | Model for a manually authored shortlist that stays useful while omitting unknown optional fields instead of using placeholders or `null`. |
 | `valid/image-package-shortlist.json` | Model for mixed image handling in a generated package manifest: one package-file image, one explicit no-image record, and one omitted image. |
@@ -130,7 +130,7 @@ Schema constraints:
 - `invalid/near-duplicate-person-name.json` must fail the same duplicate
   merge-key check after trimming, repeated-whitespace collapse, and
   case-insensitive comparison.
-- Generated edge cases in `scripts/validate-examples.mjs` cover large mechanical
+- Generated edge cases in the validator (`npm run validate`) cover large mechanical
   boundaries such as 250 valid people, 251 invalid people, maximum field lengths,
   and just-over-limit values without committing oversized fixture files.
 - Embedded image data must be canonical padded base64. Supplemental validation
@@ -222,7 +222,7 @@ app happens to tolerate.
 
 ### What The Corpus Does Not Carry
 
-Mechanical boundaries live in `../scripts/validate-examples.mjs` as generated
+Mechanical boundaries live in the validator (`npm run validate`) as generated
 edge cases rather than committed files, matching how the import corpus handles
 its own 250/251-person cases. A 250-person handoff export would be a large,
 unreadable fixture that demonstrates nothing a generated case cannot. The
@@ -240,13 +240,13 @@ generated handoff cases cover:
 Two cross-contract checks also run on every validation: the handoff schema's
 snapshot must still mirror import v1's field set, and each published handoff
 fixture's snapshot must validate as a real import v1 document unless its people
-count falls outside import v1's 1-250 bound. `empty-event-no-people.json` is the
+count falls outside import v1's 1-250 bound. `handoff/valid/empty-event-no-people.json` is the
 fixture that exercises that exemption.
 
 ## Naming
 
 Use lowercase kebab-case filenames that name the behavior being tested, such as
-`minimal.json` or `non-https-remote-image.json`. Keep each fixture focused on
+`valid/minimal.json` or `invalid/non-https-remote-image.json`. Keep each fixture focused on
 one primary behavior so validation failures are easy to diagnose.
 
 ## Privacy

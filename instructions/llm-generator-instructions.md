@@ -145,6 +145,11 @@ Allowed person fields:
 - `affiliation`: optional, 1-120 characters. WhoCue keeps one organization per
   person, so when both are present `company` is used; both must still be valid.
 - `notes`: optional, 1-2,000 characters.
+- `email`: optional, 1-254 characters. Include only an address the user
+  supplied, or one found through an email lookup the user explicitly approved.
+  Never guess one.
+- `phone`: optional, 1-40 characters. Include only a number the user supplied;
+  don't research phone numbers.
 - `connection_topic`: optional, 1-500 characters.
 - `identity_uncertain`: optional boolean; set to `true` only when the record
   may not refer to the intended person. Omit or use `false` when identity is
@@ -155,9 +160,10 @@ Allowed person fields:
 - `status`: optional; allowed values are `not_met` and `met`. Omit it unless
   the user says they have already met someone.
 - `tags`: optional array of up to 12 unique non-blank strings, each 1-40
-  characters. The 12 limit is a hard cap, not a target; keep the event's tag set
+  characters. Omit it rather than writing `null`. The 12 limit is a hard cap, not a target; keep the event's tag set
   small and shared (see the tag budget in `people-selection-guide.md`).
-- `links`: optional object with at least one supported HTTPS link.
+- `links`: optional object with at least one supported HTTPS link. Omit it
+  rather than writing `null`.
 - `image`: optional image object using one supported image mode.
 
 Person names must be unique within the import after trimming, collapsing

@@ -32,5 +32,8 @@ jobs:
       - name: Validate schema and fixture corpus
         run: npm run validate
 
+      - name: Test the validator
+        run: npm test
+
       - name: Build the testers package
         run: npm run package:testers

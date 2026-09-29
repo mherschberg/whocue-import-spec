@@ -34,7 +34,8 @@ Schema v1 is represented by:
 - `examples/valid/realistic-demo.zip`, `realistic-demo-2.zip`, and
   `realistic-demo-3.zip` - ready-to-import package forms of the three realistic
   demo events (3, 6, and 10 people), including synthetic local headshot image
-  files.
+  files. The validator doesn't open ZIPs; the WhoCue app's contract tests import
+  these three through its real ZIP path.
 - `instructions/human-authoring-guide.md` - guide for people writing or
   reviewing import files.
 - `instructions/generation-workflow.md` - end-to-end workflow and reusable
@@ -193,6 +194,18 @@ Validate the schema and fixture corpus:
 npm run validate
 ```
 
+Validate your own import or handoff file instead (a relative path resolves from
+the directory you run npm in):
+
+```bash
+npm run validate -- path/to/my-event.json
+```
+
+The validator checks JSON files, not ZIP packages: validate a package's
+manifest before zipping. File sizes, the ZIP rules, remote downloads, and image
+decoding are enforced by the WhoCue app (`PROTOCOL.md`, "ZIP Packages").
+`npm test` runs the validator's own tests.
+
 The validation command runs both contracts through one generalized path. For
 each contract it compiles the schema, enforces JSON Schema `format` checks
 through AJV, requires every valid fixture to pass, requires every invalid
@@ -211,7 +224,8 @@ Two cross-contract checks then run:
 - Every published handoff fixture's snapshot must validate as a real import v1
   document, unless its people count falls outside import v1's 1-250 bound.
 
-To run both local gates:
+To run every local gate, the same steps CI runs (structure, validate,
+`npm test`, and the testers' package):
 
 ```bash
 npm run check
@@ -226,15 +240,22 @@ npm run package:testers
 ```
 
 Its top-level README is `packaging/testers/README.md`; every other file is
-copied unchanged from the repo, and the build fails if a packaged document
-names a file the package doesn't carry. Rebuild it after changing any packaged
-file before sending it to testers.
+copied unchanged from the repo. The build fails if a packaged document names a
+file or directory the package doesn't carry: a backticked file path (Markdown,
+JSON, ZIP, script, or YAML), `LICENSE`, a backticked directory ending in `/`, a
+file path alone on a line in a fenced block, or a relative Markdown link. In
+`examples/README.md`, references into the fixture corpus (`valid/`, `invalid/`,
+`handoff/`) are exempt, because it catalogs the whole corpus while the package
+carries a few examples. Name repository-only files with a link to the
+repository instead. Rebuild the package after changing any packaged file before
+sending it to testers.
 
 ## GitHub Actions
 
 The workflow in `.github/workflows/ci.yml` runs the structural check, installs
-the locked Node dependencies with `npm ci`, runs `npm run validate`, and builds
-the testers' package to prove it still has no dangling references.
+the locked Node dependencies with `npm ci`, runs `npm run validate` and
+`npm test`, and builds the testers' package to prove it still has no dangling
+references: the same steps as `npm run check`.
 
 ## Privacy And Example Data
 

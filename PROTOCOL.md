@@ -191,7 +191,7 @@ WhoCue sorts a package's entries into three tiers:
    or another archive inside it (`.zip`, `.tar`, `.gz`, `.tgz`, `.bz2`, `.xz`,
    `.7z`, or `.rar`).
 2. **Entries are ignored**: directory entries, macOS metadata (anything under
-   `__MACOSX/`, and files whose names start with `._`, which Finder adds when it
+   a `__MACOSX` folder, and files whose names start with `._`, which Finder adds when it
    makes a ZIP), images no person references, and any other file.
 3. **One image fails and its person imports with a placeholder** when the
    image's path is missing from the package, or the file is over 2 MiB or isn't a
@@ -287,7 +287,8 @@ document. That is a different contract, in the opposite direction:
 - Schema: `schema/whocue-handoff-v1.schema.json`
 - Reference: `schema/README.md`, section "Handoff Export v1"
 - Processing guidance: `instructions/handoff-export-processing.md`
-- Fixtures: `examples/handoff/valid/` and `examples/handoff/invalid/`
+- Fixtures: [valid and invalid handoff exports](https://github.com/mherschberg/whocue-import-spec/tree/main/examples/handoff)
+  in the import-spec repository
 
 Recognize one by its root `format` field, which is exactly
 `"whocue_event_handoff"`. It also carries `not_a_whocue_import_file: true`,
