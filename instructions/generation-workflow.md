@@ -81,9 +81,9 @@ access to a browser on the user's device where they are already signed in. Use
 only access the user provides; do not bypass logins or violate site terms.
 
 Select from these sources; do not copy them whole. An event's attendee list,
-often 100-250 people, is where candidates come from, not the WhoCue list itself.
-Keep only the people who fit the user's goal, unless the user explicitly asks
-for everyone.
+whether 5 people or several hundred, is where candidates come from, not the
+WhoCue list itself. Keep only the people who fit the user's goal, unless the
+user explicitly asks for everyone.
 
 Keep research notes outside the final JSON. They can help decide who belongs on
 the list, but WhoCue v1 does not support research metadata fields.
