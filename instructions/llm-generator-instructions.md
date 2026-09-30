@@ -11,8 +11,10 @@ The output must validate against `schema/whocue-import-v1.schema.json`.
 For the full source-gathering, shortlist confirmation, validation, and phone
 transfer sequence, start with `generation-workflow.md`.
 
-If the user also asks you to find people for an event, first use
-`instructions/people-selection-guide.md`. That guide covers public-source
+If the user gives you an attendee list, agenda, or event page, or asks you to
+find people for an event, first use `instructions/people-selection-guide.md` to
+choose the people who fit the user's goal. Do not convert the whole list unless
+the user explicitly asks for everyone. That guide covers public-source
 research, relevance ranking, privacy limits, and how to map event value into
 WhoCue fields. Use this file for the final JSON protocol.
 

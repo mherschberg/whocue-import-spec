@@ -11,6 +11,12 @@ WhoCue is not a contact database. It is an event-day recognition and
 conversation aid. Select a focused set of people the user can realistically
 notice, remember, and approach during one event.
 
+Do not list everyone at the event. Events may have anywhere from 5 to 250
+attendees, sometimes more, and the user wants to meet the ones who fit their
+goal, such as investors, customers, or potential hires. Select only those
+people, even when the user supplies the full attendee list, unless the user
+explicitly asks for everyone.
+
 ## Inputs To Ask For
 
 If the user has not already provided them, ask concise questions for:

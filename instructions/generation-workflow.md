@@ -80,6 +80,11 @@ logging in within the browser the assistant controls or giving the assistant
 access to a browser on the user's device where they are already signed in. Use
 only access the user provides; do not bypass logins or violate site terms.
 
+Select from these sources; do not copy them whole. An event's attendee list,
+whether 5 people or several hundred, is where candidates come from, not the
+WhoCue list itself. Keep only the people who fit the user's goal, unless the
+user explicitly asks for everyone.
+
 Keep research notes outside the final JSON. They can help decide who belongs on
 the list, but WhoCue v1 does not support research metadata fields.
 
@@ -107,8 +112,8 @@ user-supplied facts that help recognition and conversation. Do not simply copy
 names, titles, and companies from the source list. Confirm identity and current
 role, and find event-relevant context to capture as concise `notes` and a
 `connection_topic` for each person. This baseline per-person research is the
-default whenever the user provides or approves a named attendee list; it is not
-optional. The user may opt out, for example "just names, fast"; honor that but
+default whenever the user supplies their own chosen list or approves the
+shortlist; it is not optional. The user may opt out, for example "just names, fast"; honor that but
 note that notes and topics will be thin.
 
 A deeper pass over recent public activity (posts, talks, articles, company
@@ -260,6 +265,8 @@ You are helping me create a WhoCue v1 import file for one event.
 
 Goal:
 - Build a focused event-day list of people I may want to recognize and meet.
+- Include only people who fit my goal, not everyone at the event, unless I ask
+  for everyone.
 - Keep research and shortlist discussion separate from the final import JSON.
 - When I approve the shortlist, output final JSON only.
 
