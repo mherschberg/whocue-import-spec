@@ -7,8 +7,8 @@ event handoff exports the app produces.
 
 ## Current Contract Status
 
-The repository publishes **two** contracts. They are separate and point in
-opposite directions:
+The repository publishes **two data-exchange contracts**. They are separate and
+point in opposite directions:
 
 | Contract | Schema | Direction |
 |----------|--------|-----------|
@@ -20,6 +20,12 @@ accept one. Publishing a schema for the handoff format does not change that.
 The WhoCue app can still re-import an unmodified handoff export it produced, by
 reading only its `import_compatible_snapshot` as strict import v1 — an app-side
 convenience, not part of either contract (see `PROTOCOL.md`).
+
+The repository also owns the versioned **Event Prep prompt catalog** used to
+create import files. It is not a third data-exchange format. It publishes the
+fixed app prompt, Brief Templates, their IDs and versions, and the pinned
+instructions that an external assistant reads. WhoCue bundles an exact catalog
+copy so choosing or editing a Brief never requires a network connection.
 
 ### Import v1
 
@@ -73,6 +79,23 @@ The envelope rejects unknown root sections and unknown fields inside
 app-local field does not break external validators mid-version. The snapshot is
 import-*shaped*, not import-*valid*: it carries app-local values bounded by the
 app's looser limits. `schema/README.md` has the full comparison.
+
+### Event Prep Prompt Catalog v1
+
+Event Prep prompt content is represented by:
+
+- `schema/whocue-event-prep-prompt-catalog-v1.schema.json` - JSON Schema draft
+  2020-12 contract for catalog format 1.0.
+- `prompts/event-prep-prompt-catalog-v1.json` - the fixed prompt and versioned
+  app-provided Brief Templates.
+- `instructions/event-prep-v1.0.0.md` - the pinned full instruction set named
+  by the catalog.
+- `instructions/event-prep-brief-guide.md` - guidance for writing a concise
+  free-form Brief or maintaining custom full instructions outside WhoCue.
+
+The catalog's four Brief labels are authoring guidance, not a parsing schema.
+The app copies a template into local user-owned text, never updates an existing
+Brief when a template changes, and never downloads prompt content at runtime.
 
 ## Quick Start For LLMs
 
@@ -166,6 +189,7 @@ schema/          JSON Schema contract files: whocue-import-v1 and whocue-handoff
 examples/        Synthetic valid and invalid import fixture files.
 examples/handoff/ Synthetic valid and invalid handoff export fixture files.
 instructions/    Human-facing and LLM-facing import and handoff instructions.
+prompts/         Versioned fixed Event Prep prompt and Brief Template catalogs.
 scripts/         Local validation and packaging tooling used by npm scripts and CI.
 packaging/       Sources for packages built from this repo, such as the testers' ZIP.
 PROTOCOL.md      Concise public import file-format protocol.
