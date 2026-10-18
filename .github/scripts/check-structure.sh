@@ -15,11 +15,13 @@ required_paths=(
   "package-lock.json"
   "scripts/validate-examples.mjs"
   "scripts/validate-examples.test.mjs"
+  "scripts/validate-prompt-catalog.test.mjs"
   "scripts/build-testers-package.sh"
   "packaging/testers/README.md"
   "schema/README.md"
   "schema/whocue-import-v1.schema.json"
   "schema/whocue-handoff-v1.schema.json"
+  "schema/whocue-event-prep-prompt-catalog-v1.schema.json"
   "examples/README.md"
   "examples/valid"
   "examples/invalid"
@@ -30,6 +32,9 @@ required_paths=(
   "instructions/human-authoring-guide.md"
   "instructions/llm-generator-instructions.md"
   "instructions/people-selection-guide.md"
+  "instructions/event-prep-v1.0.0.md"
+  "instructions/event-prep-brief-guide.md"
+  "prompts/event-prep-prompt-catalog-v1.json"
   ".github/workflows/ci.yml"
 )
 

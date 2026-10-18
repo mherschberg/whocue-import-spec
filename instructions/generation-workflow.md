@@ -36,7 +36,12 @@ Collect only the inputs needed for a focused event-day list:
 
 - Event name, date, timezone, location, and public event URL when available.
 - The user's goal for the event.
-- Desired list size. Default to 10-30 people unless the user asks otherwise.
+- Desired list size from the Event Prep Brief. If it is missing and the choice
+  would materially change the work, ask the user before building the shortlist.
+- If the Brief requests everyone and more than 30 people are in scope, state the
+  approximate count, warn that the work may use substantially more AI tokens,
+  and ask whether to continue, use a broad shortlist, or process the people in
+  batches before beginning person-by-person research.
 - Must-include and must-exclude people, organizations, roles, or topics.
 - Public event sources, pasted lists, screenshots, or user-supplied notes.
 - Whether to spend extra effort looking for email addresses for selected

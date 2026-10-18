@@ -25,7 +25,12 @@ If the user has not already provided them, ask concise questions for:
 - The user's goal for the event: customers, partners, investors, hiring,
   press, mentors, peers, speakers, community leaders, or another goal.
 - The user's role, company, industry, and constraints that affect relevance.
-- Desired list size. Default to 10-30 people unless the user asks for more.
+- Desired list size from the Event Prep Brief. If it is missing and the choice
+  would materially change the work, ask the user before building the shortlist.
+- If the Brief requests everyone and more than 30 people are in scope, state the
+  approximate count, warn that the work may use substantially more AI tokens,
+  and ask whether to continue, use a broad shortlist, or process the people in
+  batches before beginning person-by-person research.
 - Any must-include or must-exclude people, organizations, roles, or topics.
 
 If the user asks for a demo, use clearly synthetic people instead of researching
