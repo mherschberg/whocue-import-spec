@@ -61,5 +61,5 @@ characters. Do not invent details.
 
 Advanced users may download or copy WhoCue's public Event Prep instructions and maintain a
 personal version outside the app. A custom version is the user's responsibility and is not stored,
-validated, fetched, or executed by WhoCue. See [`event-prep-v1.0.0.md`](event-prep-v1.0.0.md) for
+validated, fetched, or executed by WhoCue. See [`event-prep-v1.1.0.md`](event-prep-v1.1.0.md) for
 the current published instructions.

@@ -42,7 +42,7 @@ imported on its own it shows a placeholder for each of the three photos.
 - Read `instructions/people-selection-guide.md` if asking an AI tool to decide
   which event-relevant people should be included.
 - Read `instructions/event-prep-brief-guide.md` to write reusable targeting
-  context, and use `instructions/event-prep-v1.0.0.md` with the versioned
+  context, and use `instructions/event-prep-v1.1.0.md` with the versioned
   catalog at `prompts/event-prep-prompt-catalog-v1.json` for the current
   WhoCue Event Prep workflow.
 - Use `PROTOCOL.md` for a concise reference. Its "Re-Importing Into An Existing
