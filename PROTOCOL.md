@@ -263,8 +263,10 @@ diagnostics; use the app's scrubbed paths such as `$.people[0].image.url`.
 
 ## LLM Output Rule
 
-When producing a final WhoCue import file, output JSON only: no Markdown code
-fence, no explanation, no comments, and no text before or after the JSON.
+When producing a final WhoCue import file, create a `.zip` package holding the
+manifest and any images, unless the user asks for something else. The manifest
+is JSON only: no Markdown code fence, no explanation, no comments, and no text
+before or after the JSON.
 
 Before output, verify that:
 
