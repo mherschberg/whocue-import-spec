@@ -18,17 +18,41 @@ the user explicitly asks for everyone. That guide covers public-source
 research, relevance ranking, privacy limits, and how to map event value into
 WhoCue fields. Use this file for the final JSON protocol.
 
-## Output Rule
+## Deliverable: A WhoCue ZIP File
 
-When the user asks for a WhoCue import file, output JSON only: no Markdown code
-fence, no explanation, and no extra text before or after the JSON.
+Unless the user says otherwise, the end goal is a WhoCue import package: a
+`.zip` file that you create, holding the JSON manifest and any `package_file`
+images. Everything before it, including questions, research, and the shortlist
+you show in the chat, is a step toward that file, not the result. Do not stop at
+a list of names and notes in the chat.
+
+- No pause along the way changes that goal: not a question you ask, a missing
+  input such as the attendee list, a clarification, a discussion, a side
+  question, extra sources or references the user adds, or the shortlist review.
+  When the conversation picks back up, carry on through to the ZIP. Only an
+  explicit request from the user, such as "just list them in the chat", changes
+  the deliverable.
+- If your environment can create files, build the ZIP yourself and give it to
+  the user to download. A ZIP holding only the manifest is valid when there are
+  no images.
+- If your environment cannot create files, say so, then output the manifest as
+  JSON only and tell the user how to save it as a `.json` file, or how to zip it
+  with its images (see "Transfer To The Phone").
+- If the user explicitly asks for something else instead, such as a plain
+  `.json` file, JSON to use with WhoCue's Paste JSON action, or only a list in
+  the chat, provide that.
+
+The manifest is JSON only: no Markdown code fence, no explanation, no comments,
+and no extra text before or after the JSON. When you output the JSON as text
+rather than as a file, the same rule applies to that output.
 
 If required facts are missing and the user has not asked you to use synthetic
 demo data, ask concise clarification questions instead of inventing real private
 data.
 
 During research or selection, you may summarize candidates and ask the user to
-confirm the shortlist. Once producing the import file, output JSON only.
+confirm the shortlist. Once the user confirms it, go on to create the ZIP; do
+not wait to be asked for it again.
 
 ## Transfer To The Phone
 
@@ -37,23 +61,23 @@ text copied to the clipboard through its **Paste JSON** action. If the user is
 chatting with you on the phone itself and the import has no `package_file`
 images, they can copy your JSON (a single fenced ```` ```json ```` block is
 fine) and tap Paste JSON on WhoCue's Events tab. If the user is working with an
-LLM on a laptop or desktop, suggest this workflow before the final JSON-only
-output:
+LLM on a laptop or desktop, suggest this workflow when you deliver the file:
 
-1. Save the generated WhoCue import as a `.json` file, or as a `.zip` package
-   when using `package_file` images.
+1. Download the `.zip` you created, or, if you could not create one, save the
+   JSON as a `.json` file (or zip it with its images).
 2. Put that file in a cloud-synced folder or drive that is also available on the
    phone, such as Google Drive, OneDrive, Dropbox, or iCloud Drive.
 3. On the phone, open WhoCue, choose Import, and select the `.json` or `.zip`
    file from the document picker.
 
-For imports with local images, prefer a ZIP package that contains the JSON
-manifest and referenced image files. Tell the user to compress the manifest and
-its image folder themselves, not the folder that holds them, because image
-paths are relative to the ZIP's root. WhoCue refuses a ZIP with an unsafe entry
-path, a repeated path, or an archive inside it, and ignores macOS metadata,
-unreferenced images, and other files (`PROTOCOL.md`, "ZIP Packages"). Do not
-suggest raw local file paths next to
+For imports with local images, use a ZIP package that contains the JSON
+manifest and referenced image files. Put the manifest and its image folder at
+the ZIP's root, not inside an enclosing folder, because image paths are
+relative to the ZIP's root. If the user zips the files themselves, tell them to
+compress the manifest and its image folder, not the folder that holds them.
+WhoCue refuses a ZIP with an unsafe entry path, a repeated path, or an archive
+inside it, and ignores macOS metadata, unreferenced images, and other files
+(`PROTOCOL.md`, "ZIP Packages"). Do not suggest raw local file paths next to
 the JSON file; mobile document pickers do not reliably grant access to sibling
 files across iOS and Android, and v1 does not support `local_file` image
 references.
@@ -200,6 +224,14 @@ Allowed `links` keys:
 Every link value must be an HTTPS URL and no longer than 2,048 characters. Omit
 `links` if no supported link is available.
 
+Try to find each person's LinkedIn profile for `linkedin`, matching by company,
+title, and field rather than by name alone. If several profiles could be the
+person, show the user the top few in the chat and let them pick; if none fits,
+omit `linkedin`. A profile on the platform the list came from, such as Luma,
+Eventbrite, or Meetup, is not the person's `website`; use it only for clues,
+such as the links it lists. See "Find Each Person's LinkedIn Profile" in
+`people-selection-guide.md`.
+
 ## Image Modes
 
 A person may omit `image`, or include exactly one of these image objects.
@@ -267,8 +299,10 @@ Image rules:
 
 ## Final Self-Check Before Output
 
-Before producing JSON, check:
+Before producing the file, check:
 
+- You are delivering the `.zip` import file you created, or what the user asked
+  for instead, not a list of people in the chat.
 - The top-level object has only `schema_version`, `event`, and `people`.
 - Every object uses only allowed fields.
 - `event.name` and every `person.name` are present and non-blank.
@@ -317,4 +351,5 @@ reported group directly:
   exactly; use canonical padded base64, safe package paths, supported MIME
   types, and HTTPS remote URLs.
 
-Return the repaired JSON only when the user is ready for the final import file.
+Return the repaired file, as a new `.zip` unless the user asked for something
+else, when the user is ready for the final import file.

@@ -115,13 +115,14 @@ When a user asks an LLM to create a WhoCue file for an event:
    `examples/valid/manual-sparse-shortlist.json`, or
    `examples/valid/image-package-shortlist.json`.
 6. If the user is generating the file on a laptop or desktop, suggest saving
-   the `.json` file, or image-heavy `.zip` package, into a synced folder such
-   as Google Drive, OneDrive, Dropbox, or iCloud Drive, then importing it from
-   the phone through WhoCue's document picker. If the user is chatting with you
-   on the phone itself, they can instead copy the JSON (a single fenced
-   ```` ```json ```` block is fine) and tap **Paste JSON** on WhoCue's Events
-   tab — no file needed.
-7. Return JSON only when the user is ready for an import file.
+   the `.zip` package (or a `.json` file, if they asked for one) into a synced
+   folder such as Google Drive, OneDrive, Dropbox, or iCloud Drive, then
+   importing it from the phone through WhoCue's document picker. If the user
+   is chatting with you on the phone itself, they can instead copy the JSON
+   (a single fenced ```` ```json ```` block is fine) and tap **Paste JSON** on
+   WhoCue's Events tab — no file needed.
+7. When the user is ready, create the `.zip` import file (manifest JSON plus
+   any images) unless they ask for something else. The manifest is JSON only.
 
 The protocol is intentionally small: one event object plus 1-250 people. For
 each selected person, prefer practical recognition and conversation details:
