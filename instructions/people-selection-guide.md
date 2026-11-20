@@ -25,7 +25,12 @@ If the user has not already provided them, ask concise questions for:
 - The user's goal for the event: customers, partners, investors, hiring,
   press, mentors, peers, speakers, community leaders, or another goal.
 - The user's role, company, industry, and constraints that affect relevance.
-- Desired list size. Default to 10-30 people unless the user asks for more.
+- Desired list size from the Event Prep Brief. If it is missing and the choice
+  would materially change the work, ask the user before building the shortlist.
+- If the Brief requests everyone and more than 30 people are in scope, state the
+  approximate count, warn that the work may use substantially more AI tokens,
+  and ask whether to continue, use a broad shortlist, or process the people in
+  batches before beginning person-by-person research.
 - Any must-include or must-exclude people, organizations, roles, or topics.
 
 If the user asks for a demo, use clearly synthetic people instead of researching
@@ -128,8 +133,11 @@ Good fields to preserve:
   matters for this event.
 - `priority`: `high` for must-meet, `medium` for useful, `low` for optional.
 - `tags`: short grouping labels based on event role or user goal.
-- `links`: HTTPS links that help verify identity, usually LinkedIn, personal
-  website, company bio, speaker page, or relevant project page.
+- `links`: HTTPS links that help verify identity, usually LinkedIn first, then
+  a personal website, company bio, speaker page, or relevant project page. A
+  profile on the platform the list came from, such as Luma, Eventbrite, Meetup,
+  or an event app, is not the person's `website`; see "Find Each Person's
+  LinkedIn Profile" below.
 - `image`: use a public, appropriate photo. If the user's sources do not already
   include photos, tell the user you will search public sources for headshots and
   proceed unless they decline; never use images from private or login-gated pages.
@@ -163,6 +171,38 @@ when unsure rather than borrowing details. When subagents or parallel workers ar
 available, isolating each person (or a small group) in its own context is the
 cleanest way to prevent cross-attribution; if you research several people in one
 context, re-check attribution before writing each record.
+
+### Find Each Person's LinkedIn Profile
+
+For every selected person, try to find their LinkedIn profile and put it in
+`links.linkedin`. It is usually the link the user most wants for recognition and
+follow-up.
+
+A profile on the platform the list came from, such as Luma, Eventbrite, Meetup,
+or an event app, is not the person's website and does not replace LinkedIn. Do
+not put it in `website` or any other `links` key. It is often the best clue,
+though: many such profiles show the person's company or title, or link to their
+own LinkedIn, X, Instagram, or website, and those links can go in `links`.
+
+Names collide, so resolve the match by content, not by name alone. Search for
+the name together with what you know: company, title, field, location, and the
+event's topic or community. Prefer the profile whose company, title, field, and
+location fit the event source, or, when the source gives only a name, fit the
+event and the user's goal.
+
+- One profile clearly fits: use it.
+- Several plausible profiles remain: show the user the top few, about three at
+  most, in the chat, each with the name, headline or title, company, location,
+  and URL, and ask which is right, or whether none is. Gather these questions
+  and ask them together, for example with the shortlist, rather than one person
+  at a time.
+- No profile fits, or the user cannot tell: omit `links.linkedin` rather than
+  guess. If you still include the person and their identity is in doubt, set
+  `identity_uncertain: true`.
+
+Never build a LinkedIn URL from the person's name. Use only public search
+results, or LinkedIn pages the user gives you access to (see the login guidance
+under "How To Find Candidate People").
 
 Avoid fields that do not help event-day recognition or conversation, such as
 long biographies, exhaustive publication lists, unrelated career history,
@@ -249,6 +289,9 @@ Before generating the import JSON, confirm:
 - Uncertain facts were omitted or clearly marked as needing confirmation.
 - Name-only matches found through LinkedIn or web search are flagged with
   `identity_uncertain: true` when the identity may not be the intended person.
+- Each person's `links.linkedin` matches them by company, title, or field, not
+  just name, or is omitted; ambiguous matches were shown to the user to pick.
+- No event-platform profile, such as Luma or Eventbrite, is used as `website`.
 - If recent online activity was used, it came only from public, relevant sources
   and was compressed into schema-supported fields.
 - The selected details fit the v1 schema in

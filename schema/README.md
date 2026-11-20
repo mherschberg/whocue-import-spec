@@ -1,7 +1,7 @@
 # Schema
 
-This directory contains the machine-readable WhoCue contracts. There are two,
-and they point in opposite directions:
+This directory contains two machine-readable WhoCue data-exchange contracts,
+which point in opposite directions:
 
 | Contract | File | Direction |
 |----------|------|-----------|
@@ -12,6 +12,28 @@ They are separate contracts. A handoff export is **not** a WhoCue import file
 and is not accepted by the import schema. See
 [Handoff Export v1](#handoff-export-v1) below and
 `../instructions/handoff-export-processing.md`.
+
+The directory also contains
+`whocue-event-prep-prompt-catalog-v1.schema.json`. That schema validates the
+shared prompt/template catalog used to help create import files; it is not an
+additional import or export document accepted by the app.
+
+## Event Prep Prompt Catalog v1
+
+- Catalog schema: `whocue-event-prep-prompt-catalog-v1.schema.json`
+- Published catalog: `../prompts/event-prep-prompt-catalog-v1.json`
+- Required format marker: `whocue_event_prep_prompt_catalog`
+- Supported `format_version`: `"1.0"`
+- General prompt and instruction set use stable IDs plus semantic versions.
+- Each Brief Template versions independently and supplies a title of at most 80
+  characters and context of at most 1,500 characters.
+- The fixed prompt contains exactly one `{{brief_context}}` placeholder. The app
+  replaces it locally; the Brief title and local ID are not included.
+
+JSON Schema validates shape and field bounds. Repository tests additionally
+enforce unique template IDs/titles, one placeholder, coherent version metadata,
+the six current template titles, their four authoring labels, and byte-for-byte
+agreement with the app's offline copy.
 
 ## v1 Artifact
 

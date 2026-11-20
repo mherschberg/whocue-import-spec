@@ -36,7 +36,12 @@ Collect only the inputs needed for a focused event-day list:
 
 - Event name, date, timezone, location, and public event URL when available.
 - The user's goal for the event.
-- Desired list size. Default to 10-30 people unless the user asks otherwise.
+- Desired list size from the Event Prep Brief. If it is missing and the choice
+  would materially change the work, ask the user before building the shortlist.
+- If the Brief requests everyone and more than 30 people are in scope, state the
+  approximate count, warn that the work may use substantially more AI tokens,
+  and ask whether to continue, use a broad shortlist, or process the people in
+  batches before beginning person-by-person research.
 - Must-include and must-exclude people, organizations, roles, or topics.
 - Public event sources, pasted lists, screenshots, or user-supplied notes.
 - Whether to spend extra effort looking for email addresses for selected
@@ -48,6 +53,13 @@ Collect only the inputs needed for a focused event-day list:
 - Research depth. By default, research each selected person (see Step 4); the
   user may opt out, for example "just names, fast".
 
+The `.zip` import file is the end goal of this workflow unless the user
+explicitly says otherwise. No stopping point along the way changes that goal:
+questions you ask, a missing input such as the attendee list, clarifications,
+discussion, side questions, extra sources or references the user adds, or the
+shortlist review. When the conversation picks back up, carry on through to the
+file. A list of people in the chat is a step toward the file, not the result.
+
 Surface the working choices explicitly — do not apply them silently. Early on
 (and again at shortlist confirmation if they have not come up), tell the user
 your planned defaults and invite changes or objections before you act on them:
@@ -58,6 +70,9 @@ your planned defaults and invite changes or objections before you act on them:
 - Email lookup: **off by default** (opt-in only).
 - Logins that would improve research (LinkedIn, the event site, the user's CRM,
   or similar): offer them and ask whether the user can provide access.
+- Deliverable: a `.zip` import file that the assistant creates, holding the
+  manifest JSON and any images — **on by default**. The user may ask for a
+  plain `.json` file or JSON to paste instead.
 
 State each default and let the user change any of them. "Proceed unless the user
 declines" is only valid when you actually stated the choice first.
@@ -134,10 +149,19 @@ cleanest way to prevent cross-attribution; if you research several people in one
 context, re-check attribution before writing each record.
 
 Good enrichment targets are current title, company, affiliation, public profile
-links, short event-relevant notes, and a concise connection topic. Email lookup
-is optional:
-ask the user before doing it because it may add cost, may fail, and may be
-unwanted if the user already has the contact information. If the user opts in,
+links, short event-relevant notes, and a concise connection topic.
+
+Try to find each person's LinkedIn profile for `links.linkedin`, matching by
+company, title, field, and location rather than by name alone. A profile on the
+platform the list came from, such as Luma, Eventbrite, or Meetup, is not the
+person's website; use it only for clues, such as the links it lists. When
+several profiles could be the person, show the user the top few in the chat and
+let them pick before you create the file. See "Find Each Person's LinkedIn
+Profile" in `people-selection-guide.md`.
+
+Email lookup is optional: ask the user before doing it because it may add
+cost, may fail, and may be unwanted if the user already has the contact
+information. If the user opts in,
 include only email addresses actually found from sources the user wants
 represented. Never fabricate, pattern-match, or guess an email address. Never
 look up phone numbers ahead of the event; include `phone` only when the user
@@ -191,11 +215,19 @@ Do not use raw local filesystem paths. A path such as
 `/Users/name/Desktop/headshot.jpg` or `C:\Users\name\headshot.jpg` cannot be
 resolved reliably by mobile document pickers and is unsupported in v1.
 
-### 7. Produce Final JSON Only
+### 7. Create The ZIP Import File
 
-When the user says the shortlist is final, output the import file as JSON only:
-no Markdown fence, comments, explanation, citations, or text before or after the
-JSON. The root object must contain only `schema_version`, `event`, and `people`.
+When the user says the shortlist is final, and any open LinkedIn matches are
+settled (see Step 4), create the import file without waiting to be asked again.
+Unless the user asked for something else, it is a `.zip` package: the manifest
+JSON plus any `package_file` images, with the manifest and its image folder at
+the ZIP's root rather than inside an enclosing folder. A ZIP holding only the
+manifest is valid. If your environment cannot create files, say so and output
+the manifest JSON instead, so the user can save it (Step 9).
+
+The manifest is JSON only: no Markdown fence, comments, explanation, citations,
+or text before or after the JSON. The root object must contain only
+`schema_version`, `event`, and `people`.
 
 If facts are missing, omit optional fields. Do not output `null`, blank strings,
 or placeholder values for unknown real data.
@@ -233,10 +265,10 @@ URLs, or image data into diagnostics or bug reports.
 
 ### 9. Transfer The File To The Phone
 
-Save the final import as either:
-
-- A standalone `.json` file when there are no package images.
-- A `.zip` package when using `package_file` images.
+The final import is the `.zip` package from Step 7, or a standalone `.json`
+file when the user asked for one or your environment could not create a ZIP. If
+the user has to zip a manifest and its images themselves, tell them to compress
+the manifest and its image folder, not the folder that holds them.
 
 Move that `.json` or `.zip` file to a location visible from the phone, such as
 Google Drive, OneDrive, Dropbox, iCloud Drive, AirDrop, or another ordinary file
@@ -268,7 +300,10 @@ Goal:
 - Include only people who fit my goal, not everyone at the event, unless I ask
   for everyone.
 - Keep research and shortlist discussion separate from the final import JSON.
-- When I approve the shortlist, output final JSON only.
+- The end result is a WhoCue .zip import file that you create (manifest JSON
+  plus any images), unless I explicitly say otherwise. A list of people in the
+  chat is not the end result, and questions, clarifications, discussion, or
+  extra sources I add along the way do not change that.
 
 Inputs:
 - Event:
@@ -286,7 +321,9 @@ Inputs:
 - Logins I can provide (e.g. LinkedIn, the event site, my CRM): none / I will log in in your browser / I have a browser on my device where I am signed in
 
 Workflow:
-1. Ask concise questions if required event or goal details are missing.
+1. Ask concise questions if required event or goal details are missing. After
+   any pause (my answers, clarifications, discussion, or extra sources I add),
+   carry on through to the .zip file.
 2. Use only public sources or data I provide. If signing into a useful site would
    help (LinkedIn, the event site, my CRM, or similar), ask me to log in in your
    browser or give access to a browser on my device where I am already signed in.
@@ -304,10 +341,15 @@ Workflow:
 10. Do not include guessed private contact details, sensitive personal data, copied private
    profile data, or unsupported fields such as citation, confidence, speaker_session,
    reason, source, local_file, activity summaries, research notes, or evidence lists.
-11. For local images, use a ZIP package with package_file paths. Do not use raw local paths.
+11. For each person, find their LinkedIn profile, matching by company, title, and field, not
+   name alone. Do not use their Luma, Eventbrite, or other event-platform profile as their
+   website. If several profiles could be the person, show me the top few and let me pick.
+12. For local images, use a ZIP package with package_file paths. Do not use raw local paths.
    If my sources lack photos, search public sources for headshots unless I decline, using
    only public, appropriate images.
-12. After I approve the shortlist, output JSON only with no Markdown fence or explanation.
+13. After I approve the shortlist, create the .zip import file with the manifest and any
+   images at its root. If you cannot create files, say so and output the JSON only, with no
+   Markdown fence or explanation.
 ```
 
 ## Final Checklist
@@ -321,13 +363,17 @@ Before import, confirm:
   roster title, unless the user opted out of research.
 - No fact, link, or photo is attributed to the wrong person (watch common names
   and shared employers).
+- Each person's `links.linkedin` matches them by company, title, or field, not
+  just name, or is omitted because no clear match was found; ambiguous matches
+  were put to the user, and no event-platform profile is used as `website`.
 - The tag vocabulary is a small shared set the user approved, roughly following
   the tag budget (approximate guidance, not hard limits): around 3-4 tags beyond
   `priority` for under 30 people; around 6-8 for 30-100; confirmed with the user
   above that.
 - Images were searched for and included per the user's preference, using only
   public, appropriate photos.
-- The final output is JSON only.
+- The deliverable is a `.zip` import file the assistant created, unless the
+  user asked for something else, and its manifest is JSON only.
 - The root object has only `schema_version`, `event`, and `people`.
 - All objects use only supported v1 fields.
 - Required names are present, non-blank, and unique within the event.

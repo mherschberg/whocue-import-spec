@@ -7,8 +7,8 @@ event handoff exports the app produces.
 
 ## Current Contract Status
 
-The repository publishes **two** contracts. They are separate and point in
-opposite directions:
+The repository publishes **two data-exchange contracts**. They are separate and
+point in opposite directions:
 
 | Contract | Schema | Direction |
 |----------|--------|-----------|
@@ -20,6 +20,12 @@ accept one. Publishing a schema for the handoff format does not change that.
 The WhoCue app can still re-import an unmodified handoff export it produced, by
 reading only its `import_compatible_snapshot` as strict import v1 — an app-side
 convenience, not part of either contract (see `PROTOCOL.md`).
+
+The repository also owns the versioned **Event Prep prompt catalog** used to
+create import files. It is not a third data-exchange format. It publishes the
+fixed app prompt, Brief Templates, their IDs and versions, and the pinned
+instructions that an external assistant reads. WhoCue bundles an exact catalog
+copy so choosing or editing a Brief never requires a network connection.
 
 ### Import v1
 
@@ -74,6 +80,23 @@ app-local field does not break external validators mid-version. The snapshot is
 import-*shaped*, not import-*valid*: it carries app-local values bounded by the
 app's looser limits. `schema/README.md` has the full comparison.
 
+### Event Prep Prompt Catalog v1
+
+Event Prep prompt content is represented by:
+
+- `schema/whocue-event-prep-prompt-catalog-v1.schema.json` - JSON Schema draft
+  2020-12 contract for catalog format 1.0.
+- `prompts/event-prep-prompt-catalog-v1.json` - the fixed prompt and versioned
+  app-provided Brief Templates.
+- `instructions/event-prep-v1.0.0.md` - the pinned full instruction set named
+  by the catalog.
+- `instructions/event-prep-brief-guide.md` - guidance for writing a concise
+  free-form Brief or maintaining custom full instructions outside WhoCue.
+
+The catalog's five Brief labels are authoring guidance, not a parsing schema.
+The app copies a template into local user-owned text, never updates an existing
+Brief when a template changes, and never downloads prompt content at runtime.
+
 ## Quick Start For LLMs
 
 When a user asks an LLM to create a WhoCue file for an event:
@@ -92,13 +115,14 @@ When a user asks an LLM to create a WhoCue file for an event:
    `examples/valid/manual-sparse-shortlist.json`, or
    `examples/valid/image-package-shortlist.json`.
 6. If the user is generating the file on a laptop or desktop, suggest saving
-   the `.json` file, or image-heavy `.zip` package, into a synced folder such
-   as Google Drive, OneDrive, Dropbox, or iCloud Drive, then importing it from
-   the phone through WhoCue's document picker. If the user is chatting with you
-   on the phone itself, they can instead copy the JSON (a single fenced
-   ```` ```json ```` block is fine) and tap **Paste JSON** on WhoCue's Events
-   tab — no file needed.
-7. Return JSON only when the user is ready for an import file.
+   the `.zip` package (or a `.json` file, if they asked for one) into a synced
+   folder such as Google Drive, OneDrive, Dropbox, or iCloud Drive, then
+   importing it from the phone through WhoCue's document picker. If the user
+   is chatting with you on the phone itself, they can instead copy the JSON
+   (a single fenced ```` ```json ```` block is fine) and tap **Paste JSON** on
+   WhoCue's Events tab — no file needed.
+7. When the user is ready, create the `.zip` import file (manifest JSON plus
+   any images) unless they ask for something else. The manifest is JSON only.
 
 The protocol is intentionally small: one event object plus 1-250 people. For
 each selected person, prefer practical recognition and conversation details:
@@ -166,6 +190,7 @@ schema/          JSON Schema contract files: whocue-import-v1 and whocue-handoff
 examples/        Synthetic valid and invalid import fixture files.
 examples/handoff/ Synthetic valid and invalid handoff export fixture files.
 instructions/    Human-facing and LLM-facing import and handoff instructions.
+prompts/         Versioned fixed Event Prep prompt and Brief Template catalogs.
 scripts/         Local validation and packaging tooling used by npm scripts and CI.
 packaging/       Sources for packages built from this repo, such as the testers' ZIP.
 PROTOCOL.md      Concise public import file-format protocol.

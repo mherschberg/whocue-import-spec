@@ -1,7 +1,7 @@
 # Instructions
 
-This directory contains public instructions for creating WhoCue v1 import files
-and for processing the event handoff exports the app produces. Use these files
+This directory contains public instructions for creating WhoCue v1 import files,
+writing Event Prep Briefs, and processing the event handoff exports the app produces. Use these files
 with the schemas and examples in this repository; they are self-contained and
 require no additional documentation.
 
@@ -10,6 +10,8 @@ require no additional documentation.
 | File | Intended use |
 |------|--------------|
 | `generation-workflow.md` | End-to-end external generation workflow, reusable LLM prompt template, final checklist, validation, and phone transfer guidance. |
+| `event-prep-v1.0.0.md` | Version-pinned full instructions referenced by WhoCue Event Prep prompt 1.0.0. |
+| `event-prep-brief-guide.md` | Guidance and examples for locally saved Event Prep Briefs and advanced custom instructions. |
 | `handoff-export-processing.md` | Instructions for external LLMs, humans, or user-controlled systems processing WhoCue event handoff exports after app updates. |
 | `human-authoring-guide.md` | Human-readable guide for writing or reviewing a v1 import JSON file. |
 | `llm-generator-instructions.md` | Prompt/instruction text for an LLM or other generator that produces v1 import JSON. |
@@ -17,11 +19,14 @@ require no additional documentation.
 
 ## Suggested Order
 
-1. Start with `generation-workflow.md` for the full process.
-2. Use `people-selection-guide.md` while researching or narrowing candidates.
-3. Use `llm-generator-instructions.md` when producing final JSON.
-4. Use `human-authoring-guide.md` to review and repair a file by hand.
-5. Use `handoff-export-processing.md` when a user exports updated WhoCue event
+1. When WhoCue supplies an Event Prep prompt, start with its pinned
+   `event-prep-v<version>.md` instruction URL.
+2. Use `event-prep-brief-guide.md` to write or improve the user's targeting context.
+3. Otherwise start with `generation-workflow.md` for the full process.
+4. Use `people-selection-guide.md` while researching or narrowing candidates.
+5. Use `llm-generator-instructions.md` when producing final JSON.
+6. Use `human-authoring-guide.md` to review and repair a file by hand.
+7. Use `handoff-export-processing.md` when a user exports updated WhoCue event
    state for external follow-up processing.
 
 ## Contract References
@@ -29,6 +34,9 @@ require no additional documentation.
 - Machine-readable import schema: `../schema/whocue-import-v1.schema.json`
 - Machine-readable handoff export schema:
   `../schema/whocue-handoff-v1.schema.json`
+- Machine-readable Event Prep prompt catalog schema:
+  `../schema/whocue-event-prep-prompt-catalog-v1.schema.json`
+- Event Prep prompt catalog: `../prompts/event-prep-prompt-catalog-v1.json`
 - Schema summaries, limits, and the two contracts' relationship:
   `../schema/README.md`
 - Valid and invalid import fixtures: `../examples/`
