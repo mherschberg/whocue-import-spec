@@ -88,8 +88,9 @@ Event Prep prompt content is represented by:
   2020-12 contract for catalog format 1.0.
 - `prompts/event-prep-prompt-catalog-v1.json` - the fixed prompt and versioned
   app-provided Brief Templates.
-- `instructions/event-prep-v1.0.0.md` - the pinned full instruction set named
-  by the catalog.
+- `instructions/event-prep-v1.1.0.md` - the pinned full instruction set named
+  by the catalog. `instructions/event-prep-v1.0.0.md` is superseded by it and
+  carries a notice saying so.
 - `instructions/event-prep-brief-guide.md` - guidance for writing a concise
   free-form Brief or maintaining custom full instructions outside WhoCue.
 
