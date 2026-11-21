@@ -33,6 +33,7 @@ required_paths=(
   "instructions/llm-generator-instructions.md"
   "instructions/people-selection-guide.md"
   "instructions/event-prep-v1.0.0.md"
+  "instructions/event-prep-v1.1.0.md"
   "instructions/event-prep-brief-guide.md"
   "prompts/event-prep-prompt-catalog-v1.json"
   ".github/workflows/ci.yml"

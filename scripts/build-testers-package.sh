@@ -33,6 +33,7 @@ readonly PACKAGE_FILES=(
   "instructions/generation-workflow.md"
   "instructions/handoff-export-processing.md"
   "instructions/event-prep-v1.0.0.md"
+  "instructions/event-prep-v1.1.0.md"
   "instructions/event-prep-brief-guide.md"
   "schema/README.md"
   "schema/whocue-import-v1.schema.json"

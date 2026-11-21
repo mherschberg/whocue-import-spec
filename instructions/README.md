@@ -10,7 +10,8 @@ require no additional documentation.
 | File | Intended use |
 |------|--------------|
 | `generation-workflow.md` | End-to-end external generation workflow, reusable LLM prompt template, final checklist, validation, and phone transfer guidance. |
-| `event-prep-v1.0.0.md` | Version-pinned full instructions referenced by WhoCue Event Prep prompt 1.0.0. |
+| `event-prep-v1.1.0.md` | Version-pinned full instructions referenced by WhoCue Event Prep prompt 1.1.0; they replace 1.0.0 for every prompt. |
+| `event-prep-v1.0.0.md` | Superseded by 1.1.0; kept with a notice for apps whose prompt 1.0.0 still links here. |
 | `event-prep-brief-guide.md` | Guidance and examples for locally saved Event Prep Briefs and advanced custom instructions. |
 | `handoff-export-processing.md` | Instructions for external LLMs, humans, or user-controlled systems processing WhoCue event handoff exports after app updates. |
 | `human-authoring-guide.md` | Human-readable guide for writing or reviewing a v1 import JSON file. |

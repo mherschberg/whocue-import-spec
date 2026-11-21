@@ -2,7 +2,13 @@
 
 **Instruction ID:** `whocue.event-prep.instructions`  
 **Version:** `1.0.0`  
-**Status:** current
+**Status:** superseded by [v1.1.0](event-prep-v1.1.0.md)
+
+> **Notice, 2026-11-20.** This version says to output the import as JSON text only. That
+> conflicts with the current [`llm-generator-instructions.md`](llm-generator-instructions.md),
+> which makes a `.zip` import file the end goal, and this version lacks the LinkedIn lookup
+> guidance. Follow [`event-prep-v1.1.0.md`](event-prep-v1.1.0.md) instead; it replaces this
+> version for every Event Prep prompt, including prompt 1.0.0. The text below is unchanged.
 
 Use these instructions when a user asks you to turn event material into a WhoCue import file.
 They are the full instructions referenced by WhoCue's Event Prep prompt version 1.0.0.
